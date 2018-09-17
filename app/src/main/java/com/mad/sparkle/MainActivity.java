@@ -7,6 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+/**
+ * @author Audwin
+ * Created on 14/09/2018
+ *
+ */
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
