@@ -1,7 +1,9 @@
 package com.mad.sparkle.model;
 
 public class User {
-    private int id;
-    private String name;
-    private String bookings;
+    private int userId;
+    private String email;
+    private String username;
+    private String password;
+    private String mobilePhone;
 }
