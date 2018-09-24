@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "3129197834",
+    "firebase_url": "https://sparkle-f8904.firebaseio.com",
+    "project_id": "sparkle-f8904",
+    "storage_bucket": "sparkle-f8904.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3129197834:android:ca2af172a20bc995",
+        "android_client_info": {
+          "package_name": "com.mad.sparkle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "3129197834-j9fpsfibjlh7ctrn6u9f1trj7pivdndv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mad.sparkle",
+            "certificate_hash": "946cf342e3dc973ac2768ef6ee909d47b0bb057e"
+          }
+        },
+        {
+          "client_id": "3129197834-h9pg7uv3np927ad15lesgjj9p6bqs2hs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjKZ4daXNio3fsA4q1USYBWvcXeph56AY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "3129197834-h9pg7uv3np927ad15lesgjj9p6bqs2hs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
