@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "3129197834-aqvd84u31d3meuih96f5tnk6i9kum5rt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mad.sparkle",
+            "certificate_hash": "303fc3a1f9f85d4f786be4dd6deb17e8c9986760"
+          }
+        },
+        {
           "client_id": "3129197834-h9pg7uv3np927ad15lesgjj9p6bqs2hs.apps.googleusercontent.com",
           "client_type": 3
         }
