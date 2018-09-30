@@ -37,14 +37,14 @@
             android:id="@+id/store_item_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Store Name" />
+            android:text="Store Name"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/store_item_address_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Address"
-            android:textStyle="bold" />
+            android:text="Address" />
 
     </LinearLayout>
 
@@ -65,13 +65,22 @@
             android:textColor="@android:color/holo_blue_dark"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/store_item_rating_tv"
-            android:layout_width="match_parent"
+        <!--<TextView-->
+        <!--android:id="@+id/store_item_rating_tv"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Rating"-->
+        <!--android:textColor="@android:color/black"-->
+        <!--android:textStyle="bold" />-->
+
+        <RatingBar
+            android:id="@+id/store_item_ratingBar"
+            style="?attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rating"
-            android:textColor="@android:color/black"
-            android:textStyle="bold" />
+            android:isIndicator="true"
+            android:numStars="5"
+            android:stepSize="0.1" />
 
     </LinearLayout>
 

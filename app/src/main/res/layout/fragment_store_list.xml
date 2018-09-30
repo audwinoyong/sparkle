@@ -7,7 +7,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
+    android:layout_marginTop="16dp"
     android:layout_marginRight="16dp"
-    app:layoutManager="LinearLayoutManager"
+    android:layout_marginBottom="16dp"
+    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
     tools:context=".StoreFragment"
     tools:listitem="@layout/fragment_store" />

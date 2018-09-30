@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,7 +28,8 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView mStoreImg;
-        private TextView mNameTv, mAddressTv, mRatingTv, mDistanceTv;
+        private TextView mNameTv, mAddressTv, mDistanceTv;
+        private RatingBar mRatingBar;
         private RelativeLayout mStoreRelativeLayout;
 
         /**
@@ -41,7 +43,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
             mStoreImg = (ImageView) view.findViewById(R.id.store_item_image);
             mNameTv = (TextView) view.findViewById(R.id.store_item_name_tv);
             mAddressTv = (TextView) view.findViewById(R.id.store_item_address_tv);
-            mRatingTv = (TextView) view.findViewById(R.id.store_item_rating_tv);
+            mRatingBar = (RatingBar) view.findViewById(R.id.store_item_ratingBar);
             mDistanceTv = (TextView) view.findViewById(R.id.store_item_distance_tv);
 
             mStoreRelativeLayout = (RelativeLayout) view.findViewById(R.id.store_item_store_rl);
@@ -87,7 +89,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
 
         holder.mNameTv.setText(store.getName());
         holder.mAddressTv.setText(store.getAddress());
-        holder.mRatingTv.setText(store.getRating());
+        holder.mRatingBar.setRating(store.getRating());
         holder.mDistanceTv.setText(store.getDistance());
 
         // OnClickListener to refresh the LinearLayout view.

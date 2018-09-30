@@ -3,6 +3,7 @@ package com.mad.sparkle;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +13,9 @@ import android.view.ViewGroup;
 
 import com.mad.sparkle.dummy.DummyContent;
 import com.mad.sparkle.dummy.DummyContent.DummyItem;
+import com.mad.sparkle.model.Store;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,10 +27,12 @@ import java.util.List;
 public class StoreFragment extends Fragment {
 
     // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
+//    private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
-    private int mColumnCount = 1;
+//    private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+
+    private List<Store> mStoreList = new ArrayList<Store>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -38,11 +43,8 @@ public class StoreFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static StoreFragment newInstance(int columnCount) {
+    public static StoreFragment newInstance() {
         StoreFragment fragment = new StoreFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -50,9 +52,28 @@ public class StoreFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
+//        if (getArguments() != null) {
+//            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+//        }
+
+        prepareStoreData();
+    }
+
+    private void prepareStoreData() {
+        Store store = new Store("Magic Wash", "18 Paramatta Road", 150, 4);
+        mStoreList.add(store);
+
+        store = new Store("Star Wash", "50 Burwood Road", 400, 5);
+        mStoreList.add(store);
+
+        store = new Store("Oz Sparkling Wash", "33 Camperdown Street", 423, 1);
+        mStoreList.add(store);
+
+        store = new Store("Sleek Wash", "167 King Street", 500, 2);
+        mStoreList.add(store);
+
+        store = new Store("King Wash", "77 Eddy Avenue", 1200, 3);
+        mStoreList.add(store);
     }
 
     @Override
@@ -64,12 +85,10 @@ public class StoreFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new StoreRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            recyclerView.addItemDecoration(new DividerItemDecoration(context, LinearLayoutManager.VERTICAL));
+//            recyclerView.setAdapter(new StoreRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new StoreRecyclerViewAdapter(mStoreList, mListener));
         }
         return view;
     }
@@ -104,6 +123,6 @@ public class StoreFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Store store);
     }
 }

@@ -4,10 +4,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mad.sparkle.StoreFragment.OnListFragmentInteractionListener;
 import com.mad.sparkle.dummy.DummyContent.DummyItem;
+import com.mad.sparkle.model.Store;
 
 import java.util.List;
 
@@ -18,11 +22,17 @@ import java.util.List;
  */
 public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+//    private final List<DummyItem> mValues;
+    private final List<Store> mStores;
     private final OnListFragmentInteractionListener mListener;
 
-    public StoreRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
+//    public StoreRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+//        mValues = items;
+//        mListener = listener;
+//    }
+
+    public StoreRecyclerViewAdapter(List<Store> stores, OnListFragmentInteractionListener listener) {
+        mStores = stores;
         mListener = listener;
     }
 
@@ -35,9 +45,17 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+//        holder.mItem = mValues.get(position);
+        holder.mStore = mStores.get(position);
+
+        holder.mNameTv.setText(holder.mStore.getName());
+        holder.mAddressTv.setText(holder.mStore.getAddress());
+        holder.mRatingBar.setRating(holder.mStore.getRating());
+        holder.mDistanceTv.setText(String.valueOf(holder.mStore.getDistance()) + "M");
+
+
+//        holder.mIdView.setText(mValues.get(position).id);
+//        holder.mContentView.setText(mValues.get(position).content);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,7 +63,7 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onListFragmentInteraction(holder.mStore);
                 }
             }
         });
@@ -53,25 +71,36 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mStores.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+//        public final TextView mIdView;
+//        public final TextView mContentView;
+        private ImageView mStoreImg;
+        private TextView mNameTv, mAddressTv, mDistanceTv;
+        private RatingBar mRatingBar;
+//        public DummyItem mItem;
+        public Store mStore;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+//            mIdView = (TextView) view.findViewById(R.id.item_number);
+//            mContentView = (TextView) view.findViewById(R.id.content);
+
+            mStoreImg = (ImageView) view.findViewById(R.id.store_item_image);
+            mNameTv = (TextView) view.findViewById(R.id.store_item_name_tv);
+            mAddressTv = (TextView) view.findViewById(R.id.store_item_address_tv);
+            mRatingBar = (RatingBar) view.findViewById(R.id.store_item_ratingBar);
+            mDistanceTv = (TextView) view.findViewById(R.id.store_item_distance_tv);
+
         }
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
-        }
+//        @Override
+//        public String toString() {
+//            return super.toString() + " '" + mContentView.getText() + "'";
+//        }
     }
 }

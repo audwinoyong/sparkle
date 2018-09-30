@@ -5,19 +5,19 @@ import java.util.ArrayList;
 public class Store {
     private String mName;
     private String mAddress;
-    private int mRating;
     private int mDistance;
-    private ArrayList<Service> mServices;
+    private int mRating;
+//    private ArrayList<Service> mServices;
 
     public Store() {
     }
 
-    public Store(String name, String address, int rating, int distance, ArrayList<Service> services) {
+    public Store(String name, String address, int distance, int rating) {
         mName = name;
         mAddress = address;
-        mRating = rating;
         mDistance = distance;
-        mServices = services;
+        mRating = rating;
+//        mServices = services;
     }
 
     public String getName() {
@@ -36,14 +36,6 @@ public class Store {
         mAddress = address;
     }
 
-    public int getRating() {
-        return mRating;
-    }
-
-    public void setRating(int rating) {
-        mRating = rating;
-    }
-
     public int getDistance() {
         return mDistance;
     }
@@ -52,11 +44,19 @@ public class Store {
         mDistance = distance;
     }
 
-    public ArrayList<Service> getServices() {
-        return mServices;
+    public int getRating() {
+        return mRating;
     }
 
-    public void setServices(ArrayList<Service> services) {
-        mServices = services;
+    public void setRating(int rating) {
+        mRating = rating;
     }
+
+//    public ArrayList<Service> getServices() {
+//        return mServices;
+//    }
+//
+//    public void setServices(ArrayList<Service> services) {
+//        mServices = services;
+//    }
 }

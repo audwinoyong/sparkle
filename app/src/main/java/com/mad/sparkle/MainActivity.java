@@ -1,5 +1,6 @@
 package com.mad.sparkle;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.mad.sparkle.dummy.DummyContent;
+import com.mad.sparkle.model.Store;
 
 /**
  * @author Audwin
@@ -22,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
 
     private TextView mTextMessage;
 
-    final Fragment mStoreFragment = StoreFragment.newInstance(1);
+    final Fragment mStoreFragment = StoreFragment.newInstance();
     final Fragment mProfileFragment = ProfileFragment.newInstance("", "");
     final FragmentManager mFragmentManager = getSupportFragmentManager();
     Fragment active = mStoreFragment;
@@ -79,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
-
+    public void onListFragmentInteraction(Store store) {
+//        Intent mainIntent = new Intent(MainActivity.this, LoginActivity.class);
+//        startActivity(mainIntent);
     }
 }
