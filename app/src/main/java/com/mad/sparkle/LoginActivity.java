@@ -1,7 +1,5 @@
 package com.mad.sparkle;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -24,7 +22,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,8 +37,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     // UI references.
-    private EditText mEmailView;
-    private EditText mPasswordView;
+    private EditText mEmailEt;
+    private EditText mPasswordEt;
     private View mProgressView;
     private View mLoginFormView;
 
@@ -53,10 +50,10 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         // Set up the login form.
-        mEmailView = (EditText) findViewById(R.id.email);
+        mEmailEt = (EditText) findViewById(R.id.activity_login_email);
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mPasswordEt = (EditText) findViewById(R.id.activity_login_password);
+        mPasswordEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
@@ -67,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        Button mEmailSignInButton = (Button) findViewById(R.id.activity_login_email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,8 +72,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        mLoginFormView = findViewById(R.id.activity_login_login_form);
+        mProgressView = findViewById(R.id.activity_login_login_progress);
     }
 
     /**
@@ -86,31 +83,31 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void attemptLogin() {
         // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
+        mEmailEt.setError(null);
+        mPasswordEt.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        String email = mEmailEt.getText().toString();
+        String password = mPasswordEt.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
+            mPasswordEt.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordEt;
             cancel = true;
         }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+            mEmailEt.setError(getString(R.string.error_field_required));
+            focusView = mEmailEt;
             cancel = true;
         } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+            mEmailEt.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailEt;
             cancel = true;
         }
 
@@ -131,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean isPasswordValid(String password) {
-        return password.length() > 4;
+        return password.length() > 5;
     }
 
     private void signIn(String email, String password) {
@@ -146,28 +143,28 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Authentication successful.",
                                     Toast.LENGTH_SHORT).show();
 
-                            // Write a message to the database
-                            FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            DatabaseReference myRef = database.getReference("message");
-
-                            myRef.setValue("Hello, World!");
-
-                            // Read from the database
-                            myRef.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    // This method is called once with the initial value and again
-                                    // whenever data at this location is updated.
-                                    String value = dataSnapshot.getValue(String.class);
-                                    Log.d("MAD", "Value is: " + value);
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError error) {
-                                    // Failed to read value
-                                    Log.w("MAD", "Failed to read value.", error.toException());
-                                }
-                            });
+//                            // Write a message to the database
+//                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+//                            DatabaseReference myRef = database.getReference("message");
+//
+//                            myRef.setValue("Hello, World!");
+//
+//                            // Read from the database
+//                            myRef.addValueEventListener(new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(DataSnapshot dataSnapshot) {
+//                                    // This method is called once with the initial value and again
+//                                    // whenever data at this location is updated.
+//                                    String value = dataSnapshot.getValue(String.class);
+//                                    Log.d("MAD", "Value is: " + value);
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(DatabaseError error) {
+//                                    // Failed to read value
+//                                    Log.w("MAD", "Failed to read value.", error.toException());
+//                                }
+//                            });
 
                             Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(mainIntent);
@@ -179,8 +176,8 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             showProgress(false);
-                            mPasswordView.setError(getString(R.string.error_incorrect_password));
-                            mPasswordView.requestFocus();
+                            mPasswordEt.setError(getString(R.string.error_incorrect_password));
+                            mPasswordEt.requestFocus();
                         }
 
                     }

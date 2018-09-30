@@ -16,7 +16,7 @@ import com.mad.sparkle.model.Store;
 
 /**
  * @author Audwin
- * Created on 14/09/2018
+ * Created on 14/09/18
  *
  */
 public class MainActivity extends AppCompatActivity implements ProfileFragment.OnFragmentInteractionListener,

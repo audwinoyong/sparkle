@@ -2,29 +2,21 @@ package com.mad.sparkle.model;
 
 public class User {
 
-    private int mUserId;
     private String mEmail;
-    private String mUsername;
     private String mPassword;
+    private String mFirstName;
+    private String mLastName;
     private String mMobilePhone;
 
     public User() {
     }
 
-    public User(int userId, String email, String username, String password, String mobilePhone) {
-        mUserId = userId;
+    public User(String email, String password, String firstName, String lastName, String mobilePhone) {
         mEmail = email;
-        mUsername = username;
         mPassword = password;
+        mFirstName = firstName;
+        mLastName = lastName;
         mMobilePhone = mobilePhone;
-    }
-
-    public int getUserId() {
-        return mUserId;
-    }
-
-    public void setUserId(int userId) {
-        mUserId = userId;
     }
 
     public String getEmail() {
@@ -35,20 +27,28 @@ public class User {
         mEmail = email;
     }
 
-    public String getUsername() {
-        return mUsername;
-    }
-
-    public void setUsername(String username) {
-        mUsername = username;
-    }
-
     public String getPassword() {
         return mPassword;
     }
 
     public void setPassword(String password) {
         mPassword = password;
+    }
+
+    public String getFirstName() {
+        return mFirstName;
+    }
+
+    public void setFirstName(String firstName) {
+        mFirstName = firstName;
+    }
+
+    public String getLastName() {
+        return mLastName;
+    }
+
+    public void setLastName(String lastName) {
+        mLastName = lastName;
     }
 
     public String getMobilePhone() {
