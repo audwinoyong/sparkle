@@ -1,11 +1,11 @@
-package com.mad.sparkle;
+package com.mad.sparkle.view;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.mad.sparkle.view.LoginActivity;
+import com.mad.sparkle.R;
 
 public class PreLoginActivity extends AppCompatActivity {
 

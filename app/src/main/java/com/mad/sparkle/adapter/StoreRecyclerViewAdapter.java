@@ -1,4 +1,4 @@
-package com.mad.sparkle;
+package com.mad.sparkle.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,10 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mad.sparkle.StoreFragment.OnListFragmentInteractionListener;
+import com.mad.sparkle.R;
+import com.mad.sparkle.view.StoreFragment.OnListFragmentInteractionListener;
 import com.mad.sparkle.dummy.DummyContent.DummyItem;
 import com.mad.sparkle.model.Store;
 

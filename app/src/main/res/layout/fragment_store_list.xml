@@ -11,5 +11,5 @@
     android:layout_marginRight="16dp"
     android:layout_marginBottom="16dp"
     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-    tools:context=".StoreFragment"
+    tools:context=".view.StoreFragment"
     tools:listitem="@layout/fragment_store" />

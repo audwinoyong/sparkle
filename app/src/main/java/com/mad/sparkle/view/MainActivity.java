@@ -1,6 +1,5 @@
-package com.mad.sparkle;
+package com.mad.sparkle.view;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.mad.sparkle.dummy.DummyContent;
+import com.mad.sparkle.R;
 import com.mad.sparkle.model.Store;
 
 /**

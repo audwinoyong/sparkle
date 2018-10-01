@@ -1,4 +1,4 @@
-package com.mad.sparkle;
+package com.mad.sparkle.view;
 
 import android.content.Context;
 import android.net.Uri;
@@ -19,6 +19,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mad.sparkle.Constants;
+import com.mad.sparkle.R;
 import com.mad.sparkle.model.User;
 
 

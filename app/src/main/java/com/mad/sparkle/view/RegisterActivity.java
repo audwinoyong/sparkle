@@ -1,4 +1,4 @@
-package com.mad.sparkle;
+package com.mad.sparkle.view;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -25,8 +25,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.mad.sparkle.Constants;
+import com.mad.sparkle.R;
 import com.mad.sparkle.model.User;
-import com.mad.sparkle.view.LoginActivity;
 
 /**
  * A login screen that offers login via email/password.

@@ -1,18 +1,17 @@
-package com.mad.sparkle;
+package com.mad.sparkle.view;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mad.sparkle.dummy.DummyContent;
-import com.mad.sparkle.dummy.DummyContent.DummyItem;
+import com.mad.sparkle.R;
+import com.mad.sparkle.adapter.StoreRecyclerViewAdapter;
 import com.mad.sparkle.model.Store;
 
 import java.util.ArrayList;
