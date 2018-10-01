@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,12 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.mad.sparkle.model.User;
 
 
 /**
@@ -29,7 +36,9 @@ public class ProfileFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabaseRef;
+    private FirebaseUser mUser;
+    private TextView mName;
     private TextView mEmail;
 
     // TODO: Rename and change types of parameters
@@ -80,13 +89,27 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mName = (TextView) getView().findViewById(R.id.fragment_profile_name);
         mEmail = (TextView) getView().findViewById(R.id.fragment_profile_email);
-        mAuth = FirebaseAuth.getInstance();
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            mEmail.setText(user.getEmail());
-        }
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child(Constants.USERS).child(mUser.getUid());
+
+        mDatabaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                mName.setText(user.mFirstName + " " + user.mLastName);
+                mEmail.setText(user.mEmail);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Failed to read value
+                Log.w("MAD", "Failed to read value.", databaseError.toException());
+            }
+        });
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

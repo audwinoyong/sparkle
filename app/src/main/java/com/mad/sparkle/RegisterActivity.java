@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mad.sparkle.model.User;
+import com.mad.sparkle.view.LoginActivity;
 
 /**
  * A login screen that offers login via email/password.
