@@ -7,7 +7,7 @@
 
         <variable
             name="loginViewModel"
-            type="com.mad.sparkle.viewmodel.UserViewModel" />
+            type="com.mad.sparkle.viewmodel.LoginViewModel" />
     </data>
 
     <RelativeLayout

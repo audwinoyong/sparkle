@@ -24,5 +24,6 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="mobile_phone">Mobile Phone</string>
+    <string name="title_activity_store_detail">Store Detail</string>
 
 </resources>

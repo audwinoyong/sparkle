@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.mad.sparkle.Constants;
 import com.mad.sparkle.R;
 import com.mad.sparkle.model.User;
+import com.squareup.picasso.Picasso;
 
 
 /**
@@ -42,6 +44,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser mUser;
     private TextView mName;
     private TextView mEmail;
+    private ImageView mAvatar;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -93,6 +96,7 @@ public class ProfileFragment extends Fragment {
 
         mName = (TextView) getView().findViewById(R.id.fragment_profile_name);
         mEmail = (TextView) getView().findViewById(R.id.fragment_profile_email);
+        mAvatar = (ImageView) getView().findViewById(R.id.fragment_profile_avatar);
 
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child(Constants.USERS).child(mUser.getUid());
@@ -103,6 +107,7 @@ public class ProfileFragment extends Fragment {
                 User user = dataSnapshot.getValue(User.class);
                 mName.setText(user.mFirstName + " " + user.mLastName);
                 mEmail.setText(user.mEmail);
+                Picasso.get().load("https://i.imgur.com/3wZvG9q.jpg").into(mAvatar);
             }
 
             @Override

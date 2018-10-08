@@ -1,5 +1,6 @@
 package com.mad.sparkle.view;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,9 +17,8 @@ import com.mad.sparkle.model.Store;
 /**
  * @author Audwin
  * Created on 14/09/18
- *
  */
-public class MainActivity extends AppCompatActivity implements ProfileFragment.OnFragmentInteractionListener,
+public class NavigationActivity extends AppCompatActivity implements ProfileFragment.OnFragmentInteractionListener,
         StoreFragment.OnListFragmentInteractionListener {
 
     private TextView mTextMessage;
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_navigation);
 
         mFragmentManager.beginTransaction().add(R.id.contentContainer, mProfileFragment).hide(mProfileFragment).commit();
         mFragmentManager.beginTransaction().add(R.id.contentContainer, mStoreFragment).commit();
@@ -81,7 +81,13 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
 
     @Override
     public void onListFragmentInteraction(Store store) {
-//        Intent mainIntent = new Intent(MainActivity.this, LoginActivity.class);
-//        startActivity(mainIntent);
+        Intent storeDetailIntent = new Intent(NavigationActivity.this, StoreDetailActivity.class);
+
+        storeDetailIntent.putExtra(StoreDetailActivity.NAME, store.getName());
+        storeDetailIntent.putExtra(StoreDetailActivity.ADDRESS, store.getAddress());
+        storeDetailIntent.putExtra(StoreDetailActivity.DISTANCE, store.getDistance());
+        storeDetailIntent.putExtra(StoreDetailActivity.RATING, store.getRating());
+
+        startActivityForResult(storeDetailIntent, 1111);
     }
 }

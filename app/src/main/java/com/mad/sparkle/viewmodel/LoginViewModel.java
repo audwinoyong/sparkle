@@ -18,11 +18,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.mad.sparkle.view.MainActivity;
+import com.mad.sparkle.view.NavigationActivity;
 import com.mad.sparkle.R;
 import com.mad.sparkle.model.User;
 
-public class UserViewModel extends BaseObservable {
+public class LoginViewModel extends BaseObservable {
 
     private String mEmail;
     private String mPassword;
@@ -36,7 +36,7 @@ public class UserViewModel extends BaseObservable {
     private EditText mPasswordEt;
     private View mProgressView;
 
-    public UserViewModel(User user, Context context, String email, String password, EditText emailEt, EditText passwordEt, View progressView) {
+    public LoginViewModel(User user, Context context, String email, String password, EditText emailEt, EditText passwordEt, View progressView) {
         this.mEmail = email;
         this.mPassword = password;
         this.mFirstName = user.mFirstName;
@@ -162,7 +162,7 @@ public class UserViewModel extends BaseObservable {
                             Toast.makeText(mContext, "Authentication successful.",
                                     Toast.LENGTH_SHORT).show();
 
-                            Intent mainIntent = new Intent(mContext, MainActivity.class);
+                            Intent mainIntent = new Intent(mContext, NavigationActivity.class);
                             mContext.startActivity(mainIntent);
 
                             showProgress(false);
