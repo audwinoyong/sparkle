@@ -92,6 +92,7 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
         storeDetailIntent.putExtra(StoreDetailActivity.ADDRESS, store.getAddress());
         storeDetailIntent.putExtra(StoreDetailActivity.DISTANCE, store.getDistance());
         storeDetailIntent.putExtra(StoreDetailActivity.RATING, store.getRating());
+        storeDetailIntent.putExtra(StoreDetailActivity.PHONE, store.getPhone());
 
         startActivityForResult(storeDetailIntent, 1111);
     }

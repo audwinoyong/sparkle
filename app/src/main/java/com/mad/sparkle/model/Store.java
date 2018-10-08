@@ -7,17 +7,19 @@ public class Store {
     private String mAddress;
     private int mDistance;
     private int mRating;
+    private String mPhone;
 //    private ArrayList<Service> mServices;
 
     public Store() {
     }
 
-    public Store(String name, String address, int distance, int rating) {
+    public Store(String name, String address, int distance, int rating, String phone) {
         mName = name;
         mAddress = address;
         mDistance = distance;
         mRating = rating;
 //        mServices = services;
+        mPhone = phone;
     }
 
     public String getName() {
@@ -59,4 +61,12 @@ public class Store {
 //    public void setServices(ArrayList<Service> services) {
 //        mServices = services;
 //    }
+
+    public String getPhone() {
+        return mPhone;
+    }
+
+    public void setPhone(String phone) {
+        mPhone = phone;
+    }
 }
