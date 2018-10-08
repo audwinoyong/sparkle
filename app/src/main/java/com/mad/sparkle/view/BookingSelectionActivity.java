@@ -3,6 +3,8 @@ package com.mad.sparkle.view;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.mad.sparkle.R;
+
 public class BookingSelectionActivity extends AppCompatActivity {
 
     @Override

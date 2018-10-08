@@ -1,45 +1,45 @@
-//package com.mad.sparkle;
-//
-//import android.app.Activity;
-//import android.content.Intent;
-//import android.support.annotation.NonNull;
-//import android.util.Log;
-//import android.widget.Toast;
-//
-//import com.google.android.gms.tasks.OnCompleteListener;
-//import com.google.android.gms.tasks.Task;
-//import com.google.firebase.auth.AuthResult;
-//import com.google.firebase.auth.FirebaseAuth;
-//import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-//import com.google.firebase.database.FirebaseDatabase;
-//import com.mad.sparkle.model.User;
-//import com.mad.sparkle.view.LoginActivity;
-//import com.mad.sparkle.view.NavigationActivity;
-//import com.mad.sparkle.view.RegisterActivity;
-//
-//public class FirebaseDatabaseHelper {
-//
-//    public boolean signInSuccess;
-//    public boolean registerSuccess;
-//
-//    public boolean signIn(String email, String password) {
-//        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-//                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if (task.isSuccessful()) {
-//                            signInSuccess = true;
-//                            Log.d("LOGIN", "signInWithEmail:success");
-//                        } else {
-//                            signInSuccess = false;
-//                            Log.d("LOGIN", "signInWithEmail:failure");
-//
-//                        }
-//                    }
-//                });
-//        return signInSuccess;
-//    }
-//
+package com.mad.sparkle.utils;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.database.FirebaseDatabase;
+import com.mad.sparkle.model.User;
+import com.mad.sparkle.view.LoginActivity;
+import com.mad.sparkle.view.NavigationActivity;
+import com.mad.sparkle.view.RegisterActivity;
+
+public class FirebaseRepository {
+
+    public boolean signInSuccess;
+    public boolean registerSuccess;
+
+    public boolean signIn(String email, String password) {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            signInSuccess = true;
+                            Log.d("LOGIN", "signInWithEmail:success");
+                        } else {
+                            signInSuccess = false;
+                            Log.d("LOGIN", "signInWithEmail:failure");
+
+                        }
+                    }
+                });
+        return signInSuccess;
+    }
+
 //    public boolean register(final String email, final String password, final Activity activity) {
 //        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
 //                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
@@ -95,5 +95,7 @@
 //                        }
 //                    }
 //                });
-//
-//}
+//        return registerSuccess;
+//    }
+
+}

@@ -1,4 +1,4 @@
-package com.mad.sparkle;
+package com.mad.sparkle.utils;
 
 /**
  * @author Audwin

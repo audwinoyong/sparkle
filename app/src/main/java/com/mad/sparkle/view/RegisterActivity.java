@@ -25,7 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.mad.sparkle.Constants;
+import com.mad.sparkle.utils.Constants;
 import com.mad.sparkle.R;
 import com.mad.sparkle.model.User;
 

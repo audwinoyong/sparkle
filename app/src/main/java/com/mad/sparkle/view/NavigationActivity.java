@@ -23,6 +23,7 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
 
     private TextView mTextMessage;
 
+    final Fragment mMapFragment = MapFragment.newInstance();
     final Fragment mStoreFragment = StoreFragment.newInstance();
     final Fragment mProfileFragment = ProfileFragment.newInstance("", "");
     final FragmentManager mFragmentManager = getSupportFragmentManager();
@@ -35,9 +36,12 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_map:
-                    mTextMessage.setText(R.string.map);
+//                    mTextMessage.setText(R.string.map);
 
-                    mFragmentManager.beginTransaction().hide(active).commit();
+                    mFragmentManager.beginTransaction().hide(active).show(mMapFragment).commit();
+                    active = mMapFragment;
+
+//                    mFragmentManager.beginTransaction().hide(active).commit();
 
                     return true;
                 case R.id.navigation_list:
@@ -62,6 +66,7 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
+        mFragmentManager.beginTransaction().add(R.id.contentContainer, mMapFragment).hide(mMapFragment).commit();
         mFragmentManager.beginTransaction().add(R.id.contentContainer, mProfileFragment).hide(mProfileFragment).commit();
         mFragmentManager.beginTransaction().add(R.id.contentContainer, mStoreFragment).commit();
 
