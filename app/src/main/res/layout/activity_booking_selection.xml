@@ -6,6 +6,49 @@
     android:layout_height="match_parent"
     tools:context=".view.BookingSelectionActivity">
 
+    <Button
+        android:id="@+id/alert_dialog_date_picker"
+        style="?android:textAppearanceSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/shape_button"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="20dp"
+        android:text="Date Picker Dialog"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/alert_dialog_time_picker"
+        style="?android:textAppearanceSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alert_dialog_date_picker"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape_button"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="20dp"
+        android:text="Time Picker Dialog"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/activity_booking_selection_button"
+        style="?android:textAppearanceSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/shape_button"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:text="Confirm"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
 
 </RelativeLayout>

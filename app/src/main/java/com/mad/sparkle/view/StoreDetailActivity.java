@@ -80,6 +80,8 @@ public class StoreDetailActivity extends AppCompatActivity {
         makeBookingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent bookingSelectionIntent = new Intent(StoreDetailActivity.this, BookingSelectionActivity.class);
+                startActivity(bookingSelectionIntent);
 
             }
         });

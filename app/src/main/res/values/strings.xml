@@ -25,5 +25,7 @@
     <string name="last_name">Last Name</string>
     <string name="mobile_phone">Mobile Phone</string>
     <string name="title_activity_store_detail">Store Detail</string>
+    <string name="title_activity_booking_selection">Booking Selection</string>
+    <string name="title_activity_booking_confirmation">Booking Confirmation</string>
 
 </resources>

@@ -9,9 +9,8 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -57,7 +56,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.BookingSelectionActivity"
-            android:label="@string/title_activity_store_detail"
+            android:label="@string/title_activity_booking_selection"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.BookingConfirmationActivity"
+            android:label="@string/title_activity_booking_confirmation"
             android:screenOrientation="portrait" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -65,15 +68,15 @@
              Note that the API key is linked to the encryption key used to sign the APK.
              You need a different API key for each encryption key, including the release key that is used to
              sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <!--<activity-->
-            <!--android:name=".view.MapsActivity"-->
-            <!--android:label="@string/map"></activity>-->
+        <!-- <activity -->
+        <!-- android:name=".view.MapsActivity" -->
+        <!-- android:label="@string/map"></activity> -->
     </application>
 
 </manifest>
