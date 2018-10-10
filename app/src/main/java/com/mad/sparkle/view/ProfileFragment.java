@@ -105,8 +105,8 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                mName.setText(user.mFirstName + " " + user.mLastName);
-                mEmail.setText(user.mEmail);
+                mName.setText(user.firstName + " " + user.lastName);
+                mEmail.setText(user.email);
                 Picasso.get().load("https://i.imgur.com/3wZvG9q.jpg").into(mAvatar);
             }
 

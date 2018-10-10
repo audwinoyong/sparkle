@@ -2,40 +2,40 @@ package com.mad.sparkle.model;
 
 public class Service {
 
-    private int mServiceId;
-    private String mServiceName;
-    private int mPrice;
+    private int serviceId;
+    private String serviceName;
+    private int price;
 
     public Service() {
     }
 
     public Service(int serviceId, String serviceName, int price) {
-        mServiceId = serviceId;
-        mServiceName = serviceName;
-        mPrice = price;
+        this.serviceId = serviceId;
+        this.serviceName = serviceName;
+        this.price = price;
     }
 
     public int getServiceId() {
-        return mServiceId;
+        return serviceId;
     }
 
     public void setServiceId(int serviceId) {
-        mServiceId = serviceId;
+        this.serviceId = serviceId;
     }
 
     public String getServiceName() {
-        return mServiceName;
+        return serviceName;
     }
 
     public void setServiceName(String serviceName) {
-        mServiceName = serviceName;
+        this.serviceName = serviceName;
     }
 
     public int getPrice() {
-        return mPrice;
+        return price;
     }
 
     public void setPrice(int price) {
-        mPrice = price;
+        this.price = price;
     }
 }

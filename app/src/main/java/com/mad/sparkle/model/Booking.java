@@ -2,60 +2,60 @@ package com.mad.sparkle.model;
 
 public class Booking {
 
-    private int mBookingId;
-    private String mDate;
-    private String mTime;
-    private Service mService;
-    private User mUser;
+    private int bookingId;
+    private String date;
+    private String time;
+    private Service service;
+    private User user;
 
     public Booking() {
     }
 
     public Booking(int bookingId, String date, String time, Service service, User user) {
-        mBookingId = bookingId;
-        mDate = date;
-        mTime = time;
-        mService = service;
-        mUser = user;
+        this.bookingId = bookingId;
+        this.date = date;
+        this.time = time;
+        this.service = service;
+        this.user = user;
     }
 
     public int getBookingId() {
-        return mBookingId;
+        return bookingId;
     }
 
     public void setBookingId(int bookingId) {
-        mBookingId = bookingId;
+        this.bookingId = bookingId;
     }
 
     public String getDate() {
-        return mDate;
+        return date;
     }
 
     public void setDate(String date) {
-        mDate = date;
+        this.date = date;
     }
 
     public String getTime() {
-        return mTime;
+        return time;
     }
 
     public void setTime(String time) {
-        mTime = time;
+        this.time = time;
     }
 
     public Service getService() {
-        return mService;
+        return service;
     }
 
     public void setService(Service service) {
-        mService = service;
+        this.service = service;
     }
 
     public User getUser() {
-        return mUser;
+        return user;
     }
 
     public void setUser(User user) {
-        mUser = user;
+        this.user = user;
     }
 }

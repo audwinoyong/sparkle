@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mad.sparkle.R;
@@ -18,30 +19,28 @@ public class BookingSelectionActivity extends AppCompatActivity implements DateP
     private static final String DIALOG_DATE = "BookingSelectionActivity.DateDialog";
     private static final String DIALOG_TIME = "BookingSelectionActivity.TimeDialog";
 
-    private Button datePickerAlertDialog;
-    private Button timePickerAlertDialog;
+    private EditText datePickerDialogEt;
+    private EditText timePickerDialogEt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_selection);
 
-        datePickerAlertDialog = (Button) findViewById(R.id.alert_dialog_date_picker);
-        timePickerAlertDialog = (Button) findViewById(R.id.alert_dialog_time_picker);
+        datePickerDialogEt = (EditText) findViewById(R.id.alert_dialog_date_picker_et);
+        timePickerDialogEt = (EditText) findViewById(R.id.alert_dialog_time_picker_et);
 
-        datePickerAlertDialog.setOnClickListener(new View.OnClickListener() {
+        datePickerDialogEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 DatePickerFragment dialog = new DatePickerFragment();
                 dialog.show(getSupportFragmentManager(), DIALOG_DATE);
             }
         });
 
-        timePickerAlertDialog.setOnClickListener(new View.OnClickListener() {
+        timePickerDialogEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 TimePickerFragment dialog = new TimePickerFragment();
                 dialog.show(getSupportFragmentManager(), DIALOG_TIME);
             }
@@ -61,6 +60,7 @@ public class BookingSelectionActivity extends AppCompatActivity implements DateP
     @Override
     public void onFinishDialog(Date date) {
         Toast.makeText(this, "Selected Date : " + formatDate(date), Toast.LENGTH_SHORT).show();
+        datePickerDialogEt.setText(formatDate(date));
     }
 
     public String formatDate(Date date) {
@@ -72,5 +72,6 @@ public class BookingSelectionActivity extends AppCompatActivity implements DateP
     @Override
     public void onFinishDialog(String time) {
         Toast.makeText(this, "Selected Time : " + time, Toast.LENGTH_SHORT).show();
+        timePickerDialogEt.setText(time);
     }
 }

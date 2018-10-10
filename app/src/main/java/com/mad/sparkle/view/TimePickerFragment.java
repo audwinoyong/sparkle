@@ -20,13 +20,14 @@ public class TimePickerFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
         View v = LayoutInflater.from(getActivity())
                 .inflate(R.layout.dialog_time, null);
 
         timePicker = (TimePicker) v.findViewById(R.id.dialog_time_picker);
+
         return new android.support.v7.app.AlertDialog.Builder(getActivity())
                 .setView(v)
-//                .setTitle("Select Time")
                 .setPositiveButton(android.R.string.ok,
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -48,12 +49,18 @@ public class TimePickerFragment extends DialogFragment {
                                 dismiss();
                             }
                         })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
                 .create();
     }
 
     private String updateTime(int hours, int mins) {
 
-        String timeSet = "";
+        String timeSet;
         if (hours > 12) {
             hours -= 12;
             timeSet = "PM";
@@ -65,15 +72,12 @@ public class TimePickerFragment extends DialogFragment {
         else
             timeSet = "AM";
 
-        String minutes = "";
+        String minutes;
         if (mins < 10)
             minutes = "0" + mins;
         else
             minutes = String.valueOf(mins);
 
-        String myTime = new StringBuilder().append(hours).append(':')
-                .append(minutes).append(" ").append(timeSet).toString();
-
-        return myTime;
+        return String.valueOf(hours) + ':' + minutes + " " + timeSet;
     }
 }

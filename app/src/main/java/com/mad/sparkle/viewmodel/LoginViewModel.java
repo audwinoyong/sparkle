@@ -36,12 +36,18 @@ public class LoginViewModel extends BaseObservable {
     private EditText mPasswordEt;
     private View mProgressView;
 
+//    public LoginViewModel(Application application, FirebaseAuth auth) {
+//        mApplication = application;
+//        mAuth = auth;
+//        mFirebaseRepo = new FirebaseRepository();
+//    }
+
     public LoginViewModel(User user, Context context, String email, String password, EditText emailEt, EditText passwordEt, View progressView) {
         this.mEmail = email;
         this.mPassword = password;
-        this.mFirstName = user.mFirstName;
-        this.mLastName = user.mLastName;
-        this.mMobilePhone = user.mMobilePhone;
+        this.mFirstName = user.firstName;
+        this.mLastName = user.lastName;
+        this.mMobilePhone = user.mobilePhone;
         this.mContext = context;
         this.mEmailEt = emailEt;
         this.mPasswordEt = passwordEt;

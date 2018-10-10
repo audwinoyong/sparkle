@@ -1,72 +1,70 @@
 package com.mad.sparkle.model;
 
-import java.util.ArrayList;
-
 public class Store {
-    private String mName;
-    private String mAddress;
-    private int mDistance;
-    private int mRating;
-    private String mPhone;
-//    private ArrayList<Service> mServices;
+    private String name;
+    private String address;
+    private int distance;
+    private int rating;
+    private String phone;
+//    private ArrayList<Service> services;
 
     public Store() {
     }
 
     public Store(String name, String address, int distance, int rating, String phone) {
-        mName = name;
-        mAddress = address;
-        mDistance = distance;
-        mRating = rating;
+        this.name = name;
+        this.address = address;
+        this.distance = distance;
+        this.rating = rating;
 //        mServices = services;
-        mPhone = phone;
+        this.phone = phone;
     }
 
     public String getName() {
-        return mName;
+        return name;
     }
 
     public void setName(String name) {
-        mName = name;
+        this.name = name;
     }
 
     public String getAddress() {
-        return mAddress;
+        return address;
     }
 
     public void setAddress(String address) {
-        mAddress = address;
+        this.address = address;
     }
 
     public int getDistance() {
-        return mDistance;
+        return distance;
     }
 
     public void setDistance(int distance) {
-        mDistance = distance;
+        this.distance = distance;
     }
 
     public int getRating() {
-        return mRating;
+        return rating;
     }
 
     public void setRating(int rating) {
-        mRating = rating;
+        this.rating = rating;
     }
 
 //    public ArrayList<Service> getServices() {
-//        return mServices;
+//        return services;
 //    }
 //
 //    public void setServices(ArrayList<Service> services) {
-//        mServices = services;
+//        this.services = services;
 //    }
 
     public String getPhone() {
-        return mPhone;
+        return phone;
     }
 
     public void setPhone(String phone) {
-        mPhone = phone;
+        this.phone = phone;
     }
 }

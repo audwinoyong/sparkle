@@ -52,12 +52,19 @@
         <activity
             android:name=".view.StoreDetailActivity"
             android:label="@string/title_activity_store_detail"
+            android:parentActivityName=".view.NavigationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.NavigationActivity" />
+        </activity>
         <activity
             android:name=".view.BookingSelectionActivity"
             android:label="@string/title_activity_booking_selection"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".view.BookingConfirmationActivity"
             android:label="@string/title_activity_booking_confirmation"

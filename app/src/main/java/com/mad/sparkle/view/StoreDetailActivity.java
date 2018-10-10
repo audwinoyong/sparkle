@@ -41,6 +41,8 @@ public class StoreDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         this.setTitle(getIntent().getStringExtra(NAME));
 

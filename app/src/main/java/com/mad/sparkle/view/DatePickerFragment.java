@@ -10,6 +10,7 @@ import android.widget.DatePicker;
 
 import com.mad.sparkle.R;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -26,10 +27,19 @@ public class DatePickerFragment extends DialogFragment {
 
         View v = LayoutInflater.from(getActivity())
                 .inflate(R.layout.dialog_date, null);
-        datePicker = (DatePicker) v.findViewById(R.id.dialog_date_date_picker);
-        return new android.support.v7.app.AlertDialog.Builder(getActivity())
+
+        Calendar calendar = Calendar.getInstance();
+
+        datePicker = (DatePicker) v.findViewById(R.id.dialog_date_picker);
+        // set today as minimum date and disable past dates
+        datePicker.setMinDate(calendar.getTimeInMillis());
+        // add 6 months from today
+        calendar.add(Calendar.MONTH, 6);
+        // set 6 months as maximum date
+        datePicker.setMaxDate(calendar.getTimeInMillis());
+
+        return new android.support.v7.app.AlertDialog.Builder(getActivity(), R.style.DialogCustomTheme)
                 .setView(v)
-//                .setTitle("Select Date")
                 .setPositiveButton(android.R.string.ok,
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -43,6 +53,12 @@ public class DatePickerFragment extends DialogFragment {
                                 dismiss();
                             }
                         })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
                 .create();
     }
 }
