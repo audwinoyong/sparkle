@@ -83,7 +83,7 @@
                     android:layout_marginTop="16dp"
                     android:background="@drawable/shape_button"
                     android:foreground="?attr/selectableItemBackgroundBorderless"
-                    android:onClick="@{loginViewModel.onLoginClick()}"
+                    android:onClick="@{loginViewModel::attemptLogin}"
                     android:text="@string/action_sign_in_short"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
