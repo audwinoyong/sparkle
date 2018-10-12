@@ -1,6 +1,6 @@
 package com.mad.sparkle.utils;
 
-import android.app.Activity;
+import android.app.Application;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -10,37 +10,37 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.database.FirebaseDatabase;
-import com.mad.sparkle.model.User;
-import com.mad.sparkle.view.LoginActivity;
+import com.mad.sparkle.R;
 import com.mad.sparkle.view.NavigationActivity;
-import com.mad.sparkle.view.RegisterActivity;
 
 public class FirebaseRepository {
 
-    public boolean signInSuccess;
-    public boolean registerSuccess;
-
-    public boolean signIn(String email, String password) {
+    public void signIn(final String email, final String password, final Application application) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            signInSuccess = true;
-                            Log.d("LOGIN", "signInWithEmail:success");
-                        } else {
-                            signInSuccess = false;
-                            Log.d("LOGIN", "signInWithEmail:failure");
+                            // Sign in success, start navigation activity
+                            Toast.makeText(application.getApplicationContext(), R.string.sign_in_successful,
+                                    Toast.LENGTH_SHORT).show();
 
+                            Intent mainIntent = new Intent(application.getApplicationContext(), NavigationActivity.class);
+                            application.startActivity(mainIntent);
+
+                            Log.d("DEBUG", "signInWithEmail:success " + email + " " + password);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(application.getApplicationContext(), R.string.error_incorrect_email_or_password,
+                                    Toast.LENGTH_SHORT).show();
+
+                            Log.d("DEBUG", "signInWithEmail:failure");
                         }
                     }
                 });
-        return signInSuccess;
     }
 
-//    public boolean register(final String email, final String password, final Activity activity) {
+//    public void register(final String email, final String password, final Activity activity) {
 //        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
 //                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
 //                    @Override

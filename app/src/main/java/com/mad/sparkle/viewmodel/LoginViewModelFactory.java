@@ -16,8 +16,8 @@ public class LoginViewModelFactory extends ViewModelProvider.NewInstanceFactory 
         mAuth = auth;
     }
 
-//    @Override
-//    public <T extends ViewModel> T create(Class<T> modelClass) {
-//        return (T) new LoginViewModel(mApplication, mAuth);
-//    }
+    @Override
+    public <T extends ViewModel> T create(Class<T> modelClass) {
+        return (T) new LoginViewModel(mApplication, mAuth);
+    }
 }

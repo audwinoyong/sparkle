@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="loginViewModel"
             type="com.mad.sparkle.viewmodel.LoginViewModel" />
@@ -52,7 +54,8 @@
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="@={loginViewModel.email}" />
+                        android:text="@={loginViewModel.email}"
+                        app:errorText="@{loginViewModel.emailError}" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -71,7 +74,8 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="@={loginViewModel.password}" />
+                        android:text="@={loginViewModel.password}"
+                        app:errorText="@{loginViewModel.passwordError}" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -96,7 +100,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:visibility="gone" />
+                    android:visibility="@{loginViewModel.progressIsShown ? View.VISIBLE : View.GONE}" />
 
             </LinearLayout>
         </ScrollView>
