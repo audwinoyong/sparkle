@@ -44,7 +44,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser mUser;
     private TextView mName;
     private TextView mEmail;
-    private ImageView mAvatar;
+    private ImageView mProfileImg;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -96,7 +96,7 @@ public class ProfileFragment extends Fragment {
 
         mName = (TextView) getView().findViewById(R.id.fragment_profile_name);
         mEmail = (TextView) getView().findViewById(R.id.fragment_profile_email);
-        mAvatar = (ImageView) getView().findViewById(R.id.fragment_profile_avatar);
+        mProfileImg = (ImageView) getView().findViewById(R.id.fragment_profile_image);
 
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child(Constants.USERS).child(mUser.getUid());
@@ -107,7 +107,10 @@ public class ProfileFragment extends Fragment {
                 User user = dataSnapshot.getValue(User.class);
                 mName.setText(user.firstName + " " + user.lastName);
                 mEmail.setText(user.email);
-                Picasso.get().load("https://i.imgur.com/3wZvG9q.jpg").into(mAvatar);
+                if (!user.profileImage.isEmpty()) {
+                    Picasso.get().load(user.profileImage).placeholder(R.drawable.ic_account_circle).into(mProfileImg);
+                }
+//                Picasso.get().load("https://i.imgur.com/3wZvG9q.jpg").into(mProfileImg);
             }
 
             @Override

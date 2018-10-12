@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/fragment_profile_avatar"
+            android:id="@+id/fragment_profile_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/ic_account_circle"

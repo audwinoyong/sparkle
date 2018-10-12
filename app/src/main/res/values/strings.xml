@@ -27,5 +27,6 @@
     <string name="title_activity_store_detail">Store Detail</string>
     <string name="title_activity_booking_selection">Booking Selection</string>
     <string name="title_activity_booking_confirmation">Booking Confirmation</string>
+    <string name="sign_out">Sign Out</string>
 
 </resources>

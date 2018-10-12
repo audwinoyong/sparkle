@@ -8,4 +8,6 @@ package com.mad.sparkle.utils;
  */
 public class Constants {
     public static final String USERS = "users";
+    public static final String PROFILE_IMAGE = "profileImage";
+    public static final int REQUEST_IMAGE_CAPTURE = 1111;
 }

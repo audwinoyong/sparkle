@@ -1,7 +1,9 @@
 package com.mad.sparkle.view;
 
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
@@ -19,15 +21,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.mad.sparkle.utils.Constants;
 import com.mad.sparkle.R;
 import com.mad.sparkle.model.User;
+
+import java.io.File;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.mad.sparkle.utils.Constants.PROFILE_IMAGE;
+import static com.mad.sparkle.utils.Constants.REQUEST_IMAGE_CAPTURE;
+import static com.mad.sparkle.utils.Constants.USERS;
 
 /**
  * A login screen that offers login via email/password.
@@ -40,13 +55,17 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseRef;
+    private StorageReference mStorageRef;
 
     // UI references.
+    private CircleImageView mProfileImg;
     private EditText mEmailEt;
     private EditText mPasswordEt;
     private EditText mFirstNameEt;
     private EditText mLastNameEt;
     private EditText mMobilePhoneEt;
+    private Uri mImageUri;
+
     private View mProgressView;
     private View mLoginFormView;
 
@@ -56,8 +75,17 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         mAuth = FirebaseAuth.getInstance();
+        mStorageRef = FirebaseStorage.getInstance().getReference();
 
         // Set up the login form.
+        mProfileImg = (CircleImageView) findViewById(R.id.activity_register_profile_image);
+        mProfileImg.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeProfileImage();
+            }
+        });
+
         mEmailEt = (EditText) findViewById(R.id.activity_register_email);
 
         mPasswordEt = (EditText) findViewById(R.id.activity_register_password);
@@ -87,6 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.activity_register_login_form);
         mProgressView = findViewById(R.id.activity_register_login_progress);
     }
+
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -159,7 +188,7 @@ public class RegisterActivity extends AppCompatActivity {
                             String lastName = mLastNameEt.getText().toString();
                             String mobilePhone = mMobilePhoneEt.getText().toString();
 
-                            User newUser = new User(email, password, firstName, lastName, mobilePhone);
+                            User newUser = new User(email, password, firstName, lastName, mobilePhone, "");
 
                             String uid = mAuth.getCurrentUser().getUid();
                             FirebaseDatabase.getInstance().getReference(Constants.USERS)
@@ -172,8 +201,8 @@ public class RegisterActivity extends AppCompatActivity {
                                         Toast.makeText(RegisterActivity.this, "Registration into database successful.",
                                                 Toast.LENGTH_SHORT).show();
 
-                                        Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                        startActivity(loginIntent);
+                                        Intent navigationIntent = new Intent(RegisterActivity.this, NavigationActivity.class);
+                                        startActivity(navigationIntent);
                                     } else {
                                         Log.w("REGISTER_DATABASE", "registerToDatabase:failure", task.getException());
                                         Toast.makeText(RegisterActivity.this, "Registration into database failed.",
@@ -182,7 +211,34 @@ public class RegisterActivity extends AppCompatActivity {
                                 }
                             });
 
+                            // Store profile image to Storage and Database
+                            mDatabaseRef = FirebaseDatabase.getInstance().getReference().child(USERS).child(uid);
+                            StorageReference filepath = mStorageRef.child(USERS).child(uid).child(mImageUri.getLastPathSegment());
+
+                            filepath.putFile(mImageUri)
+                                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            // Get the download Url from Storage and save it to the Database
+                                            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                @Override
+                                                public void onSuccess(Uri downloadUrl) {
+                                                    mDatabaseRef.child(PROFILE_IMAGE).setValue(downloadUrl.toString());
+                                                    Log.d("STORAGE", "uploadImage:success");
+                                                }
+                                            });
+
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception exception) {
+                                            Log.d("STORAGE", "uploadImage:failure");
+                                        }
+                                    });
+
                             showProgress(false);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("REGISTER", "createUserWithEmail:failure", task.getException());
@@ -206,6 +262,25 @@ public class RegisterActivity extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    private void changeProfileImage() {
+        Intent imageIntent = new Intent((Intent.ACTION_PICK));
+        imageIntent.setType("image/*");
+        imageIntent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(imageIntent, REQUEST_IMAGE_CAPTURE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            mImageUri = data.getData();
+            mProfileImg.setImageURI(mImageUri);
+            Toast.makeText(RegisterActivity.this, "Upload image successful", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }
 
