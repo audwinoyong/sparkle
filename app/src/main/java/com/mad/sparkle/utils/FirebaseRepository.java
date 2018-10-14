@@ -28,7 +28,7 @@ public class FirebaseRepository {
                             Intent mainIntent = new Intent(application.getApplicationContext(), NavigationActivity.class);
                             application.startActivity(mainIntent);
 
-                            Log.d("DEBUG", "signInWithEmail:success " + email + " " + password);
+                            Log.d("DEBUG", "signInWithEmail:success");
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(application.getApplicationContext(), R.string.error_incorrect_email_or_password,
@@ -95,7 +95,6 @@ public class FirebaseRepository {
 //                        }
 //                    }
 //                });
-//        return registerSuccess;
 //    }
 
 }
