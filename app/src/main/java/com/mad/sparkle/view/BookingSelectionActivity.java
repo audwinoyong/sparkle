@@ -65,8 +65,7 @@ public class BookingSelectionActivity extends AppCompatActivity implements DateP
 
     public String formatDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String hireDate = sdf.format(date);
-        return hireDate;
+        return sdf.format(date);
     }
 
     @Override

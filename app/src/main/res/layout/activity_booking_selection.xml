@@ -18,28 +18,35 @@
             android:layout_margin="16dp"
             android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/alert_dialog_date_picker_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/ic_date_range"
-        android:drawableLeft="@drawable/ic_date_range"
-        android:drawablePadding="8dp"
-        android:focusable="false"
-        android:hint="Date"
-        android:inputType="none" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Price: $20"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
 
-    <EditText
-        android:id="@+id/alert_dialog_time_picker_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/alert_dialog_date_picker_et"
-        android:drawableStart="@drawable/ic_access_time"
-        android:drawableLeft="@drawable/ic_access_time"
-        android:drawablePadding="8dp"
-        android:focusable="false"
-        android:hint="Time"
-        android:inputType="none" />
+            <EditText
+                android:id="@+id/alert_dialog_date_picker_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_date_range"
+                android:drawableLeft="@drawable/ic_date_range"
+                android:drawablePadding="8dp"
+                android:focusable="false"
+                android:hint="Date"
+                android:inputType="none" />
+
+            <EditText
+                android:id="@+id/alert_dialog_time_picker_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/alert_dialog_date_picker_et"
+                android:drawableStart="@drawable/ic_access_time"
+                android:drawableLeft="@drawable/ic_access_time"
+                android:drawablePadding="8dp"
+                android:focusable="false"
+                android:hint="Time"
+                android:inputType="none" />
 
         </LinearLayout>
 

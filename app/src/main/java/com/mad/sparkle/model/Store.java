@@ -7,16 +7,29 @@ public class Store {
     private int distance;
     private double rating;
     private String phone;
+    private double latitude;
+    private double longitude;
 
     public Store() {
     }
 
+    // Delete this later
     public Store(String name, String address, int distance, double rating, String phone) {
         this.name = name;
         this.address = address;
         this.distance = distance;
         this.rating = rating;
         this.phone = phone;
+    }
+
+    public Store(String name, String address, int distance, double rating, String phone, double latitude, double longitude) {
+        this.name = name;
+        this.address = address;
+        this.distance = distance;
+        this.rating = rating;
+        this.phone = phone;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getName() {
@@ -57,5 +70,21 @@ public class Store {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

@@ -2,6 +2,7 @@ package com.mad.sparkle.view;
 
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -31,6 +32,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.maps.android.SphericalUtil;
 import com.mad.sparkle.model.Store;
 import com.mad.sparkle.utils.Constants;
@@ -50,10 +53,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.mad.sparkle.utils.Constants.TAG;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
@@ -68,7 +75,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private StringBuilder mNearbyPlacesQueryStringBuilder;
     private JSONObject mJsonPlaceList;
 
+    private StorageReference mStorageRef;
+
     private List<Store> mStoreList = new ArrayList<Store>();
+
+    private Map<String, String> mMarkerMap = new HashMap<>();
 
     public static MapFragment newInstance() {
         return new MapFragment();
@@ -83,6 +94,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mStorageRef = FirebaseStorage.getInstance().getReference();
 
         getLocationPermission();
     }
@@ -143,6 +156,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         showCurrentLocation();
 
+        // Clicking on the info window snippet
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                int position = (int) (marker.getTag());
+//                Toast.makeText(getContext(), marker.getTitle() + position + marker.getSnippet(), Toast.LENGTH_SHORT).show();
+
+                Intent storeDetailIntent = new Intent(getActivity(), StoreDetailActivity.class);
+
+                storeDetailIntent.putExtra(StoreDetailActivity.NAME, mStoreList.get(position).getName());
+                storeDetailIntent.putExtra(StoreDetailActivity.ADDRESS, mStoreList.get(position).getAddress());
+                storeDetailIntent.putExtra(StoreDetailActivity.DISTANCE, mStoreList.get(position).getDistance());
+                storeDetailIntent.putExtra(StoreDetailActivity.RATING, mStoreList.get(position).getRating());
+                storeDetailIntent.putExtra(StoreDetailActivity.PHONE, mStoreList.get(position).getPhone());
+
+                startActivity(storeDetailIntent);
+            }
+        });
     }
 
     private void getLocationPermission() {
@@ -150,7 +181,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.REQUEST_LOCATION_PERMISSION);
-            Log.d("DEBUG", "Location permission requested");
+            Log.d(TAG, "Location permission requested");
         } else {
             mLocationPermissionGranted = true;
             startMap();
@@ -173,21 +204,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocationLatLng, DEFAULT_ZOOM));
                                 mLastKnownLocation = currentLocationLatLng;
 
-                                Log.d("DEBUG", "Show current location is successful");
+                                Log.d(TAG, "Show current location is successful");
                             } else {
                                 LatLng currentLocationLatLng = mDefaultLocation;
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocationLatLng, DEFAULT_ZOOM));
                                 mLastKnownLocation = currentLocationLatLng;
                             }
                         } else {
-                            Toast.makeText(getContext(), R.string.unable_to_find_current_location, Toast.LENGTH_SHORT).show();
-                            Log.d("DEBUG", "Show current location failed");
+                            Toast.makeText(getContext(), getString(R.string.unable_to_find_current_location), Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "Show current location failed");
                         }
                     }
                 });
             }
         } catch (SecurityException e) {
-            Log.e("EXCEPTION", e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
 
     }
@@ -200,12 +231,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             case Constants.REQUEST_LOCATION_PERMISSION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true;
-                    Log.d("DEBUG", "Location permission is granted");
+                    Log.d(TAG, "Location permission is granted");
                     startMap();
 
                 } else {
                     mLocationPermissionGranted = false;
-                    Log.d("DEBUG", "Location permission is not granted");
+                    Log.d(TAG, "Location permission is not granted");
                     startMap();
                 }
             }
@@ -218,25 +249,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mNearbyPlacesQueryStringBuilder.append("location=" + mLastKnownLocation.latitude + "," + mLastKnownLocation.longitude);
         mNearbyPlacesQueryStringBuilder.append("&rankby=" + "distance");
         mNearbyPlacesQueryStringBuilder.append("&keyword=" + "car+wash");
-        mNearbyPlacesQueryStringBuilder.append("&key=" + getResources().getString(R.string.google_maps_key));
+        mNearbyPlacesQueryStringBuilder.append("&key=" + getString(R.string.google_maps_key));
 
-        Log.d("DEBUG", "url= " + mNearbyPlacesQueryStringBuilder.toString());
+        Log.d(TAG, "url= " + mNearbyPlacesQueryStringBuilder.toString());
     }
 
     private String createPlaceDetailsQuery(String placeId) {
         StringBuilder placeDetailsQuery = new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json?");
         placeDetailsQuery.append("placeid=" + placeId);
         placeDetailsQuery.append("&fields=" + "formatted_phone_number");
-        placeDetailsQuery.append("&key=" + getResources().getString(R.string.google_maps_key));
+        placeDetailsQuery.append("&key=" + getString(R.string.google_maps_key));
 
-        Log.d("DEBUG", "url= " + placeDetailsQuery.toString());
+        Log.d(TAG, "url= " + placeDetailsQuery.toString());
         return placeDetailsQuery.toString();
     }
 
     private void updateMap() {
         try {
             if (mJsonPlaceList == null) {
-                Log.e("ERROR", "Failed to get a list of places");
+                Log.e(TAG, "Failed to get a list of places");
             } else {
                 JSONArray placeList = (JSONArray) mJsonPlaceList.get("results");
                 for (int i = 0; i < placeList.length(); i++) {
@@ -258,7 +289,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                         JSONObject photoDetail = (JSONObject) photos.get(0);
                         photoReference = photoDetail.getString("photo_reference");
-                        Log.d("DEBUG", "Photo Ref: " + photoReference);
+                        Log.d(TAG, "Photo Ref: " + photoReference);
 
                     }
 
@@ -270,7 +301,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     int phoneDigits = new Random().nextInt(9000000) + 1000000;
                     String randPhone = "02" + "9" + String.valueOf(phoneDigits);
 
-                    Store newStore = new Store(name, address, distance, rating, randPhone);
+                    Store newStore = new Store(name, address, distance, rating, randPhone, latitude, longitude);
+                    mStoreList.add(newStore);
 
                     // Store car wash stores into Firebase Database
                     FirebaseDatabase.getInstance().getReference(Constants.STORES)
@@ -278,9 +310,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Log.d("DEBUG", "registerStoreToDatabase:success");
+                                Log.d(TAG, "registerStoreToDatabase:success");
                             } else {
-                                Log.w("DEBUG", "registerStoreToDatabase:failure", task.getException());
+                                Log.w(TAG, "registerStoreToDatabase:failure", task.getException());
                             }
                         }
                     });
@@ -289,10 +321,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(placeLatLng);
                     markerOptions.title(name);
-                    markerOptions.snippet(address + " | " + rating + " Star Rating");
+                    markerOptions.snippet(address + " | " + rating + getString(R.string.unicode_character_star));
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
 
-                    mMap.addMarker(markerOptions);
+                    Marker marker = mMap.addMarker(markerOptions);
+                    marker.setTag(i);
+
+//                    mMarkerMap.put(marker.getId(), newStore.getName());
 
                 }
             }
@@ -322,7 +357,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         protected Boolean doInBackground(Void... voids) {
 
             try {
-                Log.d("DEBUG", "Getting nearby car wash...");
+                Log.d(TAG, "Getting nearby car wash...");
 
                 URL url = new URL(mPlaceQuery);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -340,17 +375,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
 
                 mData = stringBuilder.toString();
-                Log.d("DEBUG", mData);
+                Log.d(TAG, mData);
                 bufferedReader.close();
 
                 return true;
 
             } catch (MalformedURLException e) {
-                Log.e("ERROR", e.getMessage());
+                Log.e(TAG, e.getMessage());
                 return false;
 
             } catch (IOException e) {
-                Log.e("ERROR", e.getMessage());
+                Log.e(TAG, e.getMessage());
                 return false;
             }
         }
@@ -376,20 +411,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 updateMap();
 
             } catch (IOException e) {
-                Log.e("ERROR", e.getMessage());
+                Log.e(TAG, e.getMessage());
             } catch (JSONException e) {
-                Log.e("ERROR", e.getMessage());
+                Log.e(TAG, e.getMessage());
             }
         }
     }
 
-    private GoogleMap.OnMarkerClickListener mOnMarkerClickListener = new GoogleMap.OnMarkerClickListener() {
-        @Override
-        public boolean onMarkerClick(Marker marker) {
-            Toast.makeText(getContext(), marker.getTitle(), Toast.LENGTH_SHORT).show();
-            return false;
-        }
-    };
+//    private GoogleMap.OnMarkerClickListener mOnMarkerClickListener = new GoogleMap.OnMarkerClickListener() {
+//        @Override
+//        public boolean onMarkerClick(Marker marker) {
+//            Toast.makeText(getContext(), marker.getTitle(), Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
+//    };
 
     //    private GoogleMap.OnMyLocationButtonClickListener onMyLocationButtonClickListener =
 //            new GoogleMap.OnMyLocationButtonClickListener() {

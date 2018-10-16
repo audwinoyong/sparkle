@@ -23,6 +23,9 @@ import android.widget.TextView;
 import com.mad.sparkle.R;
 import com.mad.sparkle.utils.Constants;
 
+import static com.mad.sparkle.utils.Constants.CALL_PREFIX;
+import static com.mad.sparkle.utils.Constants.TAG;
+
 public class StoreDetailActivity extends AppCompatActivity {
 
     public static final String NAME = "name";
@@ -43,9 +46,6 @@ public class StoreDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_store_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
         this.setTitle(getIntent().getStringExtra(NAME));
 
@@ -73,16 +73,16 @@ public class StoreDetailActivity extends AppCompatActivity {
                 if (ContextCompat.checkSelfPermission(StoreDetailActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(StoreDetailActivity.this, new String[]{Manifest.permission.CALL_PHONE}, Constants.REQUEST_CALL_PHONE);
 
-                    Log.d("DEBUG", "Call phone permission requested");
+                    Log.d(TAG, "Call phone permission requested");
                 } else {
                     // If granted, execute the call
                     String number = getIntent().getStringExtra(PHONE);
 
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:" + number));
+                    callIntent.setData(Uri.parse(CALL_PREFIX + number));
                     startActivity(callIntent);
 
-                    Log.d("DEBUG", "Call phone permission granted");
+                    Log.d(TAG, "Call phone permission granted");
                 }
             }
         });

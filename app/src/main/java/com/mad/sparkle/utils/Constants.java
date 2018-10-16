@@ -18,4 +18,10 @@ public class Constants {
     public static final int REQUEST_CALL_PHONE = 3333;
 
     // Map constants
+
+
+    public static final String CALL_PREFIX = "tel:";
+
+    // Debug log tag
+    public static final String TAG = "LOG_TAG";
 }

@@ -29,4 +29,6 @@
     <string name="sign_in_successful">Sign in successful</string>
     <string name="unable_to_find_current_location">Unable to find current location</string>
 
+    <string name="unicode_character_star">\u2605</string>
+
 </resources>

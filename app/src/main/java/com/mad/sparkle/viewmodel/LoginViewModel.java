@@ -16,6 +16,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.mad.sparkle.utils.FirebaseRepository;
 import com.mad.sparkle.R;
 
+import static com.mad.sparkle.utils.Constants.TAG;
+
 public class LoginViewModel extends ViewModel {
 
     private Application mApplication;
@@ -72,7 +74,7 @@ public class LoginViewModel extends ViewModel {
         if (!cancel) {
             // Run AsyncTask
             new LoginAsyncTask().execute();
-            Log.d("DEBUG", "Attempting login");
+            Log.d(TAG, "Attempting login");
         }
     }
 

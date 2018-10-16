@@ -13,6 +13,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.mad.sparkle.R;
 import com.mad.sparkle.view.NavigationActivity;
 
+import static com.mad.sparkle.utils.Constants.TAG;
+
 public class FirebaseRepository {
 
     public void signIn(final String email, final String password, final Application application) {
@@ -28,13 +30,13 @@ public class FirebaseRepository {
                             Intent mainIntent = new Intent(application.getApplicationContext(), NavigationActivity.class);
                             application.startActivity(mainIntent);
 
-                            Log.d("DEBUG", "signInWithEmail:success");
+                            Log.d(TAG, "signInWithEmail:success");
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(application.getApplicationContext(), R.string.error_incorrect_email_or_password,
                                     Toast.LENGTH_SHORT).show();
 
-                            Log.d("DEBUG", "signInWithEmail:failure");
+                            Log.d(TAG, "signInWithEmail:failure");
                         }
                     }
                 });
