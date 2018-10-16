@@ -59,19 +59,19 @@ public class StoreFragment extends Fragment {
     }
 
     private void prepareStoreData() {
-        Store store = new Store("Magic Wash", "18 Paramatta Road", 150, 4, "+612123456789");
+        Store store = new Store("Magic Wash", "18 Paramatta Road", 150, 4.2, "0212345678");
         mStoreList.add(store);
 
-        store = new Store("Star Wash", "50 Burwood Road", 400, 5, "+61299991111");
+        store = new Store("Star Wash", "50 Burwood Road", 400, 5, "0299991111");
         mStoreList.add(store);
 
-        store = new Store("Oz Sparkling Wash", "33 Camperdown Street", 423, 1, "+612123456789");
+        store = new Store("Oz Sparkling Wash", "33 Camperdown Street", 423, 1, "0212345678");
         mStoreList.add(store);
 
-        store = new Store("Sleek Wash", "167 King Street", 500, 2, "+612123456789");
+        store = new Store("Sleek Wash", "167 King Street", 500, 2, "0212345678");
         mStoreList.add(store);
 
-        store = new Store("King Wash", "77 Eddy Avenue", 1200, 3, "+612123456789");
+        store = new Store("King Wash", "77 Eddy Avenue", 1200, 3, "0212345678");
         mStoreList.add(store);
     }
 

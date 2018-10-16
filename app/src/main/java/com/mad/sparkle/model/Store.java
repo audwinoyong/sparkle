@@ -1,22 +1,21 @@
 package com.mad.sparkle.model;
 
 public class Store {
+
     private String name;
     private String address;
     private int distance;
-    private int rating;
+    private double rating;
     private String phone;
-//    private ArrayList<Service> services;
 
     public Store() {
     }
 
-    public Store(String name, String address, int distance, int rating, String phone) {
+    public Store(String name, String address, int distance, double rating, String phone) {
         this.name = name;
         this.address = address;
         this.distance = distance;
         this.rating = rating;
-//        mServices = services;
         this.phone = phone;
     }
 
@@ -44,21 +43,13 @@ public class Store {
         this.distance = distance;
     }
 
-    public int getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
-
-//    public ArrayList<Service> getServices() {
-//        return services;
-//    }
-//
-//    public void setServices(ArrayList<Service> services) {
-//        this.services = services;
-//    }
 
     public String getPhone() {
         return phone;

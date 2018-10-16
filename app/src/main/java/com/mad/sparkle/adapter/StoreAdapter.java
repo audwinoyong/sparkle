@@ -89,7 +89,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
 
         holder.mNameTv.setText(store.getName());
         holder.mAddressTv.setText(store.getAddress());
-        holder.mRatingBar.setRating(store.getRating());
+        holder.mRatingBar.setRating((float) store.getRating());
         holder.mDistanceTv.setText(store.getDistance());
 
         // OnClickListener to refresh the LinearLayout view.

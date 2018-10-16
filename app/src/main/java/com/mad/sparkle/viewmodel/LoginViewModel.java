@@ -72,7 +72,7 @@ public class LoginViewModel extends ViewModel {
         if (!cancel) {
             // Run AsyncTask
             new LoginAsyncTask().execute();
-            Log.d("DEBUG", "Login finish");
+            Log.d("DEBUG", "Attempting login");
         }
     }
 

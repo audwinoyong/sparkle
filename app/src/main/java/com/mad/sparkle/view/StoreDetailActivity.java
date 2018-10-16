@@ -56,13 +56,14 @@ public class StoreDetailActivity extends AppCompatActivity {
         mPhoneTv = findViewById(R.id.activity_store_detail_phone_tv);
 
         int distance = getIntent().getIntExtra(DISTANCE, 0);
-        int rating = getIntent().getIntExtra(RATING, 0);
-        String number = getIntent().getStringExtra(PHONE);
+        float rating = (float) getIntent().getDoubleExtra(RATING, 0);
+//        int rating = getIntent().getIntExtra(RATING, 0);
+        String phone = getIntent().getStringExtra(PHONE);
 
         mAddressTv.setText(getIntent().getStringExtra(ADDRESS));
-        mDistanceTv.setText(String.valueOf(distance) + "M");
+        mDistanceTv.setText(String.valueOf(distance) + " m");
         mRatingBar.setRating(rating);
-        mPhoneTv.setText(number);
+        mPhoneTv.setText(formatPhoneNumber(phone));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -95,5 +96,14 @@ public class StoreDetailActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    /**
+     * Format phone number
+     * @param phone unformatted phone number
+     * @return formatted phone number
+     */
+    private String formatPhoneNumber(String phone) {
+        return String.format("(%s) %s %s", phone.substring(0, 2), phone.substring(2, 6), phone.substring(6, 10));
     }
 }

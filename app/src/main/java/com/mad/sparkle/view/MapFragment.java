@@ -1,13 +1,9 @@
 package com.mad.sparkle.view;
 
 import android.Manifest;
-import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,10 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,14 +25,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.maps.android.SphericalUtil;
 import com.mad.sparkle.model.Store;
 import com.mad.sparkle.utils.Constants;
 import com.mad.sparkle.viewmodel.MapViewModel;
@@ -49,7 +41,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,6 +49,8 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -72,8 +65,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public static final int DEFAULT_ZOOM = 14;
     private LatLng mDefaultLocation = new LatLng(-33.8840504, 151.1992254);
     private LatLng mLastKnownLocation;
-    private StringBuilder mPlaceQueryStringBuilder;
+    private StringBuilder mNearbyPlacesQueryStringBuilder;
     private JSONObject mJsonPlaceList;
+
+    private List<Store> mStoreList = new ArrayList<Store>();
 
     public static MapFragment newInstance() {
         return new MapFragment();
@@ -104,9 +99,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Getting nearby car wash...", Toast.LENGTH_SHORT).show();
 
-                createPlaceQuery();
+                createNearbyPlacesQuery();
 
-                new getNearbyPlacesAsyncTask(mMap, mPlaceQueryStringBuilder.toString()).execute();
+                new getNearbyPlacesAsyncTask(mMap, mNearbyPlacesQueryStringBuilder.toString()).execute();
 
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(mLastKnownLocation).zoom(DEFAULT_ZOOM).build();
@@ -218,14 +213,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void createPlaceQuery() {
-        mPlaceQueryStringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        mPlaceQueryStringBuilder.append("location=" + mLastKnownLocation.latitude + "," + mLastKnownLocation.longitude);
-        mPlaceQueryStringBuilder.append("&rankby=" + "distance");
-        mPlaceQueryStringBuilder.append("&keyword=" + "car+wash");
-        mPlaceQueryStringBuilder.append("&key=" + getResources().getString(R.string.google_maps_key));
+    private void createNearbyPlacesQuery() {
+        mNearbyPlacesQueryStringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        mNearbyPlacesQueryStringBuilder.append("location=" + mLastKnownLocation.latitude + "," + mLastKnownLocation.longitude);
+        mNearbyPlacesQueryStringBuilder.append("&rankby=" + "distance");
+        mNearbyPlacesQueryStringBuilder.append("&keyword=" + "car+wash");
+        mNearbyPlacesQueryStringBuilder.append("&key=" + getResources().getString(R.string.google_maps_key));
 
-        Log.d("DEBUG", "url= " + mPlaceQueryStringBuilder.toString());
+        Log.d("DEBUG", "url= " + mNearbyPlacesQueryStringBuilder.toString());
+    }
+
+    private String createPlaceDetailsQuery(String placeId) {
+        StringBuilder placeDetailsQuery = new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json?");
+        placeDetailsQuery.append("placeid=" + placeId);
+        placeDetailsQuery.append("&fields=" + "formatted_phone_number");
+        placeDetailsQuery.append("&key=" + getResources().getString(R.string.google_maps_key));
+
+        Log.d("DEBUG", "url= " + placeDetailsQuery.toString());
+        return placeDetailsQuery.toString();
     }
 
     private void updateMap() {
@@ -239,11 +244,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                     double latitude = place.getJSONObject("geometry").getJSONObject("location").getDouble("lat");
                     double longitude = place.getJSONObject("geometry").getJSONObject("location").getDouble("lng");
+                    LatLng placeLatLng = new LatLng(latitude, longitude);
 
                     String placeId = place.getString("place_id");
                     String name = place.getString("name");
                     String address = place.getString("vicinity");
-                    int rating = place.getInt("rating");
+                    double rating = place.getDouble("rating");
 
                     // Get photo reference
                     if (place.has("photos")) {
@@ -256,10 +262,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                     }
 
-//                    int randDistance = new Random().nextInt(20) + 1;
+                    // Calculate the nearest distance
+                    int distance = (int) SphericalUtil.computeDistanceBetween(mLastKnownLocation, placeLatLng);
 
+                    // Generate 7 digits random phone number,
+                    // because calling Google Places API for Place Details query require payment per request.
+                    int phoneDigits = new Random().nextInt(9000000) + 1000000;
+                    String randPhone = "02" + "9" + String.valueOf(phoneDigits);
 
-                    Store newStore = new Store(name, address, 100, rating, "+612123456789");
+                    Store newStore = new Store(name, address, distance, rating, randPhone);
 
                     // Store car wash stores into Firebase Database
                     FirebaseDatabase.getInstance().getReference(Constants.STORES)
@@ -276,7 +287,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                     // Add customised markers
                     MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position((new LatLng(latitude, longitude)));
+                    markerOptions.position(placeLatLng);
                     markerOptions.title(name);
                     markerOptions.snippet(address + " | " + rating + " Star Rating");
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));

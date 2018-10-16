@@ -50,8 +50,8 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
 
         holder.mNameTv.setText(holder.mStore.getName());
         holder.mAddressTv.setText(holder.mStore.getAddress());
-        holder.mRatingBar.setRating(holder.mStore.getRating());
-        holder.mDistanceTv.setText(String.valueOf(holder.mStore.getDistance()) + "M");
+        holder.mRatingBar.setRating((float) holder.mStore.getRating());
+        holder.mDistanceTv.setText(String.valueOf(holder.mStore.getDistance()) + " m");
 
 
 //        holder.mIdView.setText(mValues.get(position).id);
