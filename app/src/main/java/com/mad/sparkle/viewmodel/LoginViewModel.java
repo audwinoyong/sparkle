@@ -1,5 +1,6 @@
 package com.mad.sparkle.viewmodel;
 
+import android.app.Activity;
 import android.app.Application;
 import android.arch.lifecycle.ViewModel;
 import android.databinding.BindingAdapter;
@@ -29,6 +30,7 @@ public class LoginViewModel extends ViewModel {
     public ObservableField<String> emailError = new ObservableField<String>();
     public ObservableField<String> passwordError = new ObservableField<String>();
     public ObservableField<Boolean> progressIsShown = new ObservableField<Boolean>();
+    public ObservableField<Boolean> isFinished = new ObservableField<Boolean>();
 
     public LoginViewModel(Application application, FirebaseAuth auth) {
         mApplication = application;
@@ -50,38 +52,56 @@ public class LoginViewModel extends ViewModel {
         String email = this.email.get();
         String password = this.password.get();
 
-        boolean cancel = false;
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            emailError.set(mApplication.getString(R.string.error_field_required));
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            emailError.set(mApplication.getString(R.string.error_invalid_email));
-            cancel = true;
-        }
-
-        // Check for a valid password.
-        if (TextUtils.isEmpty(password)) {
-            passwordError.set(mApplication.getString(R.string.error_field_required));
-            cancel = true;
-        } else if (!isPasswordValid(password)) {
-            passwordError.set(mApplication.getString(R.string.error_invalid_password));
-            cancel = true;
-        }
+        boolean allFieldsAreValid = validateFields(email, password);
 
         // There was no error
-        if (!cancel) {
+        if (allFieldsAreValid) {
             // Run AsyncTask
             new LoginAsyncTask().execute();
             Log.d(LOG_TAG, "Attempting login");
         }
     }
 
+    private boolean validateFields(String email, String password) {
+        boolean allFieldsAreValid = true;
+
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            emailError.set(mApplication.getString(R.string.error_field_required));
+            allFieldsAreValid = false;
+        } else if (!isEmailValid(email)) {
+            emailError.set(mApplication.getString(R.string.error_invalid_email));
+            allFieldsAreValid = false;
+        }
+
+        // Check for a valid password.
+        if (TextUtils.isEmpty(password)) {
+            passwordError.set(mApplication.getString(R.string.error_field_required));
+            allFieldsAreValid = false;
+        } else if (!isPasswordValid(password)) {
+            passwordError.set(mApplication.getString(R.string.error_invalid_password));
+            allFieldsAreValid = false;
+        }
+
+        return allFieldsAreValid;
+    }
+
+    /**
+     * Check if email is in valid format
+     *
+     * @param email email address
+     * @return whether it is in valid format
+     */
     private boolean isEmailValid(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
+    /**
+     * Check if password in in valid format
+     *
+     * @param password password
+     * @return whether it is in valid format
+     */
     private boolean isPasswordValid(String password) {
         return password.length() >= 6;
     }
@@ -89,6 +109,15 @@ public class LoginViewModel extends ViewModel {
     @BindingAdapter("app:errorText")
     public static void setErrorMessage(EditText editText, String errorMessage) {
         editText.setError(errorMessage);
+    }
+
+    @BindingAdapter("app:onFinish")
+    public static void finishActivity(View view, boolean isFinished) {
+//        Log.d(LOG_TAG, "finishActivity is called");
+//        if (isFinished) {
+//            ((Activity) (view.getContext())).finish();
+//            Log.d(LOG_TAG, "Login activity is finished");
+//        }
     }
 
     private class LoginAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -119,6 +148,7 @@ public class LoginViewModel extends ViewModel {
             super.onPostExecute(aVoid);
             // Hide the progress spinner
             progressIsShown.set(false);
+//            isFinished.set(true);
         }
     }
 

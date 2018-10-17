@@ -23,13 +23,11 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
         mActivityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         mLoginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory(getApplication(), FirebaseAuth.getInstance()))
                 .get(LoginViewModel.class);
         mActivityLoginBinding.setLoginViewModel(mLoginViewModel);
-
     }
 
 }

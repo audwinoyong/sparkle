@@ -33,9 +33,9 @@ public class DatePickerFragment extends DialogFragment {
         datePicker = (DatePicker) v.findViewById(R.id.dialog_date_picker);
         // set today as minimum date and disable past dates
         datePicker.setMinDate(calendar.getTimeInMillis());
-        // add 6 months from today
-        calendar.add(Calendar.MONTH, 6);
-        // set 6 months as maximum date
+        // add 3 months from today
+        calendar.add(Calendar.MONTH, 3);
+        // set 3 months as maximum date
         datePicker.setMaxDate(calendar.getTimeInMillis());
 
         return new android.support.v7.app.AlertDialog.Builder(getActivity(), R.style.DialogCustomTheme)
