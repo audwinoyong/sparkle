@@ -11,10 +11,10 @@
 
     <ImageView
         android:id="@+id/activity_store_detail_img"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:src="@drawable/app_logo" />
-
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/shape_photo" />
 
     <TableLayout
         android:id="@+id/activity_store_detail_table"

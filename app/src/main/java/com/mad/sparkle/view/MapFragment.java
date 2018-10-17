@@ -32,8 +32,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.google.maps.android.SphericalUtil;
 import com.mad.sparkle.model.Store;
 import com.mad.sparkle.utils.Constants;
@@ -53,33 +51,27 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.mad.sparkle.utils.Constants.TAG;
+import static com.mad.sparkle.utils.Constants.DEFAULT_LOCATION_SYDNEY;
+import static com.mad.sparkle.utils.Constants.DEFAULT_ZOOM;
+import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
     private MapViewModel mViewModel;
 
     private boolean mLocationPermissionGranted;
-    public static final int DEFAULT_ZOOM = 14;
-    private LatLng mDefaultLocation = new LatLng(-33.8840504, 151.1992254);
     private LatLng mLastKnownLocation;
-    private StringBuilder mNearbyPlacesQueryStringBuilder;
     private JSONObject mJsonPlaceList;
-
-    private StorageReference mStorageRef;
 
     private List<Store> mStoreList = new ArrayList<Store>();
 
-    private Map<String, String> mMarkerMap = new HashMap<>();
+//    private Map<String, String> mMarkerMap = new HashMap<>();
 
     public static MapFragment newInstance() {
         return new MapFragment();
@@ -94,8 +86,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mStorageRef = FirebaseStorage.getInstance().getReference();
 
         getLocationPermission();
     }
@@ -112,9 +102,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Getting nearby car wash...", Toast.LENGTH_SHORT).show();
 
-                createNearbyPlacesQuery();
-
-                new getNearbyPlacesAsyncTask(mMap, mNearbyPlacesQueryStringBuilder.toString()).execute();
+                new getNearbyPlacesAsyncTask(mMap, getNearbyPlacesUrl()).execute();
 
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(mLastKnownLocation).zoom(DEFAULT_ZOOM).build();
@@ -133,8 +121,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
+     * This is where we can add markers or lines, add listeners or move the camera.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -165,13 +152,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                 Intent storeDetailIntent = new Intent(getActivity(), StoreDetailActivity.class);
 
-                storeDetailIntent.putExtra(StoreDetailActivity.NAME, mStoreList.get(position).getName());
-                storeDetailIntent.putExtra(StoreDetailActivity.ADDRESS, mStoreList.get(position).getAddress());
-                storeDetailIntent.putExtra(StoreDetailActivity.DISTANCE, mStoreList.get(position).getDistance());
-                storeDetailIntent.putExtra(StoreDetailActivity.RATING, mStoreList.get(position).getRating());
-                storeDetailIntent.putExtra(StoreDetailActivity.PHONE, mStoreList.get(position).getPhone());
+                storeDetailIntent.putExtra(Constants.NAME, mStoreList.get(position).getName());
+                storeDetailIntent.putExtra(Constants.ADDRESS, mStoreList.get(position).getAddress());
+                storeDetailIntent.putExtra(Constants.DISTANCE, mStoreList.get(position).getDistance());
+                storeDetailIntent.putExtra(Constants.RATING, mStoreList.get(position).getRating());
+                storeDetailIntent.putExtra(Constants.PHONE, mStoreList.get(position).getPhone());
+                storeDetailIntent.putExtra(Constants.PHOTO_REFERENCE, mStoreList.get(position).getPhotoReference());
 
                 startActivity(storeDetailIntent);
+                Log.d(LOG_TAG, "Launching store detail activity");
             }
         });
     }
@@ -181,7 +170,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.REQUEST_LOCATION_PERMISSION);
-            Log.d(TAG, "Location permission requested");
+            Log.d(LOG_TAG, "Location permission requested");
         } else {
             mLocationPermissionGranted = true;
             startMap();
@@ -189,11 +178,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void showCurrentLocation() {
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         try {
             if (mLocationPermissionGranted) {
-                Task location = mFusedLocationProviderClient.getLastLocation();
+                Task location = fusedLocationProviderClient.getLastLocation();
                 location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
@@ -204,21 +193,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocationLatLng, DEFAULT_ZOOM));
                                 mLastKnownLocation = currentLocationLatLng;
 
-                                Log.d(TAG, "Show current location is successful");
+                                Log.d(LOG_TAG, "Show current location is successful");
                             } else {
-                                LatLng currentLocationLatLng = mDefaultLocation;
+                                LatLng currentLocationLatLng = DEFAULT_LOCATION_SYDNEY;
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocationLatLng, DEFAULT_ZOOM));
                                 mLastKnownLocation = currentLocationLatLng;
                             }
                         } else {
                             Toast.makeText(getContext(), getString(R.string.unable_to_find_current_location), Toast.LENGTH_SHORT).show();
-                            Log.d(TAG, "Show current location failed");
+                            Log.d(LOG_TAG, "Show current location failed");
                         }
                     }
                 });
             }
         } catch (SecurityException e) {
-            Log.e(TAG, e.getMessage());
+            Log.d(LOG_TAG, e.getMessage());
         }
 
     }
@@ -231,12 +220,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             case Constants.REQUEST_LOCATION_PERMISSION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true;
-                    Log.d(TAG, "Location permission is granted");
+                    Log.d(LOG_TAG, "Location permission is granted");
                     startMap();
 
                 } else {
                     mLocationPermissionGranted = false;
-                    Log.d(TAG, "Location permission is not granted");
+                    Log.d(LOG_TAG, "Location permission is not granted");
                     startMap();
                 }
             }
@@ -244,30 +233,31 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void createNearbyPlacesQuery() {
-        mNearbyPlacesQueryStringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        mNearbyPlacesQueryStringBuilder.append("location=" + mLastKnownLocation.latitude + "," + mLastKnownLocation.longitude);
-        mNearbyPlacesQueryStringBuilder.append("&rankby=" + "distance");
-        mNearbyPlacesQueryStringBuilder.append("&keyword=" + "car+wash");
-        mNearbyPlacesQueryStringBuilder.append("&key=" + getString(R.string.google_maps_key));
+    private String getNearbyPlacesUrl() {
+        StringBuilder nearbyPlacesUrlStringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        nearbyPlacesUrlStringBuilder.append("location=" + mLastKnownLocation.latitude + "," + mLastKnownLocation.longitude);
+        nearbyPlacesUrlStringBuilder.append("&rankby=" + "distance");
+        nearbyPlacesUrlStringBuilder.append("&keyword=" + "car+wash");
+        nearbyPlacesUrlStringBuilder.append("&key=" + getString(R.string.google_maps_key));
 
-        Log.d(TAG, "url= " + mNearbyPlacesQueryStringBuilder.toString());
+        Log.d(LOG_TAG, "url= " + nearbyPlacesUrlStringBuilder.toString());
+        return nearbyPlacesUrlStringBuilder.toString();
     }
 
-    private String createPlaceDetailsQuery(String placeId) {
-        StringBuilder placeDetailsQuery = new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json?");
-        placeDetailsQuery.append("placeid=" + placeId);
-        placeDetailsQuery.append("&fields=" + "formatted_phone_number");
-        placeDetailsQuery.append("&key=" + getString(R.string.google_maps_key));
-
-        Log.d(TAG, "url= " + placeDetailsQuery.toString());
-        return placeDetailsQuery.toString();
-    }
+//    private String getPlaceDetailUrl(String placeId) {
+//        StringBuilder placeDetailStringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json?");
+//        placeDetailStringBuilder.append("placeid=" + placeId);
+//        placeDetailStringBuilder.append("&fields=" + "formatted_phone_number");
+//        placeDetailStringBuilder.append("&key=" + getString(R.string.google_maps_key));
+//
+//        Log.d(LOG_TAG, "url= " + placeDetailStringBuilder.toString());
+//        return placeDetailStringBuilder.toString();
+//    }
 
     private void updateMap() {
         try {
             if (mJsonPlaceList == null) {
-                Log.e(TAG, "Failed to get a list of places");
+                Log.d(LOG_TAG, "Failed to get a list of places");
             } else {
                 JSONArray placeList = (JSONArray) mJsonPlaceList.get("results");
                 for (int i = 0; i < placeList.length(); i++) {
@@ -281,16 +271,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     String name = place.getString("name");
                     String address = place.getString("vicinity");
                     double rating = place.getDouble("rating");
+                    String photoReference = "";
 
-                    // Get photo reference
+                    // Get photo reference if the place has photo
                     if (place.has("photos")) {
                         JSONArray photos = place.getJSONArray("photos");
-                        String photoReference;
 
+                        // Grab the first photo reference
                         JSONObject photoDetail = (JSONObject) photos.get(0);
                         photoReference = photoDetail.getString("photo_reference");
-                        Log.d(TAG, "Photo Ref: " + photoReference);
-
                     }
 
                     // Calculate the nearest distance
@@ -301,7 +290,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     int phoneDigits = new Random().nextInt(9000000) + 1000000;
                     String randPhone = "02" + "9" + String.valueOf(phoneDigits);
 
-                    Store newStore = new Store(name, address, distance, rating, randPhone, latitude, longitude);
+                    Store newStore = new Store(name, address, distance, rating, randPhone, latitude, longitude, photoReference);
                     mStoreList.add(newStore);
 
                     // Store car wash stores into Firebase Database
@@ -310,9 +299,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Log.d(TAG, "registerStoreToDatabase:success");
+                                Log.d(LOG_TAG, "registerStoreToDatabase:success");
                             } else {
-                                Log.w(TAG, "registerStoreToDatabase:failure", task.getException());
+                                Log.d(LOG_TAG, "registerStoreToDatabase:failure", task.getException());
                             }
                         }
                     });
@@ -341,7 +330,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         private GoogleMap mGoogleMap;
         private String mPlaceQuery;
         private String mData;
-        private BufferedReader mBufferedReader;
 
         public getNearbyPlacesAsyncTask(GoogleMap googleMap, String placeQuery) {
             mGoogleMap = googleMap;
@@ -349,15 +337,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
         protected Boolean doInBackground(Void... voids) {
 
             try {
-                Log.d(TAG, "Getting nearby car wash...");
+                Log.d(LOG_TAG, "Getting nearby car wash...");
 
                 URL url = new URL(mPlaceQuery);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -367,7 +350,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
                 StringBuilder stringBuilder = new StringBuilder();
-
                 String line;
 
                 while ((line = bufferedReader.readLine()) != null) {
@@ -375,17 +357,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
 
                 mData = stringBuilder.toString();
-                Log.d(TAG, mData);
+                Log.d(LOG_TAG, mData);
                 bufferedReader.close();
 
                 return true;
 
             } catch (MalformedURLException e) {
-                Log.e(TAG, e.getMessage());
+                Log.d(LOG_TAG, e.getMessage());
                 return false;
 
             } catch (IOException e) {
-                Log.e(TAG, e.getMessage());
+                Log.d(LOG_TAG, e.getMessage());
                 return false;
             }
         }
@@ -396,13 +378,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
             try {
                 StringReader stringReader = new StringReader(mData);
-
-                mBufferedReader = new BufferedReader(stringReader);
+                BufferedReader bufferedReader = new BufferedReader(stringReader);
 
                 StringBuilder stringBuilder = new StringBuilder();
                 String line;
 
-                while ((line = mBufferedReader.readLine()) != null) {
+                while ((line = bufferedReader.readLine()) != null) {
                     stringBuilder.append(line + "\n");
                 }
 
@@ -411,9 +392,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 updateMap();
 
             } catch (IOException e) {
-                Log.e(TAG, e.getMessage());
+                Log.d(LOG_TAG, e.getMessage());
             } catch (JSONException e) {
-                Log.e(TAG, e.getMessage());
+                Log.d(LOG_TAG, e.getMessage());
             }
         }
     }

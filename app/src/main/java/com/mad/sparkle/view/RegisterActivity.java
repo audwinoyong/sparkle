@@ -1,7 +1,6 @@
 package com.mad.sparkle.view;
 
 import android.annotation.TargetApi;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -36,13 +35,11 @@ import com.mad.sparkle.utils.Constants;
 import com.mad.sparkle.R;
 import com.mad.sparkle.model.User;
 
-import java.io.File;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.mad.sparkle.utils.Constants.PROFILE_IMAGE;
 import static com.mad.sparkle.utils.Constants.REQUEST_IMAGE_CAPTURE;
-import static com.mad.sparkle.utils.Constants.TAG;
+import static com.mad.sparkle.utils.Constants.LOG_TAG;
 import static com.mad.sparkle.utils.Constants.USERS;
 
 /**
@@ -180,7 +177,7 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
+                            Log.d(LOG_TAG, "createUserWithEmail:success");
 
                             Toast.makeText(RegisterActivity.this, "Registration successful.",
                                     Toast.LENGTH_SHORT).show();
@@ -197,7 +194,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Log.d(TAG, "registerToDatabase:success");
+                                        Log.d(LOG_TAG, "registerToDatabase:success");
 
                                         Toast.makeText(RegisterActivity.this, "Registration into database successful.",
                                                 Toast.LENGTH_SHORT).show();
@@ -205,7 +202,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         Intent navigationIntent = new Intent(RegisterActivity.this, NavigationActivity.class);
                                         startActivity(navigationIntent);
                                     } else {
-                                        Log.w(TAG, "registerToDatabase:failure", task.getException());
+                                        Log.w(LOG_TAG, "registerToDatabase:failure", task.getException());
                                         Toast.makeText(RegisterActivity.this, "Registration into database failed.",
                                                 Toast.LENGTH_SHORT).show();
                                     }
@@ -225,7 +222,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onSuccess(Uri downloadUrl) {
                                                     mDatabaseRef.child(PROFILE_IMAGE).setValue(downloadUrl.toString());
-                                                    Log.d(TAG, "uploadImage:success");
+                                                    Log.d(LOG_TAG, "uploadImage:success");
                                                 }
                                             });
 
@@ -234,7 +231,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception exception) {
-                                            Log.d(TAG, "uploadImage:failure");
+                                            Log.d(LOG_TAG, "uploadImage:failure");
                                         }
                                     });
 
@@ -242,7 +239,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Log.w(LOG_TAG, "createUserWithEmail:failure", task.getException());
                             showProgress(false);
 
                             if (task.getException() instanceof FirebaseAuthUserCollisionException) {
@@ -280,7 +277,7 @@ public class RegisterActivity extends AppCompatActivity {
             mImageUri = data.getData();
             mProfileImg.setImageURI(mImageUri);
             Toast.makeText(RegisterActivity.this, "Upload image successful", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "Upload image successful");
+            Log.d(LOG_TAG, "Upload image successful");
         }
 
     }

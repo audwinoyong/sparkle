@@ -9,20 +9,12 @@ public class Store {
     private String phone;
     private double latitude;
     private double longitude;
+    private String photoReference;
 
     public Store() {
     }
 
-    // Delete this later
-    public Store(String name, String address, int distance, double rating, String phone) {
-        this.name = name;
-        this.address = address;
-        this.distance = distance;
-        this.rating = rating;
-        this.phone = phone;
-    }
-
-    public Store(String name, String address, int distance, double rating, String phone, double latitude, double longitude) {
+    public Store(String name, String address, int distance, double rating, String phone, double latitude, double longitude, String photoReference) {
         this.name = name;
         this.address = address;
         this.distance = distance;
@@ -30,6 +22,7 @@ public class Store {
         this.phone = phone;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.photoReference = photoReference;
     }
 
     public String getName() {
@@ -86,5 +79,13 @@ public class Store {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getPhotoReference() {
+        return photoReference;
+    }
+
+    public void setPhotoReference(String photoReference) {
+        this.photoReference = photoReference;
     }
 }
