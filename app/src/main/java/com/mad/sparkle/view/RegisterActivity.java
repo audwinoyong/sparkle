@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Build;
@@ -57,6 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     // UI references.
     private CircleImageView mProfileImg;
+    private FloatingActionButton mProfileImgFab;
     private EditText mEmailEt;
     private EditText mPasswordEt;
     private EditText mFirstNameEt;
@@ -83,6 +85,8 @@ public class RegisterActivity extends AppCompatActivity {
                 changeProfileImage();
             }
         });
+
+        mProfileImgFab = (FloatingActionButton) findViewById(R.id.activity_register_profile_image_fab);
 
         mEmailEt = (EditText) findViewById(R.id.activity_register_email);
 
@@ -196,15 +200,10 @@ public class RegisterActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         Log.d(LOG_TAG, "registerToDatabase:success");
 
-                                        Toast.makeText(RegisterActivity.this, "Registration into database successful.",
-                                                Toast.LENGTH_SHORT).show();
-
                                         Intent navigationIntent = new Intent(RegisterActivity.this, NavigationActivity.class);
                                         startActivity(navigationIntent);
                                     } else {
                                         Log.w(LOG_TAG, "registerToDatabase:failure", task.getException());
-                                        Toast.makeText(RegisterActivity.this, "Registration into database failed.",
-                                                Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -222,7 +221,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onSuccess(Uri downloadUrl) {
                                                     mDatabaseRef.child(PROFILE_IMAGE).setValue(downloadUrl.toString());
-                                                    Log.d(LOG_TAG, "uploadImage:success");
+                                                    Log.d(LOG_TAG, "uploadImageToStorage:success");
                                                 }
                                             });
 
@@ -231,7 +230,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception exception) {
-                                            Log.d(LOG_TAG, "uploadImage:failure");
+                                            Log.d(LOG_TAG, "uploadImageToStorage:failure");
                                         }
                                     });
 
@@ -277,6 +276,7 @@ public class RegisterActivity extends AppCompatActivity {
             mImageUri = data.getData();
             mProfileImg.setImageURI(mImageUri);
             Toast.makeText(RegisterActivity.this, "Upload image successful", Toast.LENGTH_SHORT).show();
+            mProfileImgFab.hide();
             Log.d(LOG_TAG, "Upload image successful");
         }
 

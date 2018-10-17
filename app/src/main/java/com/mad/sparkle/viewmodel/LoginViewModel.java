@@ -43,7 +43,7 @@ public class LoginViewModel extends ViewModel {
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    public void attemptLogin(View v) {
+    public void attemptLogin(View view) {
         // Reset errors.
         emailError.set(null);
         passwordError.set(null);

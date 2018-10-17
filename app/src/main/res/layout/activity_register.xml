@@ -24,35 +24,37 @@
             android:orientation="vertical">
 
             <!--<ImageView-->
-                <!--android:id="@+id/activity_register_imageView"-->
-                <!--android:layout_width="150dp"-->
-                <!--android:layout_height="150dp"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:contentDescription="App Logo"-->
-                <!--app:srcCompat="@drawable/app_logo" />-->
+            <!--android:id="@+id/activity_register_imageView"-->
+            <!--android:layout_width="150dp"-->
+            <!--android:layout_height="150dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:contentDescription="App Logo"-->
+            <!--app:srcCompat="@drawable/app_logo" />-->
 
             <RelativeLayout
                 android:layout_width="100dp"
-                android:layout_gravity="center"
-                android:layout_height="100dp">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/activity_register_profile_image"
-                android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_account_circle"
-                app:civ_border_color="@android:color/tertiary_text_light"
-                app:civ_border_width="0.5dp" />
+                android:layout_gravity="center">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/activity_register_profile_image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_account_circle"
+                    app:civ_border_color="@android:color/tertiary_text_light"
+                    app:civ_border_width="0.5dp" />
 
                 <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/activity_register_profile_image_fab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
                     android:src="@android:drawable/ic_input_add"
                     android:tint="@android:color/white"
+                    app:elevation="0dp"
                     app:fabCustomSize="30dp" />
 
             </RelativeLayout>

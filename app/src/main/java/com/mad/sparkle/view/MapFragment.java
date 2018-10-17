@@ -219,13 +219,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         switch (requestCode) {
             case Constants.REQUEST_LOCATION_PERMISSION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(LOG_TAG, "Location permission granted");
+
                     mLocationPermissionGranted = true;
-                    Log.d(LOG_TAG, "Location permission is granted");
                     startMap();
 
                 } else {
+                    Log.d(LOG_TAG, "Location permission denied");
+
                     mLocationPermissionGranted = false;
-                    Log.d(LOG_TAG, "Location permission is not granted");
                     startMap();
                 }
             }

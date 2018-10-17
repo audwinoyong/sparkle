@@ -5,7 +5,7 @@ import com.google.android.gms.maps.model.LatLng;
 /**
  * @author Audwin
  * Created on 01/10/18
- *
+ * <p>
  * Constants class provides all string data
  */
 public class Constants {
@@ -20,6 +20,7 @@ public class Constants {
     public static final int REQUEST_IMAGE_CAPTURE = 1111;
     public static final int REQUEST_LOCATION_PERMISSION = 2222;
     public static final int REQUEST_CALL_PHONE = 3333;
+    public static final int REQUEST_CAMERA = 4444;
 
     // Map constants
     public static final int DEFAULT_ZOOM = 14;
@@ -38,4 +39,8 @@ public class Constants {
     public static final String RATING = "rating";
     public static final String PHONE = "phone";
     public static final String PHOTO_REFERENCE = "photoReference";
+
+    // Date and time picker tags
+    public static final String DIALOG_DATE = "DIALOG_DATE";
+    public static final String DIALOG_TIME = "DIALOG_TIME";
 }

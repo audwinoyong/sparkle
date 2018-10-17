@@ -9,15 +9,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mad.sparkle.R;
+import com.mad.sparkle.utils.Constants;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BookingSelectionActivity extends AppCompatActivity implements DatePickerFragment.DateDialogListener,
         TimePickerFragment.TimeDialogListener {
-
-    private static final String DIALOG_DATE = "BookingSelectionActivity.DateDialog";
-    private static final String DIALOG_TIME = "BookingSelectionActivity.TimeDialog";
 
     private EditText datePickerDialogEt;
     private EditText timePickerDialogEt;
@@ -34,7 +32,7 @@ public class BookingSelectionActivity extends AppCompatActivity implements DateP
             @Override
             public void onClick(View v) {
                 DatePickerFragment dialog = new DatePickerFragment();
-                dialog.show(getSupportFragmentManager(), DIALOG_DATE);
+                dialog.show(getSupportFragmentManager(), Constants.DIALOG_DATE);
             }
         });
 
@@ -42,7 +40,7 @@ public class BookingSelectionActivity extends AppCompatActivity implements DateP
             @Override
             public void onClick(View v) {
                 TimePickerFragment dialog = new TimePickerFragment();
-                dialog.show(getSupportFragmentManager(), DIALOG_TIME);
+                dialog.show(getSupportFragmentManager(), Constants.DIALOG_TIME);
             }
         });
 
@@ -50,8 +48,8 @@ public class BookingSelectionActivity extends AppCompatActivity implements DateP
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent bookingConfirmIntent = new Intent(BookingSelectionActivity.this, BookingConfirmationActivity.class);
-                startActivity(bookingConfirmIntent);
+                Intent paymentIntent = new Intent(BookingSelectionActivity.this, PaymentActivity.class);
+                startActivity(paymentIntent);
 
             }
         });

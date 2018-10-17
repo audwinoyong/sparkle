@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -77,12 +78,7 @@ public class StoreDetailActivity extends AppCompatActivity {
                     Log.d(LOG_TAG, "Call phone permission requested");
                 } else {
                     // If granted, execute the call
-                    String number = getIntent().getStringExtra(Constants.PHONE);
-
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse(CALL_PREFIX + number));
-                    startActivity(callIntent);
-
+                    makePhoneCall();
                     Log.d(LOG_TAG, "Call phone permission granted");
                 }
             }
@@ -101,11 +97,20 @@ public class StoreDetailActivity extends AppCompatActivity {
 
     /**
      * Format phone number
+     *
      * @param phone unformatted phone number
      * @return formatted phone number
      */
     private String formatPhoneNumber(String phone) {
         return String.format("(%s) %s %s", phone.substring(0, 2), phone.substring(2, 6), phone.substring(6, 10));
+    }
+
+    private void makePhoneCall() {
+        String phone = getIntent().getStringExtra(Constants.PHONE);
+
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse(CALL_PREFIX + phone));
+        startActivity(callIntent);
     }
 
     private String getPhotoUrl(String photoReference) {
@@ -116,5 +121,22 @@ public class StoreDetailActivity extends AppCompatActivity {
 
         Log.d(LOG_TAG, "url= " + photoUrlStringBuilder.toString());
         return photoUrlStringBuilder.toString();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case Constants.REQUEST_CALL_PHONE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(LOG_TAG, "Call phone permission granted");
+                    makePhoneCall();
+                } else {
+                    Log.d(LOG_TAG, "Call phone permission denied");
+                }
+            }
+
+        }
     }
 }

@@ -30,5 +30,7 @@
     <string name="unable_to_find_current_location">Unable to find current location</string>
 
     <string name="unicode_character_star">\u2605</string>
+    <string name="title_activity_payment">Payment</string>
+    <string name="scan_card">Scan card</string>
 
 </resources>
