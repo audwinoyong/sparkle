@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -166,12 +167,32 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Check if email is in valid format
+     *
+     * @param email email address
+     * @return whether it is in valid format
+     */
     private boolean isEmailValid(String email) {
-        return email.contains("@");
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
+    /**
+     * Check if password in in valid format
+     *
+     * @param password password
+     * @return whether it is in valid format
+     */
     private boolean isPasswordValid(String password) {
-        return password.length() > 5;
+        return password.length() >= 6;
+    }
+
+    private boolean isNameValid(String name) {
+        return name.matches(Constants.REGEX_NAME);
+    }
+
+    private boolean isPhoneValid(String phone) {
+        return Patterns.PHONE.matcher(phone).matches();
     }
 
     private void register(final String email, final String password) {

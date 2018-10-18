@@ -17,10 +17,10 @@ public class Constants {
     public static final String PROFILE_IMAGE = "profileImage";
 
     // Request codes
-    public static final int REQUEST_IMAGE_CAPTURE = 1111;
-    public static final int REQUEST_LOCATION_PERMISSION = 2222;
-    public static final int REQUEST_CALL_PHONE = 3333;
-    public static final int REQUEST_CAMERA = 4444;
+    public static final int REQUEST_IMAGE_CAPTURE = 1001;
+    public static final int REQUEST_LOCATION_PERMISSION = 1002;
+    public static final int REQUEST_CALL_PHONE = 1003;
+    public static final int REQUEST_CAMERA = 1004;
 
     // Map constants
     public static final int DEFAULT_ZOOM = 14;
@@ -43,4 +43,7 @@ public class Constants {
     // Date and time picker tags
     public static final String DIALOG_DATE = "DIALOG_DATE";
     public static final String DIALOG_TIME = "DIALOG_TIME";
+
+    // Regex constants
+    public static final String REGEX_NAME = "[A-Z][a-zA-Z]*";
 }
