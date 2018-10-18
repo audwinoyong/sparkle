@@ -35,7 +35,7 @@ public class LoginViewModel extends ViewModel {
     public LoginViewModel(Application application, FirebaseAuth auth) {
         mApplication = application;
         mAuth = auth;
-        mFirebaseRepo = new FirebaseRepository();
+        mFirebaseRepo = FirebaseRepository.getInstance();
     }
 
     /**

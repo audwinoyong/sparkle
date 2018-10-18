@@ -12,6 +12,12 @@ import android.view.View;
 import com.mad.sparkle.R;
 import com.mad.sparkle.utils.Constants;
 
+/**
+ * @author Audwin
+ * Created on 14/09/18
+ * <p>
+ * Show the options for user to register or login before using the application.
+ */
 public class PreLoginActivity extends AppCompatActivity {
 
     @Override
@@ -19,12 +25,18 @@ public class PreLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pre_login);
 
+        checkLocationPermission();
+    }
+
+    /**
+     * Check location permission, if not granted, request the location permission.
+     */
+    private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.REQUEST_LOCATION_PERMISSION);
         }
-
     }
 
     public void launchRegisterActivity(View view) {

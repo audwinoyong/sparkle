@@ -17,6 +17,18 @@ import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
 public class FirebaseRepository {
 
+    private static FirebaseRepository sInstance;
+
+    public static synchronized FirebaseRepository getInstance() {
+        if (sInstance == null) {
+            sInstance = new FirebaseRepository();
+        }
+        return sInstance;
+    }
+
+    private FirebaseRepository() {
+    }
+
     public void signIn(final String email, final String password, final Application application) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
