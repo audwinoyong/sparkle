@@ -40,11 +40,11 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
         public ViewHolder(View view) {
             super(view);
 
-            mStoreImg = (ImageView) view.findViewById(R.id.store_item_image);
-            mNameTv = (TextView) view.findViewById(R.id.store_item_name_tv);
-            mAddressTv = (TextView) view.findViewById(R.id.store_item_address_tv);
-            mRatingBar = (RatingBar) view.findViewById(R.id.store_item_ratingBar);
-            mDistanceTv = (TextView) view.findViewById(R.id.store_item_distance_tv);
+            mStoreImg = (ImageView) view.findViewById(R.id.item_store_image);
+            mNameTv = (TextView) view.findViewById(R.id.item_store_name_tv);
+            mAddressTv = (TextView) view.findViewById(R.id.item_store_address_tv);
+            mRatingBar = (RatingBar) view.findViewById(R.id.item_store_ratingBar);
+            mDistanceTv = (TextView) view.findViewById(R.id.item_store_distance_tv);
 
             mStoreRelativeLayout = (RelativeLayout) view.findViewById(R.id.store_item_store_rl);
         }
@@ -72,7 +72,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mContext)
-                .inflate(R.layout.store_item, parent, false);
+                .inflate(R.layout.item_store, parent, false);
 
         return new ViewHolder(itemView);
     }

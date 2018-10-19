@@ -23,7 +23,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class StoreFragment extends Fragment {
+public class StoreListFragment extends Fragment {
 
     // TODO: Customize parameter argument names
 //    private static final String ARG_COLUMN_COUNT = "column-count";
@@ -37,13 +37,13 @@ public class StoreFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public StoreFragment() {
+    public StoreListFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static StoreFragment newInstance() {
-        StoreFragment fragment = new StoreFragment();
+    public static StoreListFragment newInstance() {
+        StoreListFragment fragment = new StoreListFragment();
         return fragment;
     }
 

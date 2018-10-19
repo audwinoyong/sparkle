@@ -9,7 +9,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.mad.sparkle.R;
-import com.mad.sparkle.view.StoreFragment.OnListFragmentInteractionListener;
+import com.mad.sparkle.view.StoreListFragment.OnListFragmentInteractionListener;
 import com.mad.sparkle.dummy.DummyContent.DummyItem;
 import com.mad.sparkle.model.Store;
 
@@ -90,11 +90,11 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
 //            mIdView = (TextView) view.findViewById(R.id.item_number);
 //            mContentView = (TextView) view.findViewById(R.id.content);
 
-            mStoreImg = (ImageView) view.findViewById(R.id.store_item_image);
-            mNameTv = (TextView) view.findViewById(R.id.store_item_name_tv);
-            mAddressTv = (TextView) view.findViewById(R.id.store_item_address_tv);
-            mRatingBar = (RatingBar) view.findViewById(R.id.store_item_ratingBar);
-            mDistanceTv = (TextView) view.findViewById(R.id.store_item_distance_tv);
+            mStoreImg = (ImageView) view.findViewById(R.id.fragment_store_image);
+            mNameTv = (TextView) view.findViewById(R.id.fragment_store_name_tv);
+            mAddressTv = (TextView) view.findViewById(R.id.fragment_store_address_tv);
+            mRatingBar = (RatingBar) view.findViewById(R.id.fragment_store_ratingBar);
+            mDistanceTv = (TextView) view.findViewById(R.id.fragment_store_distance_tv);
 
         }
 

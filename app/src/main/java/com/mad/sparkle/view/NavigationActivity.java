@@ -25,14 +25,14 @@ import static com.mad.sparkle.utils.Constants.LOG_TAG;
  * Created on 14/09/18
  */
 public class NavigationActivity extends AppCompatActivity implements ProfileFragment.OnFragmentInteractionListener,
-        StoreFragment.OnListFragmentInteractionListener {
+        StoreListFragment.OnListFragmentInteractionListener {
 
     final Fragment mMapFragment = MapFragment.newInstance();
-    final Fragment mStoreFragment = StoreFragment.newInstance();
+    final Fragment mStoreListFragment = StoreListFragment.newInstance();
     final Fragment mProfileFragment = ProfileFragment.newInstance("", "");
     final FragmentManager mFragmentManager = getSupportFragmentManager();
 
-    private Fragment mActiveFragment = mStoreFragment;
+    private Fragment mActiveFragment = mStoreListFragment;
 
     private FirebaseAuth mAuth;
 
@@ -63,8 +63,8 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
                     return true;
                 case R.id.navigation_list:
 
-                    mFragmentManager.beginTransaction().hide(mActiveFragment).show(mStoreFragment).commit();
-                    mActiveFragment = mStoreFragment;
+                    mFragmentManager.beginTransaction().hide(mActiveFragment).show(mStoreListFragment).commit();
+                    mActiveFragment = mStoreListFragment;
 //                    mFragmentManager.beginTransaction().hide(mActiveFragment).commit();
 
                     return true;
@@ -87,7 +87,7 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
 
         mFragmentManager.beginTransaction().add(R.id.contentContainer, mMapFragment).hide(mMapFragment).commit();
         mFragmentManager.beginTransaction().add(R.id.contentContainer, mProfileFragment).hide(mProfileFragment).commit();
-        mFragmentManager.beginTransaction().add(R.id.contentContainer, mStoreFragment).commit();
+        mFragmentManager.beginTransaction().add(R.id.contentContainer, mStoreListFragment).commit();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 

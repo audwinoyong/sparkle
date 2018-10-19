@@ -20,14 +20,14 @@
         <!--android:textAppearance="?attr/textAppearanceListItem" />-->
 
     <LinearLayout
-        android:id="@+id/store_item_image_ll"
+        android:id="@+id/fragment_store_image_ll"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/store_item_image"
+            android:id="@+id/fragment_store_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/darker_gray"
@@ -36,26 +36,26 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/store_item_status_ll"
+        android:id="@+id/fragment_store_status_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@id/store_item_right_ll"
-        android:layout_toLeftOf="@id/store_item_right_ll"
-        android:layout_toEndOf="@id/store_item_image_ll"
-        android:layout_toRightOf="@id/store_item_image_ll"
+        android:layout_toStartOf="@id/fragment_store_right_ll"
+        android:layout_toLeftOf="@id/fragment_store_right_ll"
+        android:layout_toEndOf="@id/fragment_store_image_ll"
+        android:layout_toRightOf="@id/fragment_store_image_ll"
         android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
 
         <TextView
-            android:id="@+id/store_item_name_tv"
+            android:id="@+id/fragment_store_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Store Name"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/store_item_address_tv"
+            android:id="@+id/fragment_store_address_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Address" />
@@ -63,7 +63,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/store_item_right_ll"
+        android:id="@+id/fragment_store_right_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -72,7 +72,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/store_item_distance_tv"
+            android:id="@+id/fragment_store_distance_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
@@ -81,7 +81,7 @@
             android:textStyle="bold" />
 
         <RatingBar
-            android:id="@+id/store_item_ratingBar"
+            android:id="@+id/fragment_store_ratingBar"
             style="?attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
