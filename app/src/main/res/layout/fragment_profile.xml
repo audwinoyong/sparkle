@@ -16,7 +16,7 @@
             android:id="@+id/fragment_profile_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/ic_account_circle"
+            android:src="@drawable/ic_account_circle_grey_48dp"
             app:civ_border_color="@android:color/tertiary_text_light"
             app:civ_border_width="0.5dp" />
 

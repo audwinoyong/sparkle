@@ -41,7 +41,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_account_circle"
+                    android:src="@drawable/ic_account_circle_grey_48dp"
                     app:civ_border_color="@android:color/tertiary_text_light"
                     app:civ_border_width="0.5dp" />
 
@@ -76,7 +76,8 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="true">
 
                 <EditText
                     android:id="@+id/activity_register_password"

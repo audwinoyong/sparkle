@@ -108,7 +108,7 @@ public class ProfileFragment extends Fragment {
                 mName.setText(user.firstName + " " + user.lastName);
                 mEmail.setText(user.email);
                 if (!user.profileImage.isEmpty()) {
-                    Picasso.get().load(user.profileImage).placeholder(R.drawable.ic_account_circle).into(mProfileImg);
+                    Picasso.get().load(user.profileImage).placeholder(R.drawable.ic_account_circle_grey_48dp).into(mProfileImg);
                 }
 //                Picasso.get().load("https://i.imgur.com/3wZvG9q.jpg").into(mProfileImg);
             }

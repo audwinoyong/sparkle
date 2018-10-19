@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_camera_scan"
-        android:icon="@drawable/ic_photo_camera"
+        android:icon="@drawable/ic_photo_camera_outline"
         android:orderInCategory="100"
         android:title="@string/scan_card"
         app:showAsAction="always" />
