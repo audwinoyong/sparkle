@@ -1,21 +1,23 @@
 package com.mad.sparkle.view;
 
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.mad.sparkle.R;
 import com.mad.sparkle.utils.Constants;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
-public class BookingSelectionActivity extends AppCompatActivity implements DatePickerFragment.DateDialogListener,
-        TimePickerFragment.TimeDialogListener {
+public class BookingSelectionActivity extends AppCompatActivity implements DatePickerFragment.DateDialogListener {
 
     private EditText datePickerDialogEt;
     private EditText timePickerDialogEt;
@@ -31,16 +33,26 @@ public class BookingSelectionActivity extends AppCompatActivity implements DateP
         datePickerDialogEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerFragment dialog = new DatePickerFragment();
-                dialog.show(getSupportFragmentManager(), Constants.DIALOG_DATE);
+                DatePickerFragment datePickerFragmentDialog = new DatePickerFragment();
+                datePickerFragmentDialog.show(getSupportFragmentManager(), Constants.DIALOG_DATE);
             }
         });
 
         timePickerDialogEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerFragment dialog = new TimePickerFragment();
-                dialog.show(getSupportFragmentManager(), Constants.DIALOG_TIME);
+                Calendar calendar = Calendar.getInstance();
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                int minute = calendar.get(Calendar.MINUTE);
+
+                CustomTimePickerDialog customTimePickerDialog = new CustomTimePickerDialog(BookingSelectionActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        Toast.makeText(BookingSelectionActivity.this, "Selected Time : " + formatTime(hourOfDay, minute), Toast.LENGTH_SHORT).show();
+                        timePickerDialogEt.setText(formatTime(hourOfDay, minute));
+                    }
+                }, hour, minute, false);
+                customTimePickerDialog.show();
             }
         });
 
@@ -66,9 +78,26 @@ public class BookingSelectionActivity extends AppCompatActivity implements DateP
         return sdf.format(date);
     }
 
-    @Override
-    public void onFinishDialog(String time) {
-        Toast.makeText(this, "Selected Time : " + time, Toast.LENGTH_SHORT).show();
-        timePickerDialogEt.setText(time);
+    public String formatTime(int hourOfDay, int minute) {
+
+        String timeSet;
+        if (hourOfDay > 12) {
+            hourOfDay -= 12;
+            timeSet = "PM";
+        } else if (hourOfDay == 0) {
+            hourOfDay += 12;
+            timeSet = "AM";
+        } else if (hourOfDay == 12)
+            timeSet = "PM";
+        else
+            timeSet = "AM";
+
+        String minutes;
+        if (minute < 10)
+            minutes = "0" + minute;
+        else
+            minutes = String.valueOf(minute);
+
+        return String.valueOf(hourOfDay) + ':' + minutes + " " + timeSet;
     }
 }

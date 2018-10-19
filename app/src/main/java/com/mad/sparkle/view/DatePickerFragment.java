@@ -16,7 +16,7 @@ import java.util.GregorianCalendar;
 
 public class DatePickerFragment extends DialogFragment {
 
-    private DatePicker datePicker;
+    private DatePicker mDatePicker;
 
     public interface DateDialogListener {
         void onFinishDialog(Date date);
@@ -30,13 +30,13 @@ public class DatePickerFragment extends DialogFragment {
 
         Calendar calendar = Calendar.getInstance();
 
-        datePicker = (DatePicker) v.findViewById(R.id.dialog_date_picker);
+        mDatePicker = (DatePicker) v.findViewById(R.id.dialog_date_picker);
         // set today as minimum date and disable past dates
-        datePicker.setMinDate(calendar.getTimeInMillis());
+        mDatePicker.setMinDate(calendar.getTimeInMillis());
         // add 3 months from today
         calendar.add(Calendar.MONTH, 3);
         // set 3 months as maximum date
-        datePicker.setMaxDate(calendar.getTimeInMillis());
+        mDatePicker.setMaxDate(calendar.getTimeInMillis());
 
         return new android.support.v7.app.AlertDialog.Builder(getActivity(), R.style.DialogCustomTheme)
                 .setView(v)
@@ -44,9 +44,9 @@ public class DatePickerFragment extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                int year = datePicker.getYear();
-                                int mon = datePicker.getMonth();
-                                int day = datePicker.getDayOfMonth();
+                                int year = mDatePicker.getYear();
+                                int mon = mDatePicker.getMonth();
+                                int day = mDatePicker.getDayOfMonth();
                                 Date date = new GregorianCalendar(year, mon, day).getTime();
                                 DateDialogListener activity = (DateDialogListener) getActivity();
                                 activity.onFinishDialog(date);
@@ -56,7 +56,7 @@ public class DatePickerFragment extends DialogFragment {
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        dialog.cancel();
                     }
                 })
                 .create();
