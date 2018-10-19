@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,15 +27,14 @@ import static com.mad.sparkle.utils.Constants.LOG_TAG;
 public class NavigationActivity extends AppCompatActivity implements ProfileFragment.OnFragmentInteractionListener,
         StoreFragment.OnListFragmentInteractionListener {
 
-    private TextView mTextMessage;
-
     final Fragment mMapFragment = MapFragment.newInstance();
     final Fragment mStoreFragment = StoreFragment.newInstance();
     final Fragment mProfileFragment = ProfileFragment.newInstance("", "");
     final FragmentManager mFragmentManager = getSupportFragmentManager();
-    Fragment active = mStoreFragment;
 
-    FirebaseAuth mAuth;
+    private Fragment mActiveFragment = mStoreFragment;
+
+    private FirebaseAuth mAuth;
 
     FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
         @Override
@@ -57,23 +55,23 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_map:
-                    mFragmentManager.beginTransaction().hide(active).show(mMapFragment).commit();
-                    active = mMapFragment;
+                    mFragmentManager.beginTransaction().hide(mActiveFragment).show(mMapFragment).commit();
+                    mActiveFragment = mMapFragment;
 
-//                    mFragmentManager.beginTransaction().hide(active).commit();
+//                    mFragmentManager.beginTransaction().hide(mActiveFragment).commit();
 
                     return true;
                 case R.id.navigation_list:
 
-                    mFragmentManager.beginTransaction().hide(active).show(mStoreFragment).commit();
-                    active = mStoreFragment;
-//                    mFragmentManager.beginTransaction().hide(active).commit();
+                    mFragmentManager.beginTransaction().hide(mActiveFragment).show(mStoreFragment).commit();
+                    mActiveFragment = mStoreFragment;
+//                    mFragmentManager.beginTransaction().hide(mActiveFragment).commit();
 
                     return true;
                 case R.id.navigation_profile:
 
-                    mFragmentManager.beginTransaction().hide(active).show(mProfileFragment).commit();
-                    active = mProfileFragment;
+                    mFragmentManager.beginTransaction().hide(mActiveFragment).show(mProfileFragment).commit();
+                    mActiveFragment = mProfileFragment;
                     return true;
             }
             return false;
@@ -91,11 +89,9 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
         mFragmentManager.beginTransaction().add(R.id.contentContainer, mProfileFragment).hide(mProfileFragment).commit();
         mFragmentManager.beginTransaction().add(R.id.contentContainer, mStoreFragment).commit();
 
-        mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 
         navigation.setSelectedItemId(R.id.navigation_list);
-//        mTextMessage.setText(R.string.list);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
