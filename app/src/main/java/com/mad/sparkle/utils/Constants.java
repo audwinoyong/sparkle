@@ -25,6 +25,8 @@ public class Constants {
     // Map constants
     public static final int DEFAULT_ZOOM = 14;
     public static final LatLng DEFAULT_LOCATION_SYDNEY = new LatLng(-33.8840504, 151.1992254);
+    public static final String PLACES_API_BASE_URL = "https://maps.googleapis.com/maps/";
+    public static final String OVER_QUERY_LIMIT = "OVER_QUERY_LIMIT";
 
     // Store detail constants
     public static final String CALL_PREFIX = "tel:";

@@ -34,19 +34,31 @@ dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
+    // Firebase
     implementation 'com.google.firebase:firebase-core:16.0.4'
     implementation 'com.google.firebase:firebase-auth:16.0.4'
     implementation 'com.google.firebase:firebase-database:16.0.3'
     implementation 'com.google.firebase:firebase-storage:16.0.3'
+    // Picasso and CircleImageView
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    // Credit card form
     implementation 'com.braintreepayments:card-form:3.5.0'
     implementation 'io.card:android-sdk:5.5.1'
+    // Android Lifecycle for ViewModel and DataBinding
     implementation 'android.arch.lifecycle:extensions:1.1.1'
+    // Google Play Services and Map Utils
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.google.android.gms:play-services-places:16.0.0'
     implementation 'com.google.maps.android:android-maps-utils:0.5'
+    // Retrofit and OkHttp for networking
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    // Logging network calls
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

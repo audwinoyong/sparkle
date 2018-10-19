@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -34,27 +33,22 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.maps.android.SphericalUtil;
 import com.mad.sparkle.model.Store;
+import com.mad.sparkle.model.nearbysearch.NearbySearchResponse;
+import com.mad.sparkle.model.nearbysearch.Photo;
 import com.mad.sparkle.utils.Constants;
+import com.mad.sparkle.service.GooglePlacesService;
+import com.mad.sparkle.utils.RetrofitClient;
 import com.mad.sparkle.viewmodel.MapViewModel;
 import com.mad.sparkle.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.mad.sparkle.utils.Constants.DEFAULT_LOCATION_SYDNEY;
 import static com.mad.sparkle.utils.Constants.DEFAULT_ZOOM;
@@ -67,7 +61,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private boolean mLocationPermissionGranted;
     private LatLng mLastKnownLocation;
-    private JSONObject mJsonPlaceList;
+//    private JSONObject mJsonPlaceList;
 
     private List<Store> mStoreList = new ArrayList<Store>();
 
@@ -100,13 +94,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         storeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Getting nearby car wash...", Toast.LENGTH_SHORT).show();
+                if (mLastKnownLocation != null) {
+                    Toast.makeText(getContext(), "Getting nearby car wash...", Toast.LENGTH_SHORT).show();
 
-                new getNearbyPlacesAsyncTask(mMap, getNearbyPlacesUrl()).execute();
+//                new getNearbyPlacesAsyncTask(mMap, getNearbyPlacesUrl()).execute();
 
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(mLastKnownLocation).zoom(DEFAULT_ZOOM).build();
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                    findNearbyPlaces();
+
+                    // For zooming automatically to the location of the marker
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(mLastKnownLocation).zoom(DEFAULT_ZOOM).build();
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                } else {
+                    Toast.makeText(getContext(), "Current location is not found, please enable current location in Settings", Toast.LENGTH_SHORT).show();
+                    Log.d(LOG_TAG, "Current location is not found");
+                }
             }
         });
     }
@@ -193,7 +194,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocationLatLng, DEFAULT_ZOOM));
                                 mLastKnownLocation = currentLocationLatLng;
 
-                                Log.d(LOG_TAG, "Show current location is successful");
+                                Log.d(LOG_TAG, "Show current location successful");
                             } else {
                                 LatLng currentLocationLatLng = DEFAULT_LOCATION_SYDNEY;
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocationLatLng, DEFAULT_ZOOM));
@@ -235,16 +236,102 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private String getNearbyPlacesUrl() {
-        StringBuilder nearbyPlacesUrlStringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        nearbyPlacesUrlStringBuilder.append("location=" + mLastKnownLocation.latitude + "," + mLastKnownLocation.longitude);
-        nearbyPlacesUrlStringBuilder.append("&rankby=" + "distance");
-        nearbyPlacesUrlStringBuilder.append("&keyword=" + "car+wash");
-        nearbyPlacesUrlStringBuilder.append("&key=" + getString(R.string.google_maps_key));
+    private void findNearbyPlaces() {
+        Log.d(LOG_TAG, "Getting nearby car wash...");
 
-        Log.d(LOG_TAG, "url= " + nearbyPlacesUrlStringBuilder.toString());
-        return nearbyPlacesUrlStringBuilder.toString();
+        GooglePlacesService googlePlacesService = RetrofitClient.getClient().create(GooglePlacesService.class);
+        Call<NearbySearchResponse> call = googlePlacesService
+                .getNearbyPlaces(mLastKnownLocation.latitude + "," + mLastKnownLocation.longitude, getString(R.string.google_maps_key));
+
+        call.enqueue(new Callback<NearbySearchResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<NearbySearchResponse> call, @NonNull Response<NearbySearchResponse> response) {
+                if (response.isSuccessful()) {
+                    Log.d(LOG_TAG, "Google Places API request successful");
+
+                    if (response.body().getStatus().equals(Constants.OVER_QUERY_LIMIT)) {
+                        Log.d(LOG_TAG, "Google Places API reaches daily query limit");
+                        Toast.makeText(getContext(), "You have reached your request limit. Please wait for a few minutes.", Toast.LENGTH_SHORT).show();
+                    }
+
+                    mMap.clear();
+                    for (int i = 0; i < response.body().getResults().size(); i++) {
+
+                        Double latitude = response.body().getResults().get(i).getGeometry().getLocation().getLat();
+                        Double longitude = response.body().getResults().get(i).getGeometry().getLocation().getLng();
+                        LatLng placeLatLng = new LatLng(latitude, longitude);
+
+                        String placeId = response.body().getResults().get(i).getPlaceId();
+                        String name = response.body().getResults().get(i).getName();
+                        String address = response.body().getResults().get(i).getVicinity();
+                        Double rating = response.body().getResults().get(i).getRating();
+
+                        List<Photo> photos = response.body().getResults().get(i).getPhotos();
+                        String photoReference = "";
+
+                        if (!photos.isEmpty()) {
+                            photoReference = photos.get(0).getPhotoReference();
+                        }
+
+                        // Calculate the nearest distance
+                        int distance = (int) SphericalUtil.computeDistanceBetween(mLastKnownLocation, placeLatLng);
+
+                        // Generate 7 digits random phone number,
+                        // because calling Google Places API for Place Details query require payment per request.
+                        int phoneDigits = new Random().nextInt(9000000) + 1000000;
+                        String randPhone = "02" + "9" + String.valueOf(phoneDigits);
+
+                        Store newStore = new Store(name, address, distance, rating, randPhone, latitude, longitude, photoReference);
+                        mStoreList.add(newStore);
+
+                        // Store car wash stores into Firebase Database
+                        FirebaseDatabase.getInstance().getReference(Constants.STORES)
+                                .child(placeId).setValue(newStore).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d(LOG_TAG, "registerStoreToDatabase:success");
+                                } else {
+                                    Log.d(LOG_TAG, "registerStoreToDatabase:failure", task.getException());
+                                }
+                            }
+                        });
+
+                        // Add customised markers
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(placeLatLng);
+                        markerOptions.title(name);
+                        markerOptions.snippet(address + " | " + rating + getString(R.string.unicode_character_star));
+                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+
+                        Marker marker = mMap.addMarker(markerOptions);
+                        marker.setTag(i);
+
+//                        mMarkerMap.put(marker.getId(), newStore.getName());
+                    }
+                } else {
+                    Log.d(LOG_TAG, "Google Places API request failed");
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<NearbySearchResponse> call, @NonNull Throwable t) {
+                Log.d(LOG_TAG, t.toString());
+                t.printStackTrace();
+            }
+        });
     }
+
+//    private String getNearbyPlacesUrl() {
+//        StringBuilder nearbyPlacesUrlStringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+//        nearbyPlacesUrlStringBuilder.append("location=" + mLastKnownLocation.latitude + "," + mLastKnownLocation.longitude);
+//        nearbyPlacesUrlStringBuilder.append("&rankby=" + "distance");
+//        nearbyPlacesUrlStringBuilder.append("&keyword=" + "car+wash");
+//        nearbyPlacesUrlStringBuilder.append("&key=" + getString(R.string.google_maps_key));
+//
+//        Log.d(LOG_TAG, "url= " + nearbyPlacesUrlStringBuilder.toString());
+//        return nearbyPlacesUrlStringBuilder.toString();
+//    }
 
 //    private String getPlaceDetailUrl(String placeId) {
 //        StringBuilder placeDetailStringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json?");
@@ -255,151 +342,151 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 //        Log.d(LOG_TAG, "url= " + placeDetailStringBuilder.toString());
 //        return placeDetailStringBuilder.toString();
 //    }
+//
+//    private void updateMap() {
+//        try {
+//            if (mJsonPlaceList == null) {
+//                Log.d(LOG_TAG, "Failed to get a list of places");
+//            } else {
+//                JSONArray placeList = (JSONArray) mJsonPlaceList.get("results");
+//                for (int i = 0; i < placeList.length(); i++) {
+//                    JSONObject place = (JSONObject) placeList.get(i);
+//
+//                    double latitude = place.getJSONObject("geometry").getJSONObject("location").getDouble("lat");
+//                    double longitude = place.getJSONObject("geometry").getJSONObject("location").getDouble("lng");
+//                    LatLng placeLatLng = new LatLng(latitude, longitude);
+//
+//                    String placeId = place.getString("place_id");
+//                    String name = place.getString("name");
+//                    String address = place.getString("vicinity");
+//                    double rating = place.getDouble("rating");
+//                    String photoReference = "";
+//
+//                    // Get photo reference if the place has photo
+//                    if (place.has("photos")) {
+//                        JSONArray photos = place.getJSONArray("photos");
+//
+//                        // Grab the first photo reference
+//                        JSONObject photoDetail = (JSONObject) photos.get(0);
+//                        photoReference = photoDetail.getString("photo_reference");
+//                    }
+//
+//                    // Calculate the nearest distance
+//                    int distance = (int) SphericalUtil.computeDistanceBetween(mLastKnownLocation, placeLatLng);
+//
+//                    // Generate 7 digits random phone number,
+//                    // because calling Google Places API for Place Details query require payment per request.
+//                    int phoneDigits = new Random().nextInt(9000000) + 1000000;
+//                    String randPhone = "02" + "9" + String.valueOf(phoneDigits);
+//
+//                    Store newStore = new Store(name, address, distance, rating, randPhone, latitude, longitude, photoReference);
+//                    mStoreList.add(newStore);
+//
+//                    // Store car wash stores into Firebase Database
+//                    FirebaseDatabase.getInstance().getReference(Constants.STORES)
+//                            .child(placeId).setValue(newStore).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//                            if (task.isSuccessful()) {
+//                                Log.d(LOG_TAG, "registerStoreToDatabase:success");
+//                            } else {
+//                                Log.d(LOG_TAG, "registerStoreToDatabase:failure", task.getException());
+//                            }
+//                        }
+//                    });
+//
+//                    // Add customised markers
+//                    MarkerOptions markerOptions = new MarkerOptions();
+//                    markerOptions.position(placeLatLng);
+//                    markerOptions.title(name);
+//                    markerOptions.snippet(address + " | " + rating + getString(R.string.unicode_character_star));
+//                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+//
+//                    Marker marker = mMap.addMarker(markerOptions);
+//                    marker.setTag(i);
+//
+////                    mMarkerMap.put(marker.getId(), newStore.getName());
+//
+//                }
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    private void updateMap() {
-        try {
-            if (mJsonPlaceList == null) {
-                Log.d(LOG_TAG, "Failed to get a list of places");
-            } else {
-                JSONArray placeList = (JSONArray) mJsonPlaceList.get("results");
-                for (int i = 0; i < placeList.length(); i++) {
-                    JSONObject place = (JSONObject) placeList.get(i);
-
-                    double latitude = place.getJSONObject("geometry").getJSONObject("location").getDouble("lat");
-                    double longitude = place.getJSONObject("geometry").getJSONObject("location").getDouble("lng");
-                    LatLng placeLatLng = new LatLng(latitude, longitude);
-
-                    String placeId = place.getString("place_id");
-                    String name = place.getString("name");
-                    String address = place.getString("vicinity");
-                    double rating = place.getDouble("rating");
-                    String photoReference = "";
-
-                    // Get photo reference if the place has photo
-                    if (place.has("photos")) {
-                        JSONArray photos = place.getJSONArray("photos");
-
-                        // Grab the first photo reference
-                        JSONObject photoDetail = (JSONObject) photos.get(0);
-                        photoReference = photoDetail.getString("photo_reference");
-                    }
-
-                    // Calculate the nearest distance
-                    int distance = (int) SphericalUtil.computeDistanceBetween(mLastKnownLocation, placeLatLng);
-
-                    // Generate 7 digits random phone number,
-                    // because calling Google Places API for Place Details query require payment per request.
-                    int phoneDigits = new Random().nextInt(9000000) + 1000000;
-                    String randPhone = "02" + "9" + String.valueOf(phoneDigits);
-
-                    Store newStore = new Store(name, address, distance, rating, randPhone, latitude, longitude, photoReference);
-                    mStoreList.add(newStore);
-
-                    // Store car wash stores into Firebase Database
-                    FirebaseDatabase.getInstance().getReference(Constants.STORES)
-                            .child(placeId).setValue(newStore).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Log.d(LOG_TAG, "registerStoreToDatabase:success");
-                            } else {
-                                Log.d(LOG_TAG, "registerStoreToDatabase:failure", task.getException());
-                            }
-                        }
-                    });
-
-                    // Add customised markers
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(placeLatLng);
-                    markerOptions.title(name);
-                    markerOptions.snippet(address + " | " + rating + getString(R.string.unicode_character_star));
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-
-                    Marker marker = mMap.addMarker(markerOptions);
-                    marker.setTag(i);
-
-//                    mMarkerMap.put(marker.getId(), newStore.getName());
-
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private class getNearbyPlacesAsyncTask extends AsyncTask<Void, Void, Boolean> {
-
-        private GoogleMap mGoogleMap;
-        private String mPlaceQuery;
-        private String mData;
-
-        public getNearbyPlacesAsyncTask(GoogleMap googleMap, String placeQuery) {
-            mGoogleMap = googleMap;
-            mPlaceQuery = placeQuery;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-
-            try {
-                Log.d(LOG_TAG, "Getting nearby car wash...");
-
-                URL url = new URL(mPlaceQuery);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.connect();
-
-                InputStream inputStream = connection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-                StringBuilder stringBuilder = new StringBuilder();
-                String line;
-
-                while ((line = bufferedReader.readLine()) != null) {
-                    stringBuilder.append(line);
-                }
-
-                mData = stringBuilder.toString();
-                Log.d(LOG_TAG, mData);
-                bufferedReader.close();
-
-                return true;
-
-            } catch (MalformedURLException e) {
-                Log.d(LOG_TAG, e.getMessage());
-                return false;
-
-            } catch (IOException e) {
-                Log.d(LOG_TAG, e.getMessage());
-                return false;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            super.onPostExecute(result);
-
-            try {
-                StringReader stringReader = new StringReader(mData);
-                BufferedReader bufferedReader = new BufferedReader(stringReader);
-
-                StringBuilder stringBuilder = new StringBuilder();
-                String line;
-
-                while ((line = bufferedReader.readLine()) != null) {
-                    stringBuilder.append(line + "\n");
-                }
-
-                mJsonPlaceList = new JSONObject(stringBuilder.toString());
-
-                updateMap();
-
-            } catch (IOException e) {
-                Log.d(LOG_TAG, e.getMessage());
-            } catch (JSONException e) {
-                Log.d(LOG_TAG, e.getMessage());
-            }
-        }
-    }
+//    private class getNearbyPlacesAsyncTask extends AsyncTask<Void, Void, Boolean> {
+//
+//        private GoogleMap mGoogleMap;
+//        private String mPlaceQuery;
+//        private String mData;
+//
+//        public getNearbyPlacesAsyncTask(GoogleMap googleMap, String placeQuery) {
+//            mGoogleMap = googleMap;
+//            mPlaceQuery = placeQuery;
+//        }
+//
+//        @Override
+//        protected Boolean doInBackground(Void... voids) {
+//
+//            try {
+//                Log.d(LOG_TAG, "Getting nearby car wash...");
+//
+//                URL url = new URL(mPlaceQuery);
+//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                connection.connect();
+//
+//                InputStream inputStream = connection.getInputStream();
+//                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+//
+//                StringBuilder stringBuilder = new StringBuilder();
+//                String line;
+//
+//                while ((line = bufferedReader.readLine()) != null) {
+//                    stringBuilder.append(line);
+//                }
+//
+//                mData = stringBuilder.toString();
+//                Log.d(LOG_TAG, mData);
+//                bufferedReader.close();
+//
+//                return true;
+//
+//            } catch (MalformedURLException e) {
+//                Log.d(LOG_TAG, e.getMessage());
+//                return false;
+//
+//            } catch (IOException e) {
+//                Log.d(LOG_TAG, e.getMessage());
+//                return false;
+//            }
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Boolean result) {
+//            super.onPostExecute(result);
+//
+//            try {
+//                StringReader stringReader = new StringReader(mData);
+//                BufferedReader bufferedReader = new BufferedReader(stringReader);
+//
+//                StringBuilder stringBuilder = new StringBuilder();
+//                String line;
+//
+//                while ((line = bufferedReader.readLine()) != null) {
+//                    stringBuilder.append(line + "\n");
+//                }
+//
+//                mJsonPlaceList = new JSONObject(stringBuilder.toString());
+//
+//                updateMap();
+//
+//            } catch (IOException e) {
+//                Log.d(LOG_TAG, e.getMessage());
+//            } catch (JSONException e) {
+//                Log.d(LOG_TAG, e.getMessage());
+//            }
+//        }
+//    }
 
 //    private GoogleMap.OnMarkerClickListener mOnMarkerClickListener = new GoogleMap.OnMarkerClickListener() {
 //        @Override

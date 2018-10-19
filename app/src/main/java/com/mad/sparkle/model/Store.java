@@ -2,14 +2,14 @@ package com.mad.sparkle.model;
 
 public class Store {
 
-    private String name;
-    private String address;
-    private int distance;
-    private double rating;
-    private String phone;
-    private double latitude;
-    private double longitude;
-    private String photoReference;
+    public String name;
+    public String address;
+    public int distance;
+    public double rating;
+    public String phone;
+    public double latitude;
+    public double longitude;
+    public String photoReference;
 
     public Store() {
     }
