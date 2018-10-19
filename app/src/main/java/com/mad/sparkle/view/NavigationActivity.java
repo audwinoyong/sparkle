@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.mad.sparkle.R;
 import com.mad.sparkle.model.Store;
 import com.mad.sparkle.utils.Constants;
@@ -34,6 +35,20 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
     final Fragment mProfileFragment = ProfileFragment.newInstance("", "");
     final FragmentManager mFragmentManager = getSupportFragmentManager();
     Fragment active = mStoreFragment;
+
+    FirebaseAuth mAuth;
+
+    FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
+        @Override
+        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+            if (firebaseUser == null) {
+                Log.d(LOG_TAG, "No user is logged in, redirecting to PreLogin Activity");
+                Intent intent = new Intent(NavigationActivity.this, PreLoginActivity.class);
+                startActivity(intent);
+            }
+        }
+    };
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -70,6 +85,8 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
+        mAuth = FirebaseAuth.getInstance();
+
         mFragmentManager.beginTransaction().add(R.id.contentContainer, mMapFragment).hide(mMapFragment).commit();
         mFragmentManager.beginTransaction().add(R.id.contentContainer, mProfileFragment).hide(mProfileFragment).commit();
         mFragmentManager.beginTransaction().add(R.id.contentContainer, mStoreFragment).commit();
@@ -105,9 +122,8 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
 
         switch (id) {
             case R.id.action_sign_out:
+                // Sign out the current user
                 FirebaseAuth.getInstance().signOut();
-                Intent signOutIntent = new Intent(NavigationActivity.this, PreLoginActivity.class);
-                startActivity(signOutIntent);
                 finish();
                 break;
         }
@@ -134,5 +150,19 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
         startActivityForResult(storeDetailIntent, 1111);
 
         Log.d(LOG_TAG, "Launching store detail activity");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(LOG_TAG, "Navigation Activity onStart called");
+        mAuth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(LOG_TAG, "Navigation Activity onStop called");
+        mAuth.removeAuthStateListener(authStateListener);
     }
 }

@@ -35,6 +35,7 @@ public class PaymentActivity extends AppCompatActivity {
                 .expirationRequired(true)
                 .cvvRequired(true)
                 .maskCvv(true)
+                .actionLabel("Pay Now")
                 .cardholderName(CardForm.FIELD_REQUIRED)
                 .postalCodeRequired(true)
                 .setup(PaymentActivity.this);

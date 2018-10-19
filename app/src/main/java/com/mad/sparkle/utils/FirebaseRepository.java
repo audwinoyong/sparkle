@@ -1,9 +1,11 @@
 package com.mad.sparkle.utils;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,6 +42,7 @@ public class FirebaseRepository {
                                     Toast.LENGTH_SHORT).show();
 
                             Intent mainIntent = new Intent(application.getApplicationContext(), NavigationActivity.class);
+                            mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             application.startActivity(mainIntent);
 
                             Log.d(LOG_TAG, "signInWithEmail:success");
