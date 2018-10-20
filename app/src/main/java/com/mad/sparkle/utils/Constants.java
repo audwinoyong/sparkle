@@ -44,8 +44,8 @@ public class Constants {
 
     // Date and time picker tags
     public static final String DIALOG_DATE = "DIALOG_DATE";
-    public static final String DIALOG_TIME = "DIALOG_TIME";
 
-    // Regex constants
+    // Authentication constants
     public static final String REGEX_NAME = "[A-Z][a-zA-Z]*";
+    public static final String TYPE_IMAGE = "image/*";
 }

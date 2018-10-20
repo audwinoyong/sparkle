@@ -1,6 +1,5 @@
 package com.mad.sparkle.viewmodel;
 
-import android.app.Activity;
 import android.app.Application;
 import android.arch.lifecycle.ViewModel;
 import android.databinding.BindingAdapter;
@@ -19,6 +18,9 @@ import com.mad.sparkle.R;
 
 import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
+/**
+ * ViewModel that handles the logic for login activity.
+ */
 public class LoginViewModel extends ViewModel {
 
     private Application mApplication;
@@ -27,11 +29,19 @@ public class LoginViewModel extends ViewModel {
 
     public ObservableField<String> email = new ObservableField<String>();
     public ObservableField<String> password = new ObservableField<String>();
+
     public ObservableField<String> emailError = new ObservableField<String>();
     public ObservableField<String> passwordError = new ObservableField<String>();
+
     public ObservableField<Boolean> progressIsShown = new ObservableField<Boolean>();
     public ObservableField<Boolean> isFinished = new ObservableField<Boolean>();
 
+    /**
+     * Constructor for Login ViewModel
+     *
+     * @param application The application
+     * @param auth        Firebase Authentication
+     */
     public LoginViewModel(Application application, FirebaseAuth auth) {
         mApplication = application;
         mAuth = auth;

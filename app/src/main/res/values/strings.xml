@@ -16,17 +16,21 @@
     <string name="error_incorrect_password">Password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_incorrect_email_or_password">Incorrect email or password</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="error_invalid_name">Name should only contain alphabetical characters and no space</string>
+    <string name="error_invalid_phone">This mobile phone is invalid</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="sign_in_successful">Sign in successful</string>
+    <string name="registration_successful">Registration successful</string>
+    <string name="email_already_exists">Email already exists</string>
+    <string name="upload_image_successful">Upload image successful</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="mobile_phone">Mobile Phone</string>
     <string name="title_activity_store_detail">Store Detail</string>
     <string name="title_activity_booking_selection">Booking Selection</string>
     <string name="title_activity_booking_confirmation">Booking Confirmation</string>
-    <string name="sign_out">Sign Out</string>
-    <string name="sign_in_successful">Sign in successful</string>
+
     <string name="unable_to_find_current_location">Unable to find current location</string>
 
     <string name="unicode_character_star">\u2605</string>

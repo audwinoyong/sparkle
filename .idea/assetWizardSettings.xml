@@ -34,10 +34,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\Audwin\Desktop\res\drawable-xxxhdpi\outline_check_circle_black_48.png" />
-                                      <entry key="outputName" value="ic_check_circle_outline_48dp" />
+                                      <entry key="imageAsset" value="C:\Users\Audwin\Desktop\res\drawable-xxxhdpi\outline_phone_white_48.png" />
+                                      <entry key="outputName" value="ic_phone_outline_white_48dp" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="000000" />
+                                      <entry key="themeColor" value="ffffff" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -123,11 +123,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="height" value="48" />
-                            <entry key="outputName" value="ic_check_circle_black_48dp" />
-                            <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="C:\Users\Audwin\Desktop\material icons outlline\outline-account_circle-24px.svg" />
-                            <entry key="width" value="48" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="ic_phone_outline_24dp" />
+                            <entry key="sourceFile" value="C:\Users\Audwin\Desktop\outline-phone-24px.svg" />
                           </map>
                         </option>
                       </PersistentState>

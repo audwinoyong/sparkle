@@ -13,7 +13,7 @@ import com.mad.sparkle.viewmodel.LoginViewModel;
 import com.mad.sparkle.viewmodel.LoginViewModelFactory;
 
 /**
- * A login screen that offers login via email/password.
+ * Login activity that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
 
