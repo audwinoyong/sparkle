@@ -6,18 +6,18 @@
     android:orientation="horizontal">
 
     <!--<TextView-->
-        <!--android:id="@+id/item_number"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="@dimen/text_margin"-->
-        <!--android:textAppearance="?attr/textAppearanceListItem" />-->
+    <!--android:id="@+id/item_number"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_margin="@dimen/text_margin"-->
+    <!--android:textAppearance="?attr/textAppearanceListItem" />-->
 
     <!--<TextView-->
-        <!--android:id="@+id/content"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="@dimen/text_margin"-->
-        <!--android:textAppearance="?attr/textAppearanceListItem" />-->
+    <!--android:id="@+id/content"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_margin="@dimen/text_margin"-->
+    <!--android:textAppearance="?attr/textAppearanceListItem" />-->
 
     <LinearLayout
         android:id="@+id/fragment_store_image_ll"
@@ -51,6 +51,8 @@
             android:id="@+id/fragment_store_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="Store Name"
             android:textStyle="bold" />
 
@@ -58,6 +60,8 @@
             android:id="@+id/fragment_store_address_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="Address" />
 
     </LinearLayout>

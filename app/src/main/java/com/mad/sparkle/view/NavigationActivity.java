@@ -58,18 +58,13 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
                     mFragmentManager.beginTransaction().hide(mActiveFragment).show(mMapFragment).commit();
                     mActiveFragment = mMapFragment;
 
-//                    mFragmentManager.beginTransaction().hide(mActiveFragment).commit();
-
                     return true;
                 case R.id.navigation_list:
-
                     mFragmentManager.beginTransaction().hide(mActiveFragment).show(mStoreListFragment).commit();
                     mActiveFragment = mStoreListFragment;
-//                    mFragmentManager.beginTransaction().hide(mActiveFragment).commit();
 
                     return true;
                 case R.id.navigation_profile:
-
                     mFragmentManager.beginTransaction().hide(mActiveFragment).show(mProfileFragment).commit();
                     mActiveFragment = mProfileFragment;
                     return true;
@@ -91,6 +86,7 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 
+        // Set the first fragment on display to be the store list
         navigation.setSelectedItemId(R.id.navigation_list);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -142,8 +138,9 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
         storeDetailIntent.putExtra(Constants.DISTANCE, store.getDistance());
         storeDetailIntent.putExtra(Constants.RATING, store.getRating());
         storeDetailIntent.putExtra(Constants.PHONE, store.getPhone());
+        storeDetailIntent.putExtra(Constants.PHOTO_REFERENCE, store.getPhotoReference());
 
-        startActivityForResult(storeDetailIntent, 1111);
+        startActivity(storeDetailIntent);
 
         Log.d(LOG_TAG, "Launching store detail activity");
     }

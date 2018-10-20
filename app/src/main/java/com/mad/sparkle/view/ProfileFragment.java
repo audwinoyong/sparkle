@@ -25,6 +25,8 @@ import com.mad.sparkle.R;
 import com.mad.sparkle.model.User;
 import com.squareup.picasso.Picasso;
 
+import static com.mad.sparkle.utils.Constants.LOG_TAG;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -110,13 +112,12 @@ public class ProfileFragment extends Fragment {
                 if (!user.profileImage.isEmpty()) {
                     Picasso.get().load(user.profileImage).placeholder(R.drawable.ic_account_circle_grey_48dp).into(mProfileImg);
                 }
-//                Picasso.get().load("https://i.imgur.com/3wZvG9q.jpg").into(mProfileImg);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Failed to read value
-                Log.w("MAD", "Failed to read value.", databaseError.toException());
+                Log.d(LOG_TAG, "Failed to read value.", databaseError.toException());
             }
         });
 

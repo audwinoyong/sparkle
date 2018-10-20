@@ -2,20 +2,34 @@ package com.mad.sparkle.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mad.sparkle.R;
 import com.mad.sparkle.adapter.StoreRecyclerViewAdapter;
 import com.mad.sparkle.model.Store;
+import com.mad.sparkle.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
 /**
  * A fragment representing a list of Items.
@@ -31,7 +45,13 @@ public class StoreListFragment extends Fragment {
 //    private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
+    private RecyclerView mRecyclerView;
+    private StoreRecyclerViewAdapter mStoreRecyclerViewAdapter;
+
     private List<Store> mStoreList = new ArrayList<Store>();
+
+
+    private DatabaseReference mDatabaseRef;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -55,7 +75,7 @@ public class StoreListFragment extends Fragment {
 //            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
 //        }
 
-        prepareStoreData();
+//        prepareStoreData();
     }
 
     private void prepareStoreData() {
@@ -80,14 +100,46 @@ public class StoreListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_store_list, container, false);
 
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child(Constants.STORES);
+
+        mDatabaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    Store store = dataSnapshot1.getValue(Store.class);
+                    mStoreList.add(store);
+                }
+
+                // Sort ascending
+                Collections.sort(mStoreList, new Comparator<Store>() {
+                    @Override
+                    public int compare(Store o1, Store o2) {
+                        return o1.distance - o2.distance;
+//                        return Double.compare(o1.rating, o2.rating); // ascending
+//                        return o1.distance - o2.distance; // descending
+//                        return Double.compare(o2.rating, o1.rating); // descending
+                    }
+                });
+
+                mStoreRecyclerViewAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(LOG_TAG, "Failed to read value.", databaseError.toException());
+            }
+        });
+
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.addItemDecoration(new DividerItemDecoration(context, LinearLayoutManager.VERTICAL));
-//            recyclerView.setAdapter(new StoreRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-            recyclerView.setAdapter(new StoreRecyclerViewAdapter(mStoreList, mListener));
+            mRecyclerView = (RecyclerView) view;
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+            mRecyclerView.addItemDecoration(new DividerItemDecoration(context, LinearLayoutManager.VERTICAL));
+//            mRecyclerView.setAdapter(new StoreRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+
+            mStoreRecyclerViewAdapter = new StoreRecyclerViewAdapter(mStoreList, mListener);
+            mRecyclerView.setAdapter(mStoreRecyclerViewAdapter);
         }
         return view;
     }
