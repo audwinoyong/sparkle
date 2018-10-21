@@ -3,9 +3,6 @@ package com.mad.sparkle.utils;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
- * @author Audwin
- * Created on 01/10/18
- * <p>
  * Constants class provides all string data
  */
 public class Constants {
@@ -27,6 +24,12 @@ public class Constants {
     public static final LatLng DEFAULT_LOCATION_SYDNEY = new LatLng(-33.8840504, 151.1992254);
     public static final String PLACES_API_BASE_URL = "https://maps.googleapis.com/maps/";
     public static final String OVER_QUERY_LIMIT = "OVER_QUERY_LIMIT";
+
+    // Url constants
+    public static final String PHOTO_BASE_URL = "https://maps.googleapis.com/maps/api/place/photo?";
+    public static final String PHOTO_MAX_WIDTH = "maxwidth=400";
+    public static final String PHOTO_REFERENCE_URL = "&photoreference=";
+    public static final String PHOTO_KEY = "&key=";
 
     // Store detail constants
     public static final String CALL_PREFIX = "tel:";

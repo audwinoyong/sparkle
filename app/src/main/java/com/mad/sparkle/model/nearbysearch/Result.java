@@ -6,6 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Result object for Nearby Search API request
+ */
 public class Result {
 
     @SerializedName("geometry")

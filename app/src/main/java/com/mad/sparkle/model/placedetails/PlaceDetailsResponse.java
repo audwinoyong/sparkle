@@ -6,6 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Place Details response mapped from JSON to Java objects
+ */
 public class PlaceDetailsResponse {
 
     @SerializedName("html_attributions")

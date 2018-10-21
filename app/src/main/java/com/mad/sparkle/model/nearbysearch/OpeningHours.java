@@ -6,6 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Opening hours object
+ */
 public class OpeningHours {
 
     @SerializedName("open_now")

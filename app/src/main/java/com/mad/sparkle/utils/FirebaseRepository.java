@@ -27,12 +27,20 @@ import static com.mad.sparkle.utils.Constants.LOG_TAG;
 import static com.mad.sparkle.utils.Constants.PROFILE_IMAGE;
 import static com.mad.sparkle.utils.Constants.USERS;
 
+/**
+ * Firebase repository class contains all Firebase related codes as the data access layer.
+ */
 public class FirebaseRepository {
 
+    // Singleton pattern field
     private static FirebaseRepository sInstance;
-
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
+    /**
+     * Singleton pattern to return an instance of Firebase Repository.
+     *
+     * @return FirebaseRepository instance
+     */
     public static synchronized FirebaseRepository getInstance() {
         if (sInstance == null) {
             sInstance = new FirebaseRepository();
@@ -40,17 +48,39 @@ public class FirebaseRepository {
         return sInstance;
     }
 
+    /**
+     * Empty constructor
+     */
     private FirebaseRepository() {
     }
 
+    /**
+     * Get the current user database reference.
+     *
+     * @param uid user key
+     * @return database reference
+     */
     private DatabaseReference getCurrentUserDatabaseReference(String uid) {
         return FirebaseDatabase.getInstance().getReference().child(USERS).child(uid);
     }
 
+    /**
+     * Get the current user storage reference.
+     *
+     * @param uid user key
+     * @return storage reference
+     */
     private StorageReference getCurrentUserStorageReference(String uid) {
         return FirebaseStorage.getInstance().getReference().child(USERS).child(uid);
     }
 
+    /**
+     * Attempt sign in using Firebase Authentication.
+     *
+     * @param email       user email
+     * @param password    user password
+     * @param application application
+     */
     public void signIn(final String email, final String password, final Application application) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -77,6 +107,17 @@ public class FirebaseRepository {
                 });
     }
 
+    /**
+     * Attempt registration to Firebase.
+     *
+     * @param email       user email
+     * @param password    user password
+     * @param firstName   user first name
+     * @param lastName    user last name
+     * @param mobilePhone user mobile phone
+     * @param imageUri    profile image uri
+     * @param application application
+     */
     public void register(final String email, final String password, final String firstName, final String lastName, final String mobilePhone,
                          final Uri imageUri, final Application application) {
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -118,6 +159,13 @@ public class FirebaseRepository {
                 });
     }
 
+    /**
+     * Add the user to Firabase Database.
+     *
+     * @param uid         user key
+     * @param newUser     user object
+     * @param application application
+     */
     private void addUserToDatabase(String uid, User newUser, final Application application) {
         getCurrentUserDatabaseReference(uid).setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -136,6 +184,12 @@ public class FirebaseRepository {
         });
     }
 
+    /**
+     * Upload image to Firebase Storage.
+     *
+     * @param uid      user key
+     * @param imageUri image uri
+     */
     private void uploadImageToStorage(final String uid, Uri imageUri) {
         // Store profile image to Storage and Database
         StorageReference filepath = getCurrentUserStorageReference(uid).child(imageUri.getLastPathSegment());

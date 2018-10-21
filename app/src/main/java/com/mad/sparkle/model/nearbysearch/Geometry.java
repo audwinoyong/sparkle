@@ -3,6 +3,9 @@ package com.mad.sparkle.model.nearbysearch;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Nearby Search geometry object.
+ */
 public class Geometry {
 
     @SerializedName("location")
@@ -10,14 +13,18 @@ public class Geometry {
     private Location location;
 
     /**
-     * @return The location
+     * Get location
+     *
+     * @return location
      */
     public Location getLocation() {
         return location;
     }
 
     /**
-     * @param location The location
+     * Set location
+     *
+     * @param location the location
      */
     public void setLocation(Location location) {
         this.location = location;

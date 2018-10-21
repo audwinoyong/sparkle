@@ -3,6 +3,9 @@ package com.mad.sparkle.model.nearbysearch;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Nearby Search location object.
+ */
 public class Location {
 
     @SerializedName("lat")

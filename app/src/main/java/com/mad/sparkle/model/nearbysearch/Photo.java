@@ -6,6 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Photo object
+ */
 public class Photo {
 
     @SerializedName("height")

@@ -118,7 +118,7 @@ public class StoreListFragment extends Fragment {
             mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             mRecyclerView.addItemDecoration(new DividerItemDecoration(context, LinearLayoutManager.VERTICAL));
 
-            mStoreRecyclerViewAdapter = new StoreRecyclerViewAdapter(mStoreList, mListener);
+            mStoreRecyclerViewAdapter = new StoreRecyclerViewAdapter(context, mStoreList, mListener);
             mRecyclerView.setAdapter(mStoreRecyclerViewAdapter);
         }
         return view;
