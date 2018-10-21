@@ -32,9 +32,12 @@
     <string name="title_activity_booking_confirmation">Booking Confirmation</string>
 
     <string name="unable_to_find_current_location">Unable to find current location</string>
+    <string name="permission_denied_default_location">Location permission denied, using default location in Sydney</string>
 
     <string name="unicode_character_star">\u2605</string>
     <string name="title_activity_payment">Payment</string>
     <string name="scan_card">Scan card</string>
+    <string name="refresh">Refresh</string>
+    <string name="getting_nearby_car_wash">Getting nearby car wash...</string>
 
 </resources>

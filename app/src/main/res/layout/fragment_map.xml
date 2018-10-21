@@ -14,26 +14,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:paddingBottom="16dp">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/fragment_map_store_button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/app_logo"
-            app:civ_border_color="@android:color/holo_blue_dark"
-            app:civ_border_width="2dp"
-            app:civ_circle_background_color="@android:color/white" />
-    </RelativeLayout>
-
 </FrameLayout>
 

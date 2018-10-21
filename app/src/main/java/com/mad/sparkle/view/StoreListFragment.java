@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +23,6 @@ import com.mad.sparkle.model.Store;
 import com.mad.sparkle.utils.Constants;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -49,7 +47,6 @@ public class StoreListFragment extends Fragment {
     private StoreRecyclerViewAdapter mStoreRecyclerViewAdapter;
 
     private List<Store> mStoreList = new ArrayList<Store>();
-
 
     private DatabaseReference mDatabaseRef;
 
@@ -79,19 +76,19 @@ public class StoreListFragment extends Fragment {
     }
 
     private void prepareStoreData() {
-        Store store = new Store("Magic Wash", "18 Paramatta Road", 150, 4.2, "0212345678", -30, 15, "");
+        Store store = new Store("001", "Magic Wash", "18 Paramatta Road", 150, 4.2, "0212345678", -30, 15, "");
         mStoreList.add(store);
 
-        store = new Store("Star Wash", "50 Burwood Road", 400, 5, "0299991111", -30, 15, "");
+        store = new Store("002", "Star Wash", "50 Burwood Road", 400, 5, "0299991111", -30, 15, "");
         mStoreList.add(store);
 
-        store = new Store("Oz Sparkling Wash", "33 Camperdown Street", 423, 1, "0212345678", -30, 15, "");
+        store = new Store("003", "Oz Sparkling Wash", "33 Camperdown Street", 423, 1, "0212345678", -30, 15, "");
         mStoreList.add(store);
 
-        store = new Store("Sleek Wash", "167 King Street", 500, 2, "0212345678", -30, 15, "");
+        store = new Store("004", "Sleek Wash", "167 King Street", 500, 2, "0212345678", -30, 15, "");
         mStoreList.add(store);
 
-        store = new Store("King Wash", "77 Eddy Avenue", 1200, 3, "0212345678", -30, 15, "");
+        store = new Store("005", "King Wash", "77 Eddy Avenue", 1200, 3, "0212345678", -30, 15, "");
         mStoreList.add(store);
     }
 
@@ -105,6 +102,8 @@ public class StoreListFragment extends Fragment {
         mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mStoreList.clear();
+
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Store store = dataSnapshot1.getValue(Store.class);
                     mStoreList.add(store);
@@ -136,7 +135,6 @@ public class StoreListFragment extends Fragment {
             mRecyclerView = (RecyclerView) view;
             mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             mRecyclerView.addItemDecoration(new DividerItemDecoration(context, LinearLayoutManager.VERTICAL));
-//            mRecyclerView.setAdapter(new StoreRecyclerViewAdapter(DummyContent.ITEMS, mListener));
 
             mStoreRecyclerViewAdapter = new StoreRecyclerViewAdapter(mStoreList, mListener);
             mRecyclerView.setAdapter(mStoreRecyclerViewAdapter);
@@ -173,7 +171,6 @@ public class StoreListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(Store store);
     }
 }

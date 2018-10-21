@@ -1,6 +1,8 @@
 package com.mad.sparkle.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +14,11 @@ import com.mad.sparkle.R;
 import com.mad.sparkle.view.StoreListFragment.OnListFragmentInteractionListener;
 import com.mad.sparkle.dummy.DummyContent.DummyItem;
 import com.mad.sparkle.model.Store;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
@@ -22,14 +27,8 @@ import java.util.List;
  */
 public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecyclerViewAdapter.ViewHolder> {
 
-//    private final List<DummyItem> mValues;
     private final List<Store> mStores;
     private final OnListFragmentInteractionListener mListener;
-
-//    public StoreRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
-//        mValues = items;
-//        mListener = listener;
-//    }
 
     public StoreRecyclerViewAdapter(List<Store> stores, OnListFragmentInteractionListener listener) {
         mStores = stores;
@@ -45,17 +44,20 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-//        holder.mItem = mValues.get(position);
         holder.mStore = mStores.get(position);
+
+        String photoReference = holder.mStore.getPhotoReference();
+        if (!TextUtils.isEmpty(photoReference)) {
+            Log.d(LOG_TAG, "Fetching place photo for: " + holder.mStore.getName());
+            Picasso.get().load(getPhotoUrl(photoReference, holder)).placeholder(R.drawable.app_logo).into(holder.mStoreImg);
+
+//            Picasso.get().load("https://image.freepik.com/free-vector/car-wash-cartoon-vector_23-2147498053.jpg").placeholder(R.drawable.app_logo).into(mStoreImg);
+        }
 
         holder.mNameTv.setText(holder.mStore.getName());
         holder.mAddressTv.setText(holder.mStore.getAddress());
         holder.mRatingBar.setRating((float) holder.mStore.getRating());
         holder.mDistanceTv.setText(String.valueOf(holder.mStore.getDistance()) + " m");
-
-
-//        holder.mIdView.setText(mValues.get(position).id);
-//        holder.mContentView.setText(mValues.get(position).content);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,19 +78,14 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-//        public final TextView mIdView;
-//        public final TextView mContentView;
         private ImageView mStoreImg;
         private TextView mNameTv, mAddressTv, mDistanceTv;
         private RatingBar mRatingBar;
-//        public DummyItem mItem;
         public Store mStore;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-//            mIdView = (TextView) view.findViewById(R.id.item_number);
-//            mContentView = (TextView) view.findViewById(R.id.content);
 
             mStoreImg = (ImageView) view.findViewById(R.id.fragment_store_image);
             mNameTv = (TextView) view.findViewById(R.id.fragment_store_name_tv);
@@ -98,9 +95,15 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
 
         }
 
-//        @Override
-//        public String toString() {
-//            return super.toString() + " '" + mContentView.getText() + "'";
-//        }
+    }
+
+    private String getPhotoUrl(String photoReference, ViewHolder holder) {
+        StringBuilder photoUrlStringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/photo?");
+        photoUrlStringBuilder.append("maxwidth=" + "400");
+        photoUrlStringBuilder.append("&photoreference=" + photoReference);
+        photoUrlStringBuilder.append("&key=" + holder.itemView.getResources().getString(R.string.google_maps_key));
+
+        Log.d(LOG_TAG, "url= " + photoUrlStringBuilder.toString());
+        return photoUrlStringBuilder.toString();
     }
 }

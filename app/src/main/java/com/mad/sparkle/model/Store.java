@@ -2,6 +2,7 @@ package com.mad.sparkle.model;
 
 public class Store {
 
+    public String storeId;
     public String name;
     public String address;
     public int distance;
@@ -14,7 +15,8 @@ public class Store {
     public Store() {
     }
 
-    public Store(String name, String address, int distance, double rating, String phone, double latitude, double longitude, String photoReference) {
+    public Store(String storeId, String name, String address, int distance, double rating, String phone, double latitude, double longitude, String photoReference) {
+        this.storeId = storeId;
         this.name = name;
         this.address = address;
         this.distance = distance;
@@ -23,6 +25,14 @@ public class Store {
         this.latitude = latitude;
         this.longitude = longitude;
         this.photoReference = photoReference;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 
     public String getName() {
