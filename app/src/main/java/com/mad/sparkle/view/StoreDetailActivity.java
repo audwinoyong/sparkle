@@ -58,7 +58,12 @@ public class StoreDetailActivity extends AppCompatActivity {
         mAddressTv.setText(getIntent().getStringExtra(Constants.ADDRESS));
         mDistanceTv.setText(String.format("%s m", String.valueOf(distance)));
         mRatingBar.setRating(rating);
-        mPhoneTv.setText(formatPhoneNumber(phone));
+
+        if (!TextUtils.isEmpty(phone)) {
+            mPhoneTv.setText(formatPhoneNumber(phone));
+        } else {
+            mPhoneTv.setText(getString(R.string.no_phone_available));
+        }
 
         if (!TextUtils.isEmpty(photoReference)) {
             Log.d(LOG_TAG, "Fetching place photo for: " + name);

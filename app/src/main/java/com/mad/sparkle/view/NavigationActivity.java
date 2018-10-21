@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -16,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -221,7 +219,7 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
                         int distance = (int) SphericalUtil.computeDistanceBetween(mDefaultLocation, placeLatLng);
 
                         // Generate 7 digits random phone number,
-                        // because calling Google Places API for Place Details query require payment per request.
+                        // because calling Google Places API for Place Details query will return OVER_QUERY_LIMIT and also require further payment charge.
                         int phoneDigits = new Random().nextInt(9000000) + 1000000;
                         String randPhone = "02" + "9" + String.valueOf(phoneDigits);
 

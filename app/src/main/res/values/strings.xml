@@ -39,5 +39,6 @@
     <string name="scan_card">Scan card</string>
     <string name="refresh">Refresh</string>
     <string name="getting_nearby_car_wash">Getting nearby car wash...</string>
+    <string name="no_phone_available">No phone available</string>
 
 </resources>

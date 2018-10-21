@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.mad.sparkle.R;
 import com.mad.sparkle.view.StoreListFragment.OnListFragmentInteractionListener;
-import com.mad.sparkle.dummy.DummyContent.DummyItem;
 import com.mad.sparkle.model.Store;
 import com.squareup.picasso.Picasso;
 
@@ -21,7 +20,7 @@ import java.util.List;
 import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
