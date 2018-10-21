@@ -100,11 +100,9 @@ public class StoreListFragment extends Fragment {
                     @Override
                     public int compare(Store o1, Store o2) {
                         return o1.distance - o2.distance;
-//                        return Double.compare(o1.rating, o2.rating); // ascending
-//                        return o1.distance - o2.distance; // descending
-//                        return Double.compare(o2.rating, o1.rating); // descending
                     }
                 });
+
                 // Notify the adapter for changes
                 mStoreRecyclerViewAdapter.notifyDataSetChanged();
             }
