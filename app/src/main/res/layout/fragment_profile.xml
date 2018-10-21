@@ -55,6 +55,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/border_set"
                 android:clickable="true"
+                android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:weightSum="5">
 
@@ -81,7 +82,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Bookings" />
+                        android:text="@string/bookings" />
 
                 </LinearLayout>
 

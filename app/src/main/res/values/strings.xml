@@ -50,7 +50,25 @@
     <string name="must_implement_on_list_interaction_listener">must implement OnListFragmentInteractionListener</string>
 
     <string name="full_name">%1$s %2$s</string>
-    <string name="asdsad">asdsad</string>
-
+    <string name="booking_complete">Booking complete</string>
+    <string name="you_have_booked_a_car_wash">You have booked a car wash!</string>
+    <string name="you_can_check_your_booking_in_your_profile">You can check your booking in your profile.</string>
+    <string name="back_to_home">Back to Home</string>
+    <string name="make_a_car_wash_booking_at">Make a car wash booking at:</string>
+    <string name="store_name">Store Name</string>
+    <string name="booking_fee">Booking Fee: $5</string>
+    <string name="select_date">Select date...</string>
+    <string name="select_time">Select time...</string>
+    <string name="proceed_to_payment">Proceed to Payment</string>
+    <string name="app_logo">App Logo</string>
+    <string name="pay_now">Pay Now</string>
+    <string name="address">Address</string>
+    <string name="distance">Distance</string>
+    <string name="value">Value</string>
+    <string name="rating">Rating</string>
+    <string name="phone">Phone</string>
+    <string name="book_car_wash">Book Car Wash</string>
+    <string name="store_photo">Store Photo</string>
+    <string name="bookings">Bookings</string>
 
 </resources>

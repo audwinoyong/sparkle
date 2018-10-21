@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginBottom="16dp"
+        android:contentDescription="@string/store_photo"
         android:src="@drawable/shape_photo" />
 
     <TableLayout
@@ -33,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Address"
+                android:text="@string/address"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
@@ -44,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:maxWidth="16dp"
-                android:text="Value" />
+                android:text="@string/value" />
         </TableRow>
 
         <TableRow
@@ -57,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Distance"
+                android:text="@string/distance"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
@@ -67,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="Value" />
+                android:text="@string/value" />
         </TableRow>
 
         <TableRow
@@ -80,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Rating"
+                android:text="@string/rating"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
@@ -105,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Phone"
+                android:text="@string/phone"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
@@ -116,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:maxWidth="16dp"
-                android:text="Value" />
+                android:text="@string/value" />
         </TableRow>
 
     </TableLayout>
@@ -131,7 +132,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/shape_button"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:text="Book Car Wash"
+        android:text="@string/book_car_wash"
         android:textColor="@android:color/white"
         android:textStyle="bold" />
 

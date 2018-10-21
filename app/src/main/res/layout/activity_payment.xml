@@ -35,7 +35,7 @@
         android:background="@drawable/shape_button"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="attemptPayment"
-        android:text="Pay Now"
+        android:text="@string/pay_now"
         android:textColor="@android:color/white"
         android:textStyle="bold" />
 

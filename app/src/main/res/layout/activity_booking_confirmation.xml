@@ -31,20 +31,20 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:gravity="center"
-                android:text="Booking complete"
+                android:text="@string/booking_complete"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="You have booked a car wash!"
+                android:text="@string/you_have_booked_a_car_wash"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="You can check your booking in your profile."
+                android:text="@string/you_can_check_your_booking_in_your_profile"
                 android:textAlignment="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
@@ -65,7 +65,7 @@
         android:layout_marginBottom="32dp"
         android:background="@drawable/shape_button"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:text="Back to Home"
+        android:text="@string/back_to_home"
         android:textColor="@android:color/white"
         android:textStyle="bold" />
 
