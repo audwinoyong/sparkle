@@ -1,4 +1,4 @@
-package com.mad.sparkle.view;
+package com.mad.sparkle.view.activity;
 
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;

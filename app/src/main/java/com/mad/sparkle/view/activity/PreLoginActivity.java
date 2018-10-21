@@ -1,4 +1,4 @@
-package com.mad.sparkle.view;
+package com.mad.sparkle.view.activity;
 
 import android.Manifest;
 import android.content.Intent;

@@ -7,7 +7,7 @@
     android:layout_centerInParent="true"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".view.PreLoginActivity">
+    tools:context=".view.activity.PreLoginActivity">
 
     <ImageView
         android:id="@+id/activity_pre_login_app_logo_img"

@@ -1,4 +1,4 @@
-package com.mad.sparkle.view;
+package com.mad.sparkle.view.fragment;
 
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
@@ -37,6 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mad.sparkle.model.Store;
 import com.mad.sparkle.utils.Constants;
+import com.mad.sparkle.view.activity.StoreDetailActivity;
 import com.mad.sparkle.viewmodel.MapViewModel;
 import com.mad.sparkle.R;
 

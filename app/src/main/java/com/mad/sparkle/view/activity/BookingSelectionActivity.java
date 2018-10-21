@@ -1,4 +1,4 @@
-package com.mad.sparkle.view;
+package com.mad.sparkle.view.activity;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -22,6 +22,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.mad.sparkle.R;
 import com.mad.sparkle.model.Store;
 import com.mad.sparkle.utils.Constants;
+import com.mad.sparkle.view.CustomTimePickerDialog;
+import com.mad.sparkle.view.fragment.DatePickerFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

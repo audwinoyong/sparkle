@@ -30,7 +30,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".view.PreLoginActivity"
+            android:name=".view.activity.PreLoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -40,37 +40,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.LoginActivity"
+            android:name=".view.activity.LoginActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.RegisterActivity"
+            android:name=".view.activity.RegisterActivity"
             android:label="@string/title_activity_register"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.NavigationActivity"
+            android:name=".view.activity.NavigationActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.StoreDetailActivity"
+            android:name=".view.activity.StoreDetailActivity"
             android:label="@string/title_activity_store_detail"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".view.BookingSelectionActivity"
+            android:name=".view.activity.BookingSelectionActivity"
             android:label="@string/title_activity_booking_selection"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".view.PaymentActivity"
+            android:name=".view.activity.PaymentActivity"
             android:label="@string/title_activity_payment"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.BookingConfirmationActivity"
+            android:name=".view.activity.BookingConfirmationActivity"
             android:label="@string/title_activity_booking_confirmation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.BookingHistoryActivity"
+            android:name=".view.activity.BookingHistoryActivity"
             android:label="@string/title_activity_booking_history"
             android:screenOrientation="portrait" />
         <!--

@@ -1,4 +1,4 @@
-package com.mad.sparkle.view;
+package com.mad.sparkle.view.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.mad.sparkle.utils.Constants;
 import com.mad.sparkle.R;
 import com.mad.sparkle.model.User;
+import com.mad.sparkle.view.activity.BookingHistoryActivity;
 import com.squareup.picasso.Picasso;
 
 import static com.mad.sparkle.utils.Constants.LOG_TAG;

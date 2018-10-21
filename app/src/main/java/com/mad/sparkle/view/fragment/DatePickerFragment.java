@@ -1,4 +1,4 @@
-package com.mad.sparkle.view;
+package com.mad.sparkle.view.fragment;
 
 import android.app.Dialog;
 import android.content.DialogInterface;

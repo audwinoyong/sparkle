@@ -1,4 +1,4 @@
-package com.mad.sparkle.view;
+package com.mad.sparkle.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -34,6 +34,9 @@ import com.mad.sparkle.model.nearbysearch.Photo;
 import com.mad.sparkle.service.GooglePlacesService;
 import com.mad.sparkle.utils.Constants;
 import com.mad.sparkle.utils.RetrofitClient;
+import com.mad.sparkle.view.fragment.MapFragment;
+import com.mad.sparkle.view.fragment.ProfileFragment;
+import com.mad.sparkle.view.fragment.StoreListFragment;
 
 import java.util.List;
 import java.util.Random;

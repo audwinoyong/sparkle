@@ -21,7 +21,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mad.sparkle.R;
 import com.mad.sparkle.model.User;
-import com.mad.sparkle.view.NavigationActivity;
+import com.mad.sparkle.view.activity.NavigationActivity;
 
 import static com.mad.sparkle.utils.Constants.LOG_TAG;
 import static com.mad.sparkle.utils.Constants.PROFILE_IMAGE;

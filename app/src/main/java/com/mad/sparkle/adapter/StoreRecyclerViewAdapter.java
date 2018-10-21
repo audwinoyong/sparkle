@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.mad.sparkle.R;
 import com.mad.sparkle.utils.Constants;
-import com.mad.sparkle.view.StoreListFragment.OnListFragmentInteractionListener;
+import com.mad.sparkle.view.fragment.StoreListFragment.OnListFragmentInteractionListener;
 import com.mad.sparkle.model.Store;
 import com.squareup.picasso.Picasso;
 
