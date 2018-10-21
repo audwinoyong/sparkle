@@ -32,6 +32,9 @@ import com.squareup.picasso.Picasso;
 import static com.mad.sparkle.utils.Constants.CALL_PREFIX;
 import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
+/**
+ * The activity contains the store details of a specific car wash.
+ */
 public class StoreDetailActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabaseRef;
@@ -54,6 +57,7 @@ public class StoreDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_detail);
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -65,8 +69,8 @@ public class StoreDetailActivity extends AppCompatActivity {
         mRatingBar = findViewById(R.id.activity_store_detail_ratingBar);
         mPhoneTv = findViewById(R.id.activity_store_detail_phone_tv);
 
+        // Retrieve data from the database
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child(Constants.STORES).child(mStoreId);
-
         mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -75,7 +79,7 @@ public class StoreDetailActivity extends AppCompatActivity {
                 toolbar.setTitle(store.getName());
 
                 mAddressTv.setText(store.getAddress());
-                mDistanceTv.setText(String.format("%s m", String.valueOf(store.getDistance())));
+                mDistanceTv.setText(getString(R.string.distance_format, store.getDistance()));
                 mRatingBar.setRating((float) store.getRating());
 
                 if (!TextUtils.isEmpty(store.getPhone())) {
@@ -86,6 +90,7 @@ public class StoreDetailActivity extends AppCompatActivity {
                 }
 
                 if (!TextUtils.isEmpty(store.getPhotoReference())) {
+                    // Load the store photo
                     Log.d(LOG_TAG, "Fetching place photo for: " + store.name);
                     Picasso.get().load(getPhotoUrl(store.getPhotoReference())).placeholder(R.drawable.app_logo).into(mStoreImg);
                 }
@@ -98,6 +103,7 @@ public class StoreDetailActivity extends AppCompatActivity {
             }
         });
 
+        // Set the onClick listener for the Fab to make a phone call
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +121,7 @@ public class StoreDetailActivity extends AppCompatActivity {
             }
         });
 
+        // Set the onClick listener for the make booking button
         Button makeBookingBtn = (Button) findViewById(R.id.activity_store_detail_book_button);
         makeBookingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,25 +143,41 @@ public class StoreDetailActivity extends AppCompatActivity {
      * @return formatted phone number
      */
     private String formatPhoneNumber(String phone) {
-        return String.format("(%s) %s %s", phone.substring(0, 2), phone.substring(2, 6), phone.substring(6, 10));
+        return String.format(Constants.PHONE_FORMAT, phone.substring(0, 2), phone.substring(2, 6), phone.substring(6, 10));
     }
 
+    /**
+     * Make a phone call using the phone device
+     */
     private void makePhoneCall() {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse(CALL_PREFIX + mPhone));
         startActivity(callIntent);
     }
 
+    /**
+     * Build the url for getting the store photo from the photo reference.
+     *
+     * @param photoReference The photo reference
+     * @return The url of the photo
+     */
     private String getPhotoUrl(String photoReference) {
-        StringBuilder photoUrlStringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/photo?");
-        photoUrlStringBuilder.append("maxwidth=" + "400");
-        photoUrlStringBuilder.append("&photoreference=" + photoReference);
-        photoUrlStringBuilder.append("&key=" + getString(R.string.google_maps_key));
+        StringBuilder photoUrlStringBuilder = new StringBuilder(Constants.PHOTO_BASE_URL);
+        photoUrlStringBuilder.append(Constants.PHOTO_MAX_WIDTH);
+        photoUrlStringBuilder.append(Constants.PHOTO_REFERENCE_URL + photoReference);
+        photoUrlStringBuilder.append(Constants.PHOTO_KEY + getString(R.string.google_maps_key));
 
         Log.d(LOG_TAG, "url= " + photoUrlStringBuilder.toString());
         return photoUrlStringBuilder.toString();
     }
 
+    /**
+     * Returns the call phone permission results, whether granted or not.
+     *
+     * @param requestCode  the request code
+     * @param permissions  the permissions
+     * @param grantResults the grant results
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

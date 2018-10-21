@@ -28,10 +28,13 @@ import com.mad.sparkle.utils.Constants;
 import static com.mad.sparkle.utils.Constants.BOOKINGS;
 import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
+/**
+ * Show the credit card payment form and option to use the camera scanner.
+ */
 public class PaymentActivity extends AppCompatActivity {
 
-    private DatabaseReference mDatabaseRef;
     private FirebaseUser mUser;
+    private DatabaseReference mDatabaseRef;
 
     private CardForm mCardForm;
 
@@ -55,8 +58,8 @@ public class PaymentActivity extends AppCompatActivity {
         mDate = getIntent().getStringExtra(Constants.DATE);
         mTime = getIntent().getStringExtra(Constants.TIME);
 
+        // Set up the payment form
         mCardForm = findViewById(R.id.activity_payment_card_form);
-
         mCardForm.cardRequired(true)
                 .expirationRequired(true)
                 .cvvRequired(true)
@@ -64,9 +67,14 @@ public class PaymentActivity extends AppCompatActivity {
                 .actionLabel("Pay Now")
                 .cardholderName(CardForm.FIELD_REQUIRED)
                 .setup(PaymentActivity.this);
-
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu.
+     *
+     * @param menu the menu
+     * @return whether the inflation is successful or not.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -102,10 +110,16 @@ public class PaymentActivity extends AppCompatActivity {
                     break;
                 }
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Returns the camera permission result, whether granted or not.
+     *
+     * @param requestCode  the request code
+     * @param permissions  the permissions
+     * @param grantResults the grant results
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -115,6 +129,7 @@ public class PaymentActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d(LOG_TAG, "Camera permission granted");
 
+                    // Start camera scanning
                     mCardForm.scanCard(PaymentActivity.this);
                 } else {
                     Log.d(LOG_TAG, "Camera permission denied");
@@ -124,9 +139,15 @@ public class PaymentActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Attempt the payment process.
+     * If successful, redirect to booking confirmation activity.
+     *
+     * @param view the view
+     */
     public void attemptPayment(View view) {
         if (mCardForm.isValid()) {
-
+            // Store the booking into the database
             mUser = FirebaseAuth.getInstance().getCurrentUser();
             mDatabaseRef = FirebaseDatabase.getInstance().getReference().child(BOOKINGS).child(mUser.getUid()).push();
 
@@ -138,6 +159,7 @@ public class PaymentActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Log.d(LOG_TAG, "addBookingToDatabase:success");
 
+                        // Start booking confirmation activity
                         Intent bookingConfirmIntent = new Intent(PaymentActivity.this, BookingConfirmationActivity.class);
                         startActivity(bookingConfirmIntent);
                         finish();

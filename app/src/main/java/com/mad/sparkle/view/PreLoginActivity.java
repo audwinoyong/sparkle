@@ -19,9 +19,6 @@ import com.mad.sparkle.utils.Constants;
 import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
 /**
- * @author Audwin
- * Created on 14/09/18
- * <p>
  * Show the options for user to register or login before using the application.
  */
 public class PreLoginActivity extends AppCompatActivity {
@@ -39,6 +36,7 @@ public class PreLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pre_login);
 
+        // Check if the user is logged in, if yes redirect to navigation  activity
         mAuth = FirebaseAuth.getInstance();
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -67,16 +65,29 @@ public class PreLoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Launch the register activity.
+     *
+     * @param view the view
+     */
     public void launchRegisterActivity(View view) {
         Intent registerIntent = new Intent(PreLoginActivity.this, RegisterActivity.class);
         startActivity(registerIntent);
     }
 
+    /**
+     * Launch the login activity.
+     *
+     * @param view the view
+     */
     public void launchLoginActivity(View view) {
         Intent loginIntent = new Intent(PreLoginActivity.this, LoginActivity.class);
         startActivity(loginIntent);
     }
 
+    /**
+     * onStart lifecycle.
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -84,6 +95,9 @@ public class PreLoginActivity extends AppCompatActivity {
         mAuth.addAuthStateListener(mAuthStateListener);
     }
 
+    /**
+     * onStop lifecycle.
+     */
     @Override
     protected void onStop() {
         super.onStop();

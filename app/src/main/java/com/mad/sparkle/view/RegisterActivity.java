@@ -40,6 +40,9 @@ public class RegisterActivity extends AppCompatActivity implements RegisterNavig
         mActivityRegisterBinding.setRegisterViewModel(mRegisterViewModel);
     }
 
+    /**
+     * Open the gallery photo intent to upload the profile image.
+     */
     @Override
     public void changeProfileImage() {
         Intent imageIntent = new Intent((Intent.ACTION_PICK));
@@ -48,6 +51,13 @@ public class RegisterActivity extends AppCompatActivity implements RegisterNavig
         startActivityForResult(imageIntent, REQUEST_IMAGE_CAPTURE);
     }
 
+    /**
+     * Returns the result of the gallery photo activity, whether upload photo is successful or not.
+     *
+     * @param requestCode the request code
+     * @param resultCode  the result code
+     * @param data        the uploaded intent data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mRegisterViewModel.handleActivityResult(requestCode, resultCode, data);

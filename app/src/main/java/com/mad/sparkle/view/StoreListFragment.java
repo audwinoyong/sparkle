@@ -30,25 +30,18 @@ import java.util.List;
 import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
 /**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
+ * Fragment that shows the list of car wash stores.
  */
 public class StoreListFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-//    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-//    private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private DatabaseReference mDatabaseRef;
 
     private RecyclerView mRecyclerView;
     private StoreRecyclerViewAdapter mStoreRecyclerViewAdapter;
 
     private List<Store> mStoreList = new ArrayList<Store>();
 
-    private DatabaseReference mDatabaseRef;
+    private OnListFragmentInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -57,33 +50,44 @@ public class StoreListFragment extends Fragment {
     public StoreListFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
+    /**
+     * Create new instance of the store list fragment
+     *
+     * @return StoreListFragment instance
+     */
     public static StoreListFragment newInstance() {
-        StoreListFragment fragment = new StoreListFragment();
-        return fragment;
+        return new StoreListFragment();
     }
 
+    /**
+     * Called when activity is first created.
+     *
+     * @param savedInstanceState Bundle object containing the activity's previously saved state
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        if (getArguments() != null) {
-//            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-//        }
-
     }
 
+    /**
+     * Inflate the view of the fragment
+     *
+     * @param inflater           layout inflater
+     * @param container          viewgroup container
+     * @param savedInstanceState Bundle object containing the activity's previously saved state
+     * @return the inflated view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_store_list, container, false);
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child(Constants.STORES);
-
         mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                // Clear the list
                 mStoreList.clear();
 
                 for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
@@ -91,7 +95,7 @@ public class StoreListFragment extends Fragment {
                     mStoreList.add(store);
                 }
 
-                // Sort ascending
+                // Sort the store ascending from the nearest distance
                 Collections.sort(mStoreList, new Comparator<Store>() {
                     @Override
                     public int compare(Store o1, Store o2) {
@@ -101,7 +105,7 @@ public class StoreListFragment extends Fragment {
 //                        return Double.compare(o2.rating, o1.rating); // descending
                     }
                 });
-
+                // Notify the adapter for changes
                 mStoreRecyclerViewAdapter.notifyDataSetChanged();
             }
 
@@ -125,6 +129,11 @@ public class StoreListFragment extends Fragment {
     }
 
 
+    /**
+     * Attach the onListFragmentInteractionListener.
+     *
+     * @param context the context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -132,10 +141,13 @@ public class StoreListFragment extends Fragment {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + getString(R.string.must_implement_on_list_interaction_listener));
         }
     }
 
+    /**
+     * Detach the listener.
+     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -145,9 +157,7 @@ public class StoreListFragment extends Fragment {
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
+     * to the activity and potentially other fragments contained in that activity.
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

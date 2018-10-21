@@ -65,6 +65,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private List<Store> mStoreList = new ArrayList<Store>();
 
     /**
+     * Mandatory empty constructor for the fragment manager to instantiate the
+     * fragment (e.g. upon screen orientation changes).
+     */
+    public MapFragment() {
+    }
+
+    /**
      * Create new instance of the map fragment
      *
      * @return MapFragment instance

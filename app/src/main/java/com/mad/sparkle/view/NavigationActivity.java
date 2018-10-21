@@ -35,7 +35,6 @@ import com.mad.sparkle.service.GooglePlacesService;
 import com.mad.sparkle.utils.Constants;
 import com.mad.sparkle.utils.RetrofitClient;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -54,44 +53,31 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
 
     private final Fragment mMapFragment = MapFragment.newInstance();
     private final Fragment mStoreListFragment = StoreListFragment.newInstance();
-    private final Fragment mProfileFragment = ProfileFragment.newInstance("", "");
+    private final Fragment mProfileFragment = ProfileFragment.newInstance();
     private final FragmentManager mFragmentManager = getSupportFragmentManager();
 
-    private Fragment mActiveFragment = mStoreListFragment;
+    private Fragment mActiveFragment = mMapFragment;
 
     private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     private LatLng mDefaultLocation = DEFAULT_LOCATION_SYDNEY;
-    private List<Store> mStoreList = new ArrayList<Store>();
-
-    FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
-        @Override
-        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-            if (firebaseUser == null) {
-                Log.d(LOG_TAG, "No user is logged in, redirecting to PreLogin Activity");
-                Intent intent = new Intent(NavigationActivity.this, PreLoginActivity.class);
-                startActivity(intent);
-            }
-        }
-    };
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_map:
                     mFragmentManager.beginTransaction().hide(mActiveFragment).show(mMapFragment).commit();
                     mActiveFragment = mMapFragment;
-
                     return true;
+
                 case R.id.navigation_list:
                     mFragmentManager.beginTransaction().hide(mActiveFragment).show(mStoreListFragment).commit();
                     mActiveFragment = mStoreListFragment;
-
                     return true;
+
                 case R.id.navigation_profile:
                     mFragmentManager.beginTransaction().hide(mActiveFragment).show(mProfileFragment).commit();
                     mActiveFragment = mProfileFragment;
@@ -111,19 +97,31 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
+        // Check if the user is logged in, if not redirect to prelogin activity
         mAuth = FirebaseAuth.getInstance();
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                if (firebaseUser == null) {
+                    Log.d(LOG_TAG, "No user is logged in, redirecting to PreLogin Activity");
+                    Intent intent = new Intent(NavigationActivity.this, PreLoginActivity.class);
+                    startActivity(intent);
+                }
+            }
+        };
 
-        mFragmentManager.beginTransaction().add(R.id.contentContainer, mMapFragment).hide(mMapFragment).commit();
+
+        // Add the fragment instances to fragment manager
+        mFragmentManager.beginTransaction().add(R.id.contentContainer, mMapFragment).commit();
         mFragmentManager.beginTransaction().add(R.id.contentContainer, mProfileFragment).hide(mProfileFragment).commit();
-        mFragmentManager.beginTransaction().add(R.id.contentContainer, mStoreListFragment).commit();
+        mFragmentManager.beginTransaction().add(R.id.contentContainer, mStoreListFragment).hide(mStoreListFragment).commit();
 
+        // Set the onNavigationItemSelected listener
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-
-        // Set the first fragment on display to be the store list
-        navigation.setSelectedItemId(R.id.navigation_list);
-
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        // Get the initial nearby car wash
         Toast.makeText(NavigationActivity.this, getString(R.string.getting_nearby_car_wash), Toast.LENGTH_SHORT).show();
         findNearbyPlaces();
     }
@@ -165,15 +163,25 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
                 Log.d(LOG_TAG, "User is signed out");
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
 
+    /**
+     * Handle interactions between the fragments.
+     *
+     * @param uri the fragment unique key
+     */
     @Override
     public void onFragmentInteraction(Uri uri) {
     }
 
+    /**
+     * Handle the fragment list interaction.
+     * Launch the store detail activity when user click on a row.
+     *
+     * @param store the store
+     */
     @Override
     public void onListFragmentInteraction(Store store) {
         Intent storeDetailIntent = new Intent(NavigationActivity.this, StoreDetailActivity.class);
@@ -184,6 +192,9 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
         Log.d(LOG_TAG, "Launching store detail activity");
     }
 
+    /**
+     * Find the nearby car wash from the Google Places API Http request.
+     */
     private void findNearbyPlaces() {
         Log.d(LOG_TAG, "Getting nearby car wash...");
 
@@ -197,9 +208,10 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
                 if (response.isSuccessful()) {
                     Log.d(LOG_TAG, "Google Places API request successful");
 
+                    // Reaches the daily query limit
                     if (response.body().getStatus().equals(Constants.OVER_QUERY_LIMIT)) {
                         Log.d(LOG_TAG, "Google Places API reaches daily query limit");
-                        Toast.makeText(NavigationActivity.this, "You have reached your request limit. Please wait for a few minutes.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(NavigationActivity.this, getString(R.string.api_request_limit_reached), Toast.LENGTH_SHORT).show();
                     }
 
                     for (int i = 0; i < response.body().getResults().size(); i++) {
@@ -225,10 +237,9 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
                         // Generate 7 digits random phone number,
                         // because calling Google Places API for Place Details query will return OVER_QUERY_LIMIT and also require further payment charge.
                         int phoneDigits = new Random().nextInt(9000000) + 1000000;
-                        String randPhone = "02" + "9" + String.valueOf(phoneDigits);
+                        String randPhone = Constants.PHONE_DIGIT_PREFIX + String.valueOf(phoneDigits);
 
                         Store newStore = new Store(placeId, name, address, distance, rating, randPhone, latitude, longitude, photoReference);
-                        mStoreList.add(newStore);
 
                         // Store car wash stores into Firebase Database
                         FirebaseDatabase.getInstance().getReference(Constants.STORES)
@@ -256,7 +267,12 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
         });
     }
 
-    public void refresh(MenuItem item) {
+    /**
+     * Animate the refresh action menu item when fetching new data.
+     *
+     * @param item the refresh menu item
+     */
+    public void animateRefresh(MenuItem item) {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ImageView imageView = (ImageView) inflater.inflate(R.layout.action_refresh, null);
 
@@ -267,40 +283,69 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
         MenuItemCompat.setActionView(item, imageView);
     }
 
-    public void completeRefresh(MenuItem item) {
+    /**
+     * Clear the animation of the refresh action menu item.
+     *
+     * @param item the refresh menu item
+     */
+    public void completeAnimateRefresh(MenuItem item) {
         item.getActionView().clearAnimation();
         item.setActionView(null);
     }
 
+    /**
+     * onStart lifecycle
+     */
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(LOG_TAG, "Navigation Activity onStart called");
-        mAuth.addAuthStateListener(authStateListener);
+        mAuth.addAuthStateListener(mAuthStateListener);
     }
 
+    /**
+     * onStop lifecycle
+     */
     @Override
     protected void onStop() {
         super.onStop();
         Log.d(LOG_TAG, "Navigation Activity onStop called");
-        mAuth.removeAuthStateListener(authStateListener);
+        mAuth.removeAuthStateListener(mAuthStateListener);
     }
 
+    /**
+     * AsyncTask to find the nearby car wash.
+     * Animate the refresh menu item during the process.
+     */
     private class FindNearbyPlacesAsyncTask extends AsyncTask<Void, Void, Void> {
         private MenuItem mRefreshItem;
 
+        /**
+         * Constructor to set the private local field.
+         *
+         * @param refreshItem the refresh menu item
+         */
         public FindNearbyPlacesAsyncTask(MenuItem refreshItem) {
             mRefreshItem = refreshItem;
         }
 
+        /**
+         * Animate the refresh menu item and show a Toast message
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             Log.d(LOG_TAG, "Refreshing nearby car wash...");
-            refresh(mRefreshItem);
+            animateRefresh(mRefreshItem);
             Toast.makeText(NavigationActivity.this, getString(R.string.getting_nearby_car_wash), Toast.LENGTH_SHORT).show();
         }
 
+        /**
+         * Find the nearby car wash.
+         *
+         * @param voids void
+         * @return null
+         */
         @Override
         protected Void doInBackground(Void... voids) {
             try {
@@ -314,10 +359,15 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
             return null;
         }
 
+        /**
+         * Remove the refresh menu item animation.
+         *
+         * @param aVoid void
+         */
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            completeRefresh(mRefreshItem);
+            completeAnimateRefresh(mRefreshItem);
             Log.d(LOG_TAG, "Refreshing nearby car wash complete");
         }
     }
