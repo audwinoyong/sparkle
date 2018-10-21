@@ -113,7 +113,7 @@ public class LoginViewModel extends ViewModel {
     }
 
     /**
-     * Check if password in in valid format
+     * Check if password is in valid format
      *
      * @param password password
      * @return whether it is in valid format
@@ -124,7 +124,8 @@ public class LoginViewModel extends ViewModel {
 
     /**
      * Set the EditText error message using binding adapter
-     * @param editText the EditText
+     *
+     * @param editText     the EditText
      * @param errorMessage the error message
      */
     @BindingAdapter("app:errorText")
@@ -132,8 +133,15 @@ public class LoginViewModel extends ViewModel {
         editText.setError(errorMessage);
     }
 
+    /**
+     * AsyncTask to attempt login.
+     * Show the progress bar during the process.
+     */
     private class LoginAsyncTask extends AsyncTask<Void, Void, Void> {
 
+        /**
+         * Show the progress bar
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -141,6 +149,12 @@ public class LoginViewModel extends ViewModel {
             progressIsShown.set(true);
         }
 
+        /**
+         * Attempt login using Firebase Authentication
+         *
+         * @param voids void
+         * @return null
+         */
         @Override
         protected Void doInBackground(Void... voids) {
             try {
@@ -155,6 +169,11 @@ public class LoginViewModel extends ViewModel {
             return null;
         }
 
+        /**
+         * Hide the progress bar
+         *
+         * @param aVoid void
+         */
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);

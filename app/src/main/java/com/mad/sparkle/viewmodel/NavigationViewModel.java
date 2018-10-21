@@ -5,6 +5,9 @@ import android.arch.lifecycle.ViewModel;
 
 import com.mad.sparkle.utils.FirebaseRepository;
 
+/**
+ * ViewModel that handles the logic for navigation activity.
+ */
 public class NavigationViewModel extends ViewModel {
 
     private Application mApplication;

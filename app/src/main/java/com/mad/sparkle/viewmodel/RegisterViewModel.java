@@ -26,6 +26,9 @@ import static android.app.Activity.RESULT_OK;
 import static com.mad.sparkle.utils.Constants.LOG_TAG;
 import static com.mad.sparkle.utils.Constants.REQUEST_IMAGE_CAPTURE;
 
+/**
+ * ViewModel that handles the logic for register activity.
+ */
 public class RegisterViewModel extends ViewModel {
 
     private Application mApplication;
@@ -49,6 +52,11 @@ public class RegisterViewModel extends ViewModel {
     public ObservableField<Boolean> fabIsShown = new ObservableField<Boolean>();
     public ObservableField<Boolean> progressIsShown = new ObservableField<Boolean>();
 
+    /**
+     * Constructor for Register ViewModel
+     *
+     * @param application The application
+     */
     public RegisterViewModel(Application application) {
         mApplication = application;
         mFirebaseRepo = FirebaseRepository.getInstance();
@@ -56,10 +64,20 @@ public class RegisterViewModel extends ViewModel {
         fabIsShown.set(true);
     }
 
+    /**
+     * Set the reference for the Register Navigator
+     *
+     * @param registerNavigator the register navigation
+     */
     public void setRegisterNavigator(RegisterNavigator registerNavigator) {
         mRegisterNavigator = new WeakReference<>(registerNavigator);
     }
 
+    /**
+     * Attempts to register specified by the register form.
+     * If there are form errors (invalid email, missing fields, etc.), the
+     * errors are presented and no actual register attempt is made.
+     */
     public void attemptRegister(View view) {
         // Reset errors.
         emailError.set(null);
@@ -85,6 +103,16 @@ public class RegisterViewModel extends ViewModel {
         }
     }
 
+    /**
+     * Validate all the fields.
+     *
+     * @param email       user email
+     * @param password    user password
+     * @param firstName   user first name
+     * @param lastName    user last name
+     * @param mobilePhone user mobile phone
+     * @return true if all fields are valid and vice versa
+     */
     private boolean validateFields(String email, String password, String firstName, String lastName, String mobilePhone) {
         boolean allFieldsAreValid = true;
 
@@ -147,7 +175,7 @@ public class RegisterViewModel extends ViewModel {
     }
 
     /**
-     * Check if password in in valid format
+     * Check if password is in valid format
      *
      * @param password password
      * @return whether it is in valid format
@@ -156,28 +184,65 @@ public class RegisterViewModel extends ViewModel {
         return password.length() >= 6;
     }
 
+    /**
+     * Check if name is in valid format
+     *
+     * @param name name
+     * @return whether it is in valid format
+     */
     private boolean isNameValid(String name) {
         return name.matches(Constants.REGEX_NAME);
     }
 
+    /**
+     * Check if the phone number is in valid format
+     *
+     * @param phone phone
+     * @return whether it is in valid format
+     */
     private boolean isPhoneValid(String phone) {
         return Patterns.PHONE.matcher(phone).matches();
     }
 
+    /**
+     * Set the EditText error message using binding adapter
+     *
+     * @param editText     the EditText
+     * @param errorMessage the error message
+     */
     @BindingAdapter("app:errorText")
     public static void setErrorMessage(EditText editText, String errorMessage) {
         editText.setError(errorMessage);
     }
 
+    /**
+     * Set the image uri of the CircleImageView using binding adapter
+     *
+     * @param circleImageView the circle image view
+     * @param imageUri        the image uri
+     */
     @BindingAdapter("app:imageUri")
     public static void setImageURI(CircleImageView circleImageView, Uri imageUri) {
         circleImageView.setImageURI(imageUri);
     }
 
+    /**
+     * Handle the click event on profile image.
+     * Call the implementation of changeProfileImage().
+     *
+     * @param view the view
+     */
     public void onProfileImageClick(View view) {
         mRegisterNavigator.get().changeProfileImage();
     }
 
+    /**
+     * Handle the result of the upload image intent
+     *
+     * @param requestCode the request code
+     * @param resultCode  the result code
+     * @param data        the Intent data returned
+     */
     public void handleActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             imageUri.set(data.getData());
@@ -188,8 +253,15 @@ public class RegisterViewModel extends ViewModel {
         }
     }
 
+    /**
+     * AsyncTask to attempt register.
+     * Show the progress bar during the process.
+     */
     private class RegisterAsyncTask extends AsyncTask<Void, Void, Void> {
 
+        /**
+         * Show the progress bar
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -197,6 +269,12 @@ public class RegisterViewModel extends ViewModel {
             progressIsShown.set(true);
         }
 
+        /**
+         * Attempt registration using Firebase
+         *
+         * @param voids void
+         * @return null
+         */
         @Override
         protected Void doInBackground(Void... voids) {
             try {
@@ -211,6 +289,11 @@ public class RegisterViewModel extends ViewModel {
             return null;
         }
 
+        /**
+         * Hide the progress bar
+         *
+         * @param aVoid void
+         */
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
