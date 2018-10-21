@@ -1,16 +1,25 @@
 package com.mad.sparkle.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -113,6 +122,7 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        Toast.makeText(NavigationActivity.this, getString(R.string.getting_nearby_car_wash), Toast.LENGTH_SHORT).show();
         findNearbyPlaces();
     }
 
@@ -130,7 +140,7 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
      * @return false to allow normal menu processing to proceed.
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -138,12 +148,13 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
 
         switch (id) {
             case R.id.action_refresh:
-                findNearbyPlaces();
+                new FindNearbyPlacesAsyncTask(item).execute();
                 break;
             case R.id.action_sign_out:
                 // Sign out the current user
                 FirebaseAuth.getInstance().signOut();
                 finish();
+                Log.d(LOG_TAG, "User is signed out");
                 break;
         }
 
@@ -153,7 +164,6 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
     }
 
     @Override
@@ -174,7 +184,6 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
 
     private void findNearbyPlaces() {
         Log.d(LOG_TAG, "Getting nearby car wash...");
-        Toast.makeText(this, getString(R.string.getting_nearby_car_wash), Toast.LENGTH_SHORT).show();
 
         GooglePlacesService googlePlacesService = RetrofitClient.getClient().create(GooglePlacesService.class);
         Call<NearbySearchResponse> call = googlePlacesService
@@ -245,6 +254,22 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
         });
     }
 
+    public void refresh(MenuItem item) {
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ImageView imageView = (ImageView) inflater.inflate(R.layout.action_refresh, null);
+
+        Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        rotation.setRepeatCount(Animation.INFINITE);
+        imageView.startAnimation(rotation);
+
+        MenuItemCompat.setActionView(item, imageView);
+    }
+
+    public void completeRefresh(MenuItem item) {
+        item.getActionView().clearAnimation();
+        item.setActionView(null);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -257,5 +282,41 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
         super.onStop();
         Log.d(LOG_TAG, "Navigation Activity onStop called");
         mAuth.removeAuthStateListener(authStateListener);
+    }
+
+    private class FindNearbyPlacesAsyncTask extends AsyncTask<Void, Void, Void> {
+        private MenuItem mRefreshItem;
+
+        public FindNearbyPlacesAsyncTask(MenuItem refreshItem) {
+            mRefreshItem = refreshItem;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.d(LOG_TAG, "Refreshing nearby car wash...");
+            refresh(mRefreshItem);
+            Toast.makeText(NavigationActivity.this, getString(R.string.getting_nearby_car_wash), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                // Sleep for 2 second
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            findNearbyPlaces();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            completeRefresh(mRefreshItem);
+            Log.d(LOG_TAG, "Refreshing nearby car wash complete");
+        }
     }
 }

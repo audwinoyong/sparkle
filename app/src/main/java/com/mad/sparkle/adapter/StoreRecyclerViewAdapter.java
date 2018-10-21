@@ -50,8 +50,6 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
         if (!TextUtils.isEmpty(photoReference)) {
             Log.d(LOG_TAG, "Fetching place photo for: " + holder.mStore.getName());
             Picasso.get().load(getPhotoUrl(photoReference, holder)).placeholder(R.drawable.app_logo).into(holder.mStoreImg);
-
-//            Picasso.get().load("https://image.freepik.com/free-vector/car-wash-cartoon-vector_23-2147498053.jpg").placeholder(R.drawable.app_logo).into(mStoreImg);
         }
 
         holder.mNameTv.setText(holder.mStore.getName());
