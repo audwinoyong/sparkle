@@ -1,6 +1,7 @@
 package com.mad.sparkle.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,8 +46,11 @@ public class ProfileFragment extends Fragment {
 
     private DatabaseReference mDatabaseRef;
     private FirebaseUser mUser;
+
+    private LinearLayout mUserBooking;
     private TextView mName;
     private TextView mEmail;
+    private TextView mMobilePhone;
     private ImageView mProfileImg;
 
     // TODO: Rename and change types of parameters
@@ -96,8 +101,10 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mUserBooking = (LinearLayout) getView().findViewById(R.id.fragment_profile_bookings);
         mName = (TextView) getView().findViewById(R.id.fragment_profile_name);
         mEmail = (TextView) getView().findViewById(R.id.fragment_profile_email);
+        mMobilePhone = (TextView) getView().findViewById(R.id.fragment_profile_mobile_phone);
         mProfileImg = (ImageView) getView().findViewById(R.id.fragment_profile_image);
 
         mUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -109,6 +116,7 @@ public class ProfileFragment extends Fragment {
                 User user = dataSnapshot.getValue(User.class);
                 mName.setText(user.firstName + " " + user.lastName);
                 mEmail.setText(user.email);
+                mMobilePhone.setText(user.mobilePhone);
                 if (!user.profileImage.isEmpty()) {
                     Picasso.get().load(user.profileImage).placeholder(R.drawable.ic_account_circle_grey_48dp).into(mProfileImg);
                 }
@@ -118,6 +126,14 @@ public class ProfileFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Failed to read value
                 Log.d(LOG_TAG, "Failed to read value.", databaseError.toException());
+            }
+        });
+
+        mUserBooking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent bookingHistoryIntent = new Intent(getContext(), BookingHistoryActivity.class);
+                startActivity(bookingHistoryIntent);
             }
         });
 

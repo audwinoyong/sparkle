@@ -86,8 +86,8 @@ public class StoreListFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mStoreList.clear();
 
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    Store store = dataSnapshot1.getValue(Store.class);
+                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                    Store store = childDataSnapshot.getValue(Store.class);
                     mStoreList.add(store);
                 }
 

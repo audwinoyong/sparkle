@@ -41,5 +41,6 @@
     <string name="getting_nearby_car_wash">Getting nearby car wash...</string>
     <string name="no_phone_available">No phone available</string>
     <string name="error_select_both_date_and_time">Please select both date and time</string>
+    <string name="title_activity_booking_history">Bookings</string>
 
 </resources>

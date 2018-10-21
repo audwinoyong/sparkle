@@ -74,6 +74,7 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
         public final View mView;
         private ImageView mStoreImg;
         private TextView mNameTv, mAddressTv, mDistanceTv;
@@ -89,7 +90,6 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
             mAddressTv = (TextView) view.findViewById(R.id.fragment_store_address_tv);
             mRatingBar = (RatingBar) view.findViewById(R.id.fragment_store_ratingBar);
             mDistanceTv = (TextView) view.findViewById(R.id.fragment_store_distance_tv);
-
         }
 
     }
