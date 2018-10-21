@@ -29,6 +29,9 @@ import java.util.Date;
 
 import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
+/**
+ * Enable user to select the booking date and time of the selected store.
+ */
 public class BookingSelectionActivity extends AppCompatActivity implements DatePickerFragment.DateDialogListener {
 
     private DatabaseReference mDatabaseRef;
@@ -42,6 +45,11 @@ public class BookingSelectionActivity extends AppCompatActivity implements DateP
     private String mDate;
     private String mTime;
 
+    /**
+     * Called when activity is first created.
+     *
+     * @param savedInstanceState Bundle object containing the activity's previously saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +63,7 @@ public class BookingSelectionActivity extends AppCompatActivity implements DateP
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child(Constants.STORES).child(mStoreId);
 
+        // Show the store name
         mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -70,7 +79,7 @@ public class BookingSelectionActivity extends AppCompatActivity implements DateP
             }
         });
 
-
+        // Show the date picker dialog when user clicks
         datePickerDialogEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,6 +88,7 @@ public class BookingSelectionActivity extends AppCompatActivity implements DateP
             }
         });
 
+        // Show the time picker dialog when user clicks
         timePickerDialogEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,19 +99,21 @@ public class BookingSelectionActivity extends AppCompatActivity implements DateP
                 CustomTimePickerDialog customTimePickerDialog = new CustomTimePickerDialog(BookingSelectionActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        // Set the selected time
                         timePickerDialogEt.setText(formatTime(hourOfDay, minute));
                         mTime = formatTime(hourOfDay, minute);
-
                     }
                 }, hour, minute, false);
                 customTimePickerDialog.show();
             }
         });
 
+        // Set the onClick listener for proceeding to payment activity
         Button proceedToPaymentBtn = (Button) findViewById(R.id.activity_booking_proceed_to_payment_btn);
         proceedToPaymentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Both date and time are selected
                 if (!TextUtils.isEmpty(mDate) || !TextUtils.isEmpty(mTime)) {
                     Intent paymentIntent = new Intent(BookingSelectionActivity.this, PaymentActivity.class);
                     paymentIntent.putExtra(Constants.STORE_ID, mStoreId);
@@ -119,17 +131,35 @@ public class BookingSelectionActivity extends AppCompatActivity implements DateP
         });
     }
 
+    /**
+     * Set the selected date after the dialog finish
+     *
+     * @param date selected date
+     */
     @Override
     public void onFinishDialog(Date date) {
         datePickerDialogEt.setText(formatDate(date));
         mDate = formatDate(date);
     }
 
+    /**
+     * Format the date into string
+     *
+     * @param date selected date
+     * @return formatted date
+     */
     public String formatDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return sdf.format(date);
     }
 
+    /**
+     * Format the time into string
+     *
+     * @param hourOfDay selected hour
+     * @param minute    selected minute
+     * @return formatted time
+     */
     public String formatTime(int hourOfDay, int minute) {
 
         String timeSet;

@@ -24,6 +24,11 @@ public class RegisterActivity extends AppCompatActivity implements RegisterNavig
     private ActivityRegisterBinding mActivityRegisterBinding;
     private RegisterViewModel mRegisterViewModel;
 
+    /**
+     * Called when activity is first created.
+     *
+     * @param savedInstanceState Bundle object containing the activity's previously saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

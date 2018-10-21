@@ -40,6 +40,11 @@ public class PaymentActivity extends AppCompatActivity {
     private String mDate;
     private String mTime;
 
+    /**
+     * Called when activity is first created.
+     *
+     * @param savedInstanceState Bundle object containing the activity's previously saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

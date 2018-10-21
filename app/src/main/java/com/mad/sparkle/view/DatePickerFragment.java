@@ -14,14 +14,26 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * The date picker fragment dialog for user to select booking date.
+ */
 public class DatePickerFragment extends DialogFragment {
 
     private DatePicker mDatePicker;
 
+    /**
+     * Listener for Date Dialog when the dialog is finished.
+     */
     public interface DateDialogListener {
         void onFinishDialog(Date date);
     }
 
+    /**
+     * Called when the dialog is created.
+     *
+     * @param savedInstanceState Bundle object containing the activity's previously saved state
+     * @return the date dialog
+     */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -31,11 +43,11 @@ public class DatePickerFragment extends DialogFragment {
         Calendar calendar = Calendar.getInstance();
 
         mDatePicker = (DatePicker) v.findViewById(R.id.dialog_date_picker);
-        // set today as minimum date and disable past dates
+        // Set today as minimum date and disable past dates
         mDatePicker.setMinDate(calendar.getTimeInMillis());
-        // add 3 months from today
+        // Add 3 months from today
         calendar.add(Calendar.MONTH, 3);
-        // set 3 months as maximum date
+        // Set 3 months as maximum date
         mDatePicker.setMaxDate(calendar.getTimeInMillis());
 
         return new android.support.v7.app.AlertDialog.Builder(getActivity(), R.style.DialogCustomTheme)

@@ -11,15 +11,24 @@ import com.mad.sparkle.R;
 
 import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
+/**
+ * Show booking confirmation activity after booking is successful
+ */
 public class BookingConfirmationActivity extends AppCompatActivity {
 
     private Button mHomeBtn;
 
+    /**
+     * Called when activity is first created.
+     *
+     * @param savedInstanceState Bundle object containing the activity's previously saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_confirmation);
 
+        // onClick listener for the home button
         mHomeBtn = (Button) findViewById(R.id.activity_booking_confirmation_home_button);
         mHomeBtn.setOnClickListener(new View.OnClickListener() {
             @Override

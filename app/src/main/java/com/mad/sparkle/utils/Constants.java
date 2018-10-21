@@ -42,6 +42,7 @@ public class Constants {
     public static final String STORE_NAME = "storeName";
 
     // Date and time picker tag and intent keys
+    public static final int TIME_PICKER_INTERVAL = 30;
     public static final String DIALOG_DATE = "DIALOG_DATE";
     public static final String DATE = "date";
     public static final String TIME = "time";

@@ -45,6 +45,11 @@ public class StoreDetailActivity extends AppCompatActivity {
     private String mStoreId;
     private String mPhone;
 
+    /**
+     * Called when activity is first created.
+     *
+     * @param savedInstanceState Bundle object containing the activity's previously saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

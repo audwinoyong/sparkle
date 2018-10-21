@@ -47,16 +47,15 @@ import static com.mad.sparkle.utils.Constants.DEFAULT_LOCATION_SYDNEY;
 import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
 /**
- * @author Audwin
- * Created on 14/09/18
+ * The home navigation activity that holds the three main fragments of the map, list and profile.
  */
 public class NavigationActivity extends AppCompatActivity implements ProfileFragment.OnFragmentInteractionListener,
         StoreListFragment.OnListFragmentInteractionListener {
 
-    final Fragment mMapFragment = MapFragment.newInstance();
-    final Fragment mStoreListFragment = StoreListFragment.newInstance();
-    final Fragment mProfileFragment = ProfileFragment.newInstance("", "");
-    final FragmentManager mFragmentManager = getSupportFragmentManager();
+    private final Fragment mMapFragment = MapFragment.newInstance();
+    private final Fragment mStoreListFragment = StoreListFragment.newInstance();
+    private final Fragment mProfileFragment = ProfileFragment.newInstance("", "");
+    private final FragmentManager mFragmentManager = getSupportFragmentManager();
 
     private Fragment mActiveFragment = mStoreListFragment;
 
@@ -102,6 +101,11 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
         }
     };
 
+    /**
+     * Called when activity is first created.
+     *
+     * @param savedInstanceState Bundle object containing the activity's previously saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +128,12 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
         findNearbyPlaces();
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu.
+     *
+     * @param menu the menu
+     * @return whether inflation is successful or not
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

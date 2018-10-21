@@ -21,13 +21,17 @@ import com.mad.sparkle.model.Booking;
 import com.mad.sparkle.utils.Constants;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
+/**
+ * Show the list of bookings made by the current user.
+ */
 public class BookingHistoryActivity extends AppCompatActivity {
+
+    private DatabaseReference mDatabaseRef;
+    private FirebaseUser mUser;
 
     // Initial widget fields
     private RecyclerView mBookingRecyclerView;
@@ -35,9 +39,11 @@ public class BookingHistoryActivity extends AppCompatActivity {
 
     private List<Booking> mBookingList = new ArrayList<Booking>();
 
-    private DatabaseReference mDatabaseRef;
-    private FirebaseUser mUser;
-
+    /**
+     * Called when activity is first created.
+     *
+     * @param savedInstanceState Bundle object containing the activity's previously saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,9 +51,11 @@ public class BookingHistoryActivity extends AppCompatActivity {
 
         prepareBookingAdapter();
 
+        // Get the reference to the user bookings
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child(Constants.BOOKINGS).child(mUser.getUid());
 
+        // Add the booking to the list
         mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -55,6 +63,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
                     Booking booking = childDataSnapshot.getValue(Booking.class);
                     mBookingList.add(booking);
                 }
+                // Notify the adapter for changes
                 mBookingRecyclerViewAdapter.notifyDataSetChanged();
             }
 
@@ -65,6 +74,9 @@ public class BookingHistoryActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Binds the adapter to the RecyclerView
+     */
     private void prepareBookingAdapter() {
         mBookingRecyclerView = (RecyclerView) findViewById(R.id.activity_booking_history_recycler_view);
         mBookingRecyclerView.setLayoutManager(new LinearLayoutManager(this));

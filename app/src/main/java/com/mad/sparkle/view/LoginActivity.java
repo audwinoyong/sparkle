@@ -20,6 +20,11 @@ public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding mActivityLoginBinding;
     private LoginViewModel mLoginViewModel;
 
+    /**
+     * Called when activity is first created.
+     *
+     * @param savedInstanceState Bundle object containing the activity's previously saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

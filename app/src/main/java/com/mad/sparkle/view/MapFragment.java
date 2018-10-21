@@ -49,37 +49,61 @@ import static com.mad.sparkle.utils.Constants.DEFAULT_LOCATION_SYDNEY;
 import static com.mad.sparkle.utils.Constants.DEFAULT_ZOOM;
 import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
+/**
+ * Fragment that shows the map for user to locate the stores.
+ */
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private MapViewModel mViewModel;
+
+    private DatabaseReference mDatabaseRef;
 
     private boolean mLocationPermissionGranted;
     private LatLng mLastKnownLocation;
 
     private List<Store> mStoreList = new ArrayList<Store>();
 
-    private DatabaseReference mDatabaseRef;
-
+    /**
+     * Create new instance of the map fragment
+     *
+     * @return MapFragment instance
+     */
     public static MapFragment newInstance() {
         return new MapFragment();
     }
 
+    /**
+     * Inflate the view of the fragment
+     *
+     * @param inflater           layout inflater
+     * @param container          viewgroup container
+     * @param savedInstanceState Bundle object containing the activity's previously saved state
+     * @return the inflated view
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_map, container, false);
     }
 
+    /**
+     * Called after the view is created
+     *
+     * @param view               the view
+     * @param savedInstanceState bundle object
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child(Constants.STORES);
-
         getLocationPermission();
     }
 
+    /**
+     * Starts the map.
+     */
     private void startMap() {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
@@ -87,16 +111,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
     }
 
+    /**
+     * Called when the activity is created.
+     * Add the markers of the store locations into the map from the database.
+     *
+     * @param savedInstanceState Bundle object
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(MapViewModel.class);
-        // TODO: Use the ViewModel
 
         mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (mLocationPermissionGranted) {
+
+                    // Clear markers and the list
                     mMap.clear();
                     mStoreList.clear();
 
@@ -105,14 +136,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         mStoreList.add(store);
                     }
 
-                    // Sort ascending
+                    // Sort the store ascending from the nearest distance
                     Collections.sort(mStoreList, new Comparator<Store>() {
                         @Override
                         public int compare(Store o1, Store o2) {
                             return o1.distance - o2.distance;
                         }
                     });
-
 
                     // Check if the fragment is currently added to its activity
                     if (isAdded()) {
@@ -157,8 +187,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        // Set the zoom controls
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
+        // Enable my location button if location permission is granted
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
@@ -167,8 +199,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         showCurrentLocation();
 
-
-        // Clicking on the info window snippet
+        // Set the onClick listener when clicking on the info window snippet of the marker, start the store detail activity
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -183,6 +214,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
+    /**
+     * Request the location permission.
+     */
     private void getLocationPermission() {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -195,6 +229,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /**
+     * Show the current location of the device using GPS and other sensors.
+     */
     private void showCurrentLocation() {
         FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
@@ -207,6 +244,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         if (task.isSuccessful()) {
                             Location currentLocation = (Location) task.getResult();
                             if (currentLocation != null) {
+                                // Move the camera to the current location
                                 LatLng currentLocationLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocationLatLng, DEFAULT_ZOOM));
                                 mLastKnownLocation = currentLocationLatLng;
@@ -231,12 +269,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /**
+     * Show the default location to Sydney if permission is not granted or current location is not available.
+     */
     private void showDefaultLocation() {
         LatLng currentLocationLatLng = DEFAULT_LOCATION_SYDNEY;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocationLatLng, DEFAULT_ZOOM));
         mLastKnownLocation = currentLocationLatLng;
     }
 
+    /**
+     * Returns the location permission results, whether granted or not.
+     *
+     * @param requestCode  the request code
+     * @param permissions  the permissions
+     * @param grantResults the grant results
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
