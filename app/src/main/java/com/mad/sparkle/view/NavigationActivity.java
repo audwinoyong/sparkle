@@ -198,10 +198,12 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
     private void findNearbyPlaces() {
         Log.d(LOG_TAG, "Getting nearby car wash...");
 
+        // Create an instance of Retrofit and make a request to Google Places API
         GooglePlacesService googlePlacesService = RetrofitClient.getClient().create(GooglePlacesService.class);
         Call<NearbySearchResponse> call = googlePlacesService
                 .getNearbyPlaces(mDefaultLocation.latitude + "," + mDefaultLocation.longitude, getString(R.string.google_maps_key));
 
+        // Execute the Http request
         call.enqueue(new Callback<NearbySearchResponse>() {
             @Override
             public void onResponse(@NonNull Call<NearbySearchResponse> call, @NonNull Response<NearbySearchResponse> response) {

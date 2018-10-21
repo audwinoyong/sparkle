@@ -21,27 +21,56 @@ public class PlaceDetailsResponse {
     @Expose
     private String status;
 
-
+    /**
+     * Get Html attributions
+     *
+     * @return Html attributions
+     */
     public List<Object> getHtmlAttributions() {
         return htmlAttributions;
     }
 
+    /**
+     * Set Html attributions
+     *
+     * @param htmlAttributions Html attributions
+     */
     public void setHtmlAttributions(List<Object> htmlAttributions) {
         this.htmlAttributions = htmlAttributions;
     }
 
+    /**
+     * Get result
+     *
+     * @return result
+     */
     public Result getResult() {
         return result;
     }
 
+    /**
+     * Set result
+     *
+     * @param result result
+     */
     public void setResult(Result result) {
         this.result = result;
     }
 
+    /**
+     * Get status
+     *
+     * @return status
+     */
     public String getStatus() {
         return status;
     }
 
+    /**
+     * Set status
+     *
+     * @param status status
+     */
     public void setStatus(String status) {
         this.status = status;
     }

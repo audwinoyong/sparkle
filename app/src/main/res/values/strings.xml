@@ -5,6 +5,11 @@
     <string name="profile">Profile</string>
     <string name="title_activity_login">Sign in</string>
     <string name='title_activity_register'>Register</string>
+    <string name="title_activity_store_detail">Store Detail</string>
+    <string name="title_activity_booking_selection">Booking Selection</string>
+    <string name="title_activity_payment">Payment</string>
+    <string name="title_activity_booking_confirmation">Booking Confirmation</string>
+    <string name="title_activity_booking_history">Bookings</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -19,56 +24,62 @@
     <string name="error_invalid_name">Name should only contain alphabetical characters and no space</string>
     <string name="error_invalid_phone">This mobile phone is invalid</string>
     <string name="sign_out">Sign Out</string>
+
     <string name="sign_in_successful">Sign in successful</string>
     <string name="registration_successful">Registration successful</string>
+
     <string name="email_already_exists">Email already exists</string>
     <string name="upload_image_successful">Upload image successful</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
+
+    <string name="full_name">%1$s %2$s</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="mobile_phone">Mobile Phone</string>
-    <string name="title_activity_store_detail">Store Detail</string>
-    <string name="title_activity_booking_selection">Booking Selection</string>
-    <string name="title_activity_booking_confirmation">Booking Confirmation</string>
 
     <string name="unable_to_find_current_location">Unable to find current location</string>
     <string name="permission_denied_default_location">Location permission denied, using default location in Sydney</string>
 
+    <!-- Unicode star character -->
     <string name="unicode_character_star">\u2605</string>
-    <string name="title_activity_payment">Payment</string>
-    <string name="scan_card">Scan card</string>
-    <string name="refresh">Refresh</string>
+
     <string name="getting_nearby_car_wash">Getting nearby car wash...</string>
     <string name="no_phone_available">No phone available</string>
-    <string name="error_select_both_date_and_time">Please select both date and time</string>
-    <string name="title_activity_booking_history">Bookings</string>
 
-    <string name="distance_format">%1$d m</string>
     <string name="api_request_limit_reached">You have reached your request limit. Please wait for a few minutes.</string>
 
-    <string name="must_implement_on_fragment_interaction_listener">must implement OnFragmentInteractionListener</string>
-    <string name="must_implement_on_list_interaction_listener">must implement OnListFragmentInteractionListener</string>
+    <string name="refresh">Refresh</string>
+    <string name="make_a_car_wash_booking_at">Make a car wash booking at:</string>
+    <string name="store_name">Store Name</string>
+    <string name="address">Address</string>
+    <string name="distance">Distance</string>
+    <string name="distance_format">%1$d m</string>
+    <string name="rating">Rating</string>
+    <string name="phone">Phone</string>
 
-    <string name="full_name">%1$s %2$s</string>
+    <string name="booking_fee">Booking Fee: $5</string>
+    <string name="select_date">Select date...</string>
+    <string name="select_time">Select time...</string>
+    <string name="error_select_both_date_and_time">Please select both date and time</string>
+    <string name="proceed_to_payment">Proceed to Payment</string>
+
+    <string name="scan_card">Scan card</string>
+    <string name="pay_now">Pay Now</string>
+    <string name="app_logo">App Logo</string>
+    <string name="value">Value</string>
+    <string name="book_car_wash">Book Car Wash</string>
+    <string name="store_photo">Store Photo</string>
+
+    <string name="bookings">Bookings</string>
+    <string name="date">Date :</string>
+    <string name="time">Time :</string>
+
     <string name="booking_complete">Booking complete</string>
     <string name="you_have_booked_a_car_wash">You have booked a car wash!</string>
     <string name="you_can_check_your_booking_in_your_profile">You can check your booking in your profile.</string>
     <string name="back_to_home">Back to Home</string>
-    <string name="make_a_car_wash_booking_at">Make a car wash booking at:</string>
-    <string name="store_name">Store Name</string>
-    <string name="booking_fee">Booking Fee: $5</string>
-    <string name="select_date">Select date...</string>
-    <string name="select_time">Select time...</string>
-    <string name="proceed_to_payment">Proceed to Payment</string>
-    <string name="app_logo">App Logo</string>
-    <string name="pay_now">Pay Now</string>
-    <string name="address">Address</string>
-    <string name="distance">Distance</string>
-    <string name="value">Value</string>
-    <string name="rating">Rating</string>
-    <string name="phone">Phone</string>
-    <string name="book_car_wash">Book Car Wash</string>
-    <string name="store_photo">Store Photo</string>
-    <string name="bookings">Bookings</string>
+
+    <string name="must_implement_on_fragment_interaction_listener">must implement OnFragmentInteractionListener</string>
+    <string name="must_implement_on_list_interaction_listener">must implement OnListFragmentInteractionListener</string>
 
 </resources>
