@@ -174,15 +174,6 @@ public class RegisterViewModel extends ViewModel {
         circleImageView.setImageURI(imageUri);
     }
 
-    @BindingAdapter("app:onFinish")
-    public static void finishActivity(View view, boolean isFinished) {
-//        Log.d(LOG_TAG, "finishActivity is called");
-//        if (isFinished) {
-//            ((Activity) (view.getContext())).finish();
-//            Log.d(LOG_TAG, "Register activity is finished");
-//        }
-    }
-
     public void onProfileImageClick(View view) {
         mRegisterNavigator.get().changeProfileImage();
     }
@@ -225,7 +216,6 @@ public class RegisterViewModel extends ViewModel {
             super.onPostExecute(aVoid);
             // Hide the progress spinner
             progressIsShown.set(false);
-//            isFinished.set(true);
         }
     }
 

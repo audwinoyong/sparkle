@@ -34,7 +34,6 @@ public class LoginViewModel extends ViewModel {
     public ObservableField<String> passwordError = new ObservableField<String>();
 
     public ObservableField<Boolean> progressIsShown = new ObservableField<Boolean>();
-    public ObservableField<Boolean> isFinished = new ObservableField<Boolean>();
 
     /**
      * Constructor for Login ViewModel
@@ -72,6 +71,13 @@ public class LoginViewModel extends ViewModel {
         }
     }
 
+    /**
+     * Validate all the fields
+     *
+     * @param email    the email
+     * @param password the password
+     * @return true if all fields are valid and vice versa
+     */
     private boolean validateFields(String email, String password) {
         boolean allFieldsAreValid = true;
 
@@ -116,18 +122,14 @@ public class LoginViewModel extends ViewModel {
         return password.length() >= 6;
     }
 
+    /**
+     * Set the EditText error message using binding adapter
+     * @param editText the EditText
+     * @param errorMessage the error message
+     */
     @BindingAdapter("app:errorText")
     public static void setErrorMessage(EditText editText, String errorMessage) {
         editText.setError(errorMessage);
-    }
-
-    @BindingAdapter("app:onFinish")
-    public static void finishActivity(View view, boolean isFinished) {
-//        Log.d(LOG_TAG, "finishActivity is called");
-//        if (isFinished) {
-//            ((Activity) (view.getContext())).finish();
-//            Log.d(LOG_TAG, "Login activity is finished");
-//        }
     }
 
     private class LoginAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -158,7 +160,6 @@ public class LoginViewModel extends ViewModel {
             super.onPostExecute(aVoid);
             // Hide the progress spinner
             progressIsShown.set(false);
-//            isFinished.set(true);
         }
     }
 
