@@ -15,19 +15,40 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.braintreepayments.cardform.view.CardForm;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mad.sparkle.R;
+import com.mad.sparkle.model.Booking;
 import com.mad.sparkle.utils.Constants;
 
+import static com.mad.sparkle.utils.Constants.BOOKINGS;
 import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
 public class PaymentActivity extends AppCompatActivity {
 
+    private DatabaseReference mDatabaseRef;
+    private FirebaseUser mUser;
+
     private CardForm mCardForm;
+
+    private String mStoreId;
+    private String mStoreName;
+    private String mDate;
+    private String mTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+
+        mStoreId = getIntent().getStringExtra(Constants.STORE_ID);
+        mStoreName = getIntent().getStringExtra(Constants.STORE_NAME);
+        mDate = getIntent().getStringExtra(Constants.DATE);
+        mTime = getIntent().getStringExtra(Constants.TIME);
 
         mCardForm = findViewById(R.id.activity_payment_card_form);
 
@@ -37,7 +58,6 @@ public class PaymentActivity extends AppCompatActivity {
                 .maskCvv(true)
                 .actionLabel("Pay Now")
                 .cardholderName(CardForm.FIELD_REQUIRED)
-                .postalCodeRequired(true)
                 .setup(PaymentActivity.this);
 
     }
@@ -101,8 +121,27 @@ public class PaymentActivity extends AppCompatActivity {
 
     public void attemptPayment(View view) {
         if (mCardForm.isValid()) {
-            Intent bookingConfirmIntent = new Intent(PaymentActivity.this, BookingConfirmationActivity.class);
-            startActivity(bookingConfirmIntent);
+
+            mUser = FirebaseAuth.getInstance().getCurrentUser();
+            mDatabaseRef = FirebaseDatabase.getInstance().getReference().child(BOOKINGS).child(mUser.getUid()).push();
+
+            Booking newBooking = new Booking(mStoreId, mStoreName, mDate, mTime);
+
+            mDatabaseRef.setValue(newBooking).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Log.d(LOG_TAG, "addBookingToDatabase:success");
+
+                        Intent bookingConfirmIntent = new Intent(PaymentActivity.this, BookingConfirmationActivity.class);
+                        startActivity(bookingConfirmIntent);
+                        finish();
+                    } else {
+                        Log.d(LOG_TAG, "addBookingToDatabase:failure", task.getException());
+                    }
+                }
+            });
+
         } else {
             mCardForm.validate();
             Toast.makeText(this, "Payment form is invalid", Toast.LENGTH_SHORT).show();

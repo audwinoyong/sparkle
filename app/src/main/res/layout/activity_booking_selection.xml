@@ -22,9 +22,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Booking Fee: $5"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="8dp"
+                android:text="Make a car wash booking at:"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+
+            <TextView
+                android:id="@+id/activity_booking_selection_store_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_horizontal"
+                android:text="Store Name"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textColor="@android:color/holo_blue_dark" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:text="Booking Fee: $5"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="@android:color/black" />
 
             <EditText
                 android:id="@+id/alert_dialog_date_picker_et"
@@ -34,7 +54,7 @@
                 android:drawableLeft="@drawable/ic_date_range"
                 android:drawablePadding="8dp"
                 android:focusable="false"
-                android:hint="Date"
+                android:hint="Select date..."
                 android:inputType="none" />
 
             <EditText
@@ -46,7 +66,7 @@
                 android:drawableLeft="@drawable/ic_access_time"
                 android:drawablePadding="8dp"
                 android:focusable="false"
-                android:hint="Time"
+                android:hint="Select time..."
                 android:inputType="none" />
 
         </LinearLayout>
@@ -54,7 +74,7 @@
     </android.support.v7.widget.CardView>
 
     <Button
-        android:id="@+id/activity_booking_selection_button"
+        android:id="@+id/activity_booking_proceed_to_payment_btn"
         style="?android:textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -66,7 +86,7 @@
         android:layout_marginBottom="32dp"
         android:background="@drawable/shape_button"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:text="Confirm"
+        android:text="Proceed to Payment"
         android:textColor="@android:color/white"
         android:textStyle="bold" />
 

@@ -72,24 +72,6 @@ public class StoreListFragment extends Fragment {
 //            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
 //        }
 
-//        prepareStoreData();
-    }
-
-    private void prepareStoreData() {
-        Store store = new Store("001", "Magic Wash", "18 Paramatta Road", 150, 4.2, "0212345678", -30, 15, "");
-        mStoreList.add(store);
-
-        store = new Store("002", "Star Wash", "50 Burwood Road", 400, 5, "0299991111", -30, 15, "");
-        mStoreList.add(store);
-
-        store = new Store("003", "Oz Sparkling Wash", "33 Camperdown Street", 423, 1, "0212345678", -30, 15, "");
-        mStoreList.add(store);
-
-        store = new Store("004", "Sleek Wash", "167 King Street", 500, 2, "0212345678", -30, 15, "");
-        mStoreList.add(store);
-
-        store = new Store("005", "King Wash", "77 Eddy Avenue", 1200, 3, "0212345678", -30, 15, "");
-        mStoreList.add(store);
     }
 
     @Override

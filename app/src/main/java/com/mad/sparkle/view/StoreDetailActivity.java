@@ -19,7 +19,13 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mad.sparkle.R;
+import com.mad.sparkle.model.Store;
 import com.mad.sparkle.utils.Constants;
 import com.squareup.picasso.Picasso;
 
@@ -28,21 +34,25 @@ import static com.mad.sparkle.utils.Constants.LOG_TAG;
 
 public class StoreDetailActivity extends AppCompatActivity {
 
+    private DatabaseReference mDatabaseRef;
+
     private ImageView mStoreImg;
     private TextView mAddressTv;
     private TextView mDistanceTv;
     private RatingBar mRatingBar;
     private TextView mPhoneTv;
 
+    private String mStoreId;
+    private String mPhone;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        String name = getIntent().getStringExtra(Constants.NAME);
-        this.setTitle(name);
+        mStoreId = getIntent().getStringExtra(Constants.STORE_ID);
 
         mStoreImg = findViewById(R.id.activity_store_detail_img);
         mAddressTv = findViewById(R.id.activity_store_detail_address_tv);
@@ -50,27 +60,38 @@ public class StoreDetailActivity extends AppCompatActivity {
         mRatingBar = findViewById(R.id.activity_store_detail_ratingBar);
         mPhoneTv = findViewById(R.id.activity_store_detail_phone_tv);
 
-        String photoReference = getIntent().getStringExtra(Constants.PHOTO_REFERENCE);
-        int distance = getIntent().getIntExtra(Constants.DISTANCE, 0);
-        float rating = (float) getIntent().getDoubleExtra(Constants.RATING, 0);
-        String phone = getIntent().getStringExtra(Constants.PHONE);
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child(Constants.STORES).child(mStoreId);
 
-        mAddressTv.setText(getIntent().getStringExtra(Constants.ADDRESS));
-        mDistanceTv.setText(String.format("%s m", String.valueOf(distance)));
-        mRatingBar.setRating(rating);
+        mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Store store = dataSnapshot.getValue(Store.class);
 
-        if (!TextUtils.isEmpty(phone)) {
-            mPhoneTv.setText(formatPhoneNumber(phone));
-        } else {
-            mPhoneTv.setText(getString(R.string.no_phone_available));
-        }
+                toolbar.setTitle(store.getName());
 
-        if (!TextUtils.isEmpty(photoReference)) {
-            Log.d(LOG_TAG, "Fetching place photo for: " + name);
-            Picasso.get().load(getPhotoUrl(photoReference)).placeholder(R.drawable.app_logo).into(mStoreImg);
+                mAddressTv.setText(store.getAddress());
+                mDistanceTv.setText(String.format("%s m", String.valueOf(store.getDistance())));
+                mRatingBar.setRating((float) store.getRating());
 
-//            Picasso.get().load("https://image.freepik.com/free-vector/car-wash-cartoon-vector_23-2147498053.jpg").placeholder(R.drawable.app_logo).into(mStoreImg);
-        }
+                if (!TextUtils.isEmpty(store.getPhone())) {
+                    mPhone = store.getPhone();
+                    mPhoneTv.setText(formatPhoneNumber(store.getPhone()));
+                } else {
+                    mPhoneTv.setText(getString(R.string.no_phone_available));
+                }
+
+                if (!TextUtils.isEmpty(store.getPhotoReference())) {
+                    Log.d(LOG_TAG, "Fetching place photo for: " + store.name);
+                    Picasso.get().load(getPhotoUrl(store.getPhotoReference())).placeholder(R.drawable.app_logo).into(mStoreImg);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Failed to read value
+                Log.d(LOG_TAG, "Failed to read value.", databaseError.toException());
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -94,8 +115,11 @@ public class StoreDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent bookingSelectionIntent = new Intent(StoreDetailActivity.this, BookingSelectionActivity.class);
+
+                bookingSelectionIntent.putExtra(Constants.STORE_ID, mStoreId);
                 startActivity(bookingSelectionIntent);
 
+                Log.d(LOG_TAG, "Launching booking selection activity");
             }
         });
     }
@@ -111,10 +135,8 @@ public class StoreDetailActivity extends AppCompatActivity {
     }
 
     private void makePhoneCall() {
-        String phone = getIntent().getStringExtra(Constants.PHONE);
-
         Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse(CALL_PREFIX + phone));
+        callIntent.setData(Uri.parse(CALL_PREFIX + mPhone));
         startActivity(callIntent);
     }
 

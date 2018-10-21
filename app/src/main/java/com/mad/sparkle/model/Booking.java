@@ -2,6 +2,7 @@ package com.mad.sparkle.model;
 
 public class Booking {
 
+    public String storeId;
     public String storeName;
     public String date;
     public String time;
@@ -9,10 +10,19 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(String storeName, String date, String time) {
+    public Booking(String storeId, String storeName, String date, String time) {
+        this.storeId = storeId;
         this.storeName = storeName;
         this.date = date;
         this.time = time;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 
     public String getStoreName() {

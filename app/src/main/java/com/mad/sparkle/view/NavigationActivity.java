@@ -168,13 +168,7 @@ public class NavigationActivity extends AppCompatActivity implements ProfileFrag
     public void onListFragmentInteraction(Store store) {
         Intent storeDetailIntent = new Intent(NavigationActivity.this, StoreDetailActivity.class);
 
-        storeDetailIntent.putExtra(Constants.NAME, store.getName());
-        storeDetailIntent.putExtra(Constants.ADDRESS, store.getAddress());
-        storeDetailIntent.putExtra(Constants.DISTANCE, store.getDistance());
-        storeDetailIntent.putExtra(Constants.RATING, store.getRating());
-        storeDetailIntent.putExtra(Constants.PHONE, store.getPhone());
-        storeDetailIntent.putExtra(Constants.PHOTO_REFERENCE, store.getPhotoReference());
-
+        storeDetailIntent.putExtra(Constants.STORE_ID, store.getStoreId());
         startActivity(storeDetailIntent);
 
         Log.d(LOG_TAG, "Launching store detail activity");

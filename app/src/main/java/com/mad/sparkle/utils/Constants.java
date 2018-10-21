@@ -34,16 +34,14 @@ public class Constants {
     // Debug log tag
     public static final String LOG_TAG = "LOG_TAG";
 
-    // Store intent keys
-    public static final String NAME = "name";
-    public static final String ADDRESS = "address";
-    public static final String DISTANCE = "distance";
-    public static final String RATING = "rating";
-    public static final String PHONE = "phone";
-    public static final String PHOTO_REFERENCE = "photoReference";
+    // Store intent key
+    public static final String STORE_ID = "storeId";
+    public static final String STORE_NAME = "storeName";
 
-    // Date and time picker tags
+    // Date and time picker tag and intent keys
     public static final String DIALOG_DATE = "DIALOG_DATE";
+    public static final String DATE = "date";
+    public static final String TIME = "time";
 
     // Authentication constants
     public static final String REGEX_NAME = "[A-Z][a-zA-Z]*";

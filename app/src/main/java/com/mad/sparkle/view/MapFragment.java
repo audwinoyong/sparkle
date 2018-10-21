@@ -35,27 +35,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.maps.android.SphericalUtil;
 import com.mad.sparkle.model.Store;
-import com.mad.sparkle.model.nearbysearch.NearbySearchResponse;
-import com.mad.sparkle.model.nearbysearch.Photo;
 import com.mad.sparkle.utils.Constants;
-import com.mad.sparkle.service.GooglePlacesService;
-import com.mad.sparkle.utils.RetrofitClient;
 import com.mad.sparkle.viewmodel.MapViewModel;
 import com.mad.sparkle.R;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.mad.sparkle.utils.Constants.DEFAULT_LOCATION_SYDNEY;
 import static com.mad.sparkle.utils.Constants.DEFAULT_ZOOM;
@@ -72,8 +60,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private List<Store> mStoreList = new ArrayList<Store>();
 
     private DatabaseReference mDatabaseRef;
-
-//    private Map<String, String> mMarkerMap = new HashMap<>();
 
     public static MapFragment newInstance() {
         return new MapFragment();
@@ -171,9 +157,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-//        mMap.setOnMyLocationButtonClickListener(onMyLocationButtonClickListener);
-//        mMap.setOnMyLocationClickListener(onMyLocationClickListener);
-
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -192,13 +175,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 int position = (int) (marker.getTag());
 
                 Intent storeDetailIntent = new Intent(getActivity(), StoreDetailActivity.class);
-
-                storeDetailIntent.putExtra(Constants.NAME, mStoreList.get(position).getName());
-                storeDetailIntent.putExtra(Constants.ADDRESS, mStoreList.get(position).getAddress());
-                storeDetailIntent.putExtra(Constants.DISTANCE, mStoreList.get(position).getDistance());
-                storeDetailIntent.putExtra(Constants.RATING, mStoreList.get(position).getRating());
-                storeDetailIntent.putExtra(Constants.PHONE, mStoreList.get(position).getPhone());
-                storeDetailIntent.putExtra(Constants.PHOTO_REFERENCE, mStoreList.get(position).getPhotoReference());
+                storeDetailIntent.putExtra(Constants.STORE_ID, mStoreList.get(position).getStoreId());
 
                 startActivity(storeDetailIntent);
                 Log.d(LOG_TAG, "Launching store detail activity");
@@ -283,63 +260,4 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-//    private String getPlaceDetailUrl(String placeId) {
-//        StringBuilder placeDetailStringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json?");
-//        placeDetailStringBuilder.append("placeid=" + placeId);
-//        placeDetailStringBuilder.append("&fields=" + "formatted_phone_number");
-//        placeDetailStringBuilder.append("&key=" + getString(R.string.google_maps_key));
-//
-//        Log.d(LOG_TAG, "url= " + placeDetailStringBuilder.toString());
-//        return placeDetailStringBuilder.toString();
-//    }
-
-//    private GoogleMap.OnMarkerClickListener mOnMarkerClickListener = new GoogleMap.OnMarkerClickListener() {
-//        @Override
-//        public boolean onMarkerClick(Marker marker) {
-//            Toast.makeText(getContext(), marker.getTitle(), Toast.LENGTH_SHORT).show();
-//            return false;
-//        }
-//    };
-
-    //    private GoogleMap.OnMyLocationButtonClickListener onMyLocationButtonClickListener =
-//            new GoogleMap.OnMyLocationButtonClickListener() {
-//                @Override
-//                public boolean onMyLocationButtonClick() {
-//                    // Add a marker in Sydney and move the camera
-//                    LatLng sydney = new LatLng(-33.885504, 151.158329);
-//                    mMap.addMarker(new MarkerOptions().position(sydney).title("Magic Wash"));
-//                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, DEFAULT_ZOOM));
-
-//                    // Add a marker in Google HQ and move the camera
-//
-//                    LatLng latLng = new LatLng(37.422, -122.084);
-//
-//                    MarkerOptions googleHq = new MarkerOptions();
-//                    googleHq.position(latLng);
-//                    googleHq.title("user Current Location");
-//                    googleHq.snippet("some text");
-//                    googleHq.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-//
-//                    mMap.addMarker(googleHq);
-//                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
-//                    return false;
-//                }
-//            };
-
-//    private GoogleMap.OnMyLocationClickListener onMyLocationClickListener =
-//            new GoogleMap.OnMyLocationClickListener() {
-//                @Override
-//                public void onMyLocationClick(@NonNull Location location) {
-//
-//                    CircleOptions circleOptions = new CircleOptions();
-//                    circleOptions.center(new LatLng(location.getLatitude(),
-//                            location.getLongitude()));
-//
-//                    circleOptions.radius(200);
-//                    circleOptions.fillColor(Color.RED);
-//                    circleOptions.strokeWidth(6);
-//
-//                    mMap.addCircle(circleOptions);
-//                }
-//            };
 }
